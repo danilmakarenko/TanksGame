@@ -62,8 +62,10 @@ public class Player extends Sprite {
 
 
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(12 / TanksGame.PPM);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(10/ TanksGame.PPM,20/ TanksGame.PPM);
+//        CircleShape shape = new CircleShape();
+//        shape.setRadius(12 / TanksGame.PPM);
 //        fdef.filter.categoryBits = MarioBros.MARIO_BIT;
 //        fdef.filter.maskBits = MarioBros.GROUND_BIT |
 //                MarioBros.COIN_BIT |
@@ -83,17 +85,12 @@ public class Player extends Sprite {
 
     public void update(float dt) {
 
-        //update our sprite to correspond with the position of our Box2D body
-        group.setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 - 6 / TanksGame.PPM);
-        //update sprite with the correct frame depending on marios current action
-//        setRegion(getFrame(dt));
-
+        group.setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
     }
 
 
     public void createTank(Texture tankHull, Texture tankTower, Texture flame) {
 
-        stage = new Stage();
 
         tankHullTexture = new TextureRegion(tankHull);
         tankTowerTexture = new TextureRegion(tankTower);
@@ -135,7 +132,6 @@ public class Player extends Sprite {
         group.addActor(tankHullActor);
         group.addActor(tankTowerActor);
 //        group.addActor(flameActor);
-        stage.addActor(group);
     }
 
 

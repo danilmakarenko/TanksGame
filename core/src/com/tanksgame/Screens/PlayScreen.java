@@ -1,9 +1,6 @@
 package com.tanksgame.Screens;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,7 +21,7 @@ import com.tanksgame.TanksGame;
 import com.tanksgame.Tools.Box2DWorldCreator;
 import com.tanksgame.Tools.WorldContactListener;
 
-public class PlayScreen implements Screen {
+public class PlayScreen implements Screen, InputProcessor {
     //Reference to our Game, used to set Screens
     private TanksGame game;
 //    private TextureAtlas atlas;
@@ -69,9 +66,10 @@ public class PlayScreen implements Screen {
 
         //create mario in our game world
         player = new Player(this);
-
+//        directionIsRight = true;
+//        directionIsUp = true;
         world.setContactListener(new WorldContactListener());
-
+        Gdx.input.setInputProcessor(this);
 
     }
 
@@ -81,24 +79,28 @@ public class PlayScreen implements Screen {
     }
 
 
-    public void handleInput(float dt) {
-        //control our player using immediate impulses
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            player.b2body.applyLinearImpulse(new Vector2(0, 0.1f), player.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            player.b2body.applyLinearImpulse(new Vector2(0, -0.1f), player.b2body.getWorldCenter(), true);
-//            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
-//                player.fire();
-
-    }
+//    public void handleInput(float dt) {
+//        //control our player using immediate impulses
+//        if (Gdx.input.isKeyPressed(Input.Keys.UP)&&player.b2body.getLinearVelocity().y<=0.5)
+//            player.b2body.applyLinearImpulse(new Vector2(0, 0.1f), player.b2body.getWorldCenter(), true);
+//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 0.5) {
+//            player.b2body.setAngularVelocity(-0.5f);
+//        }
+////            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
+//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -0.5) {
+////            player.b2body.setAngularVelocity(0.5f);
+//            player.b2body.setTransform(player.b2body.getWorldCenter(),5);
+//        }
+//
+////            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+//        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)&&player.b2body.getLinearVelocity().y>=-0.5)
+//            player.b2body.applyLinearImpulse(new Vector2(0, -0.1f), player.b2body.getWorldCenter(), true);
+////            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+////                player.fire();
+//
+//    }
 
     public void update(float dt) {
-        //handle user input first
-        handleInput(dt);
 
         //takes 1 step in the physics simulation(60 times per second)
         world.step(1 / 60f, 6, 2);
@@ -179,4 +181,82 @@ public class PlayScreen implements Screen {
         return world;
     }
 
+    @Override
+    public boolean keyDown(int keycode) {
+        //go forward
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            if (player.b2body.getLinearVelocity().y <= 0.5) {
+                player.b2body.applyLinearImpulse(new Vector2(0, 0.1f), player.b2body.getWorldCenter(), true);
+            }
+        }
+        //turn right
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player.b2body.setAngularVelocity(-0.5f);
+
+        }
+        //turn left
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            player.b2body.setAngularVelocity(0.5f);
+
+        }
+
+        //go backward
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            if (player.b2body.getLinearVelocity().y >= -0.5) {
+                player.b2body.applyLinearImpulse(new Vector2(0, -0.1f), player.b2body.getWorldCenter(), true);
+            }
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        if (keycode== Input.Keys.UP) {
+            player.b2body.setLinearVelocity(0,0);
+        }
+        if (keycode== Input.Keys.DOWN) {
+            player.b2body.setLinearVelocity(0,0);
+
+        }
+        if (keycode== Input.Keys.LEFT) {
+            player.b2body.setAngularVelocity(0);
+
+
+        }
+        if (keycode== Input.Keys.RIGHT) {
+            player.b2body.setAngularVelocity(0);
+
+
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
 }
