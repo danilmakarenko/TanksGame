@@ -14,7 +14,7 @@ public class Box2DWorldCreator {
 
     public Box2DWorldCreator(PlayScreen screen){
         World world = screen.getWorld();
-        TiledMap map = screen.getMap();
+//        TiledMap map = screen.getMap();
         //create body and fixture variables
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
