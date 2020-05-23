@@ -5,16 +5,15 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tanksgame.Sprites.Enemies.Enemy;
@@ -39,6 +38,7 @@ public class PlayScreen extends ScreenAdapter {
 
 
     private SpriteBatch batch;
+
 
     private Texture backgroundTexture;
 
@@ -72,7 +72,6 @@ public class PlayScreen extends ScreenAdapter {
         player.tank.getHull().setAngularDamping(6);
         player.tank.getTower().setAngularDamping(6);
 
-
     }
 
     public void update(float dt) {
@@ -83,6 +82,7 @@ public class PlayScreen extends ScreenAdapter {
 
         camera.position.set(player.tank.getHull().getPosition().x, player.tank.getHull().getPosition().y, 0);
         camera.update();
+
 
 
     }
@@ -96,10 +96,12 @@ public class PlayScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(backgroundTexture, 0, 0);
+
+        player.tank.draw(batch);
+
         batch.end();
 
-        b2dr.render(world, camera.combined);
-
+//        b2dr.render(world, camera.combined);
 
     }
 
@@ -111,8 +113,8 @@ public class PlayScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width / 25;
-        camera.viewportHeight = height / 25;
+        camera.viewportWidth = width/2;
+        camera.viewportHeight = height/2;
     }
 
     @Override

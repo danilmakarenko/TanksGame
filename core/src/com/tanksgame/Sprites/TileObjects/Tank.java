@@ -1,12 +1,15 @@
 package com.tanksgame.Sprites.TileObjects;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.tanksgame.Screens.PlayScreen;
+
 import com.tanksgame.TanksGame;
 
 
@@ -19,11 +22,11 @@ public class Tank extends Sprite {
     private BodyDef bulletBodyDef;
     private FixtureDef bulletFixtureDef;
 
-    public float acceleration = 60000000;
+    public float acceleration = 999999999;
     public float leftAcc;
     public float rightAcc;
 
-    public float tankSpeed = 20;
+    public float tankSpeed = 100;
     public float bulletSpeed = 50000;
 
     private float forwardX = 0;
@@ -41,8 +44,14 @@ public class Tank extends Sprite {
     private boolean isGoingForward = false;
     private boolean isGoingBackward = false;
 
+    private Fixture hullFixture;
+    private Fixture towerFixture;
+
+
+
 
     public Tank(World world, float x, float y, float width, float height, PlayScreen playScreen) {
+
 
         this.playScreen = playScreen;
 
@@ -52,23 +61,26 @@ public class Tank extends Sprite {
         this.width = width;
         this.height = height;
 
+
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2, height / 2);
+        shape.setAsBox(width/2, height/2);
 
         FixtureDef fixDef = new FixtureDef();
         fixDef.shape = shape;
-        fixDef.density = (float) Math.pow(4, 10);
+        fixDef.density = (float) Math.pow(2, 12);
         fixDef.restitution = .1f;
         fixDef.friction = .5f;
 
 
         hull = world.createBody(bodyDef);
-        hull.createFixture(fixDef);
+        hullFixture = hull.createFixture(fixDef);
 
-        shape.setAsBox(width / 10, height / 3);
+        shape.setAsBox(width/10, height/3);
 
         tower = world.createBody(bodyDef);
-        tower.createFixture(fixDef);
+
+        towerFixture = tower.createFixture(fixDef);
+
 
         RevoluteJointDef jointDef = new RevoluteJointDef();
         jointDef.bodyA = hull;
@@ -95,7 +107,6 @@ public class Tank extends Sprite {
         fixDef.friction = 1;
 
         bulletFixtureDef = fixDef;
-
     }
 
     public void shoot() {
@@ -114,6 +125,24 @@ public class Tank extends Sprite {
     Vector2 tmp = new Vector2();
     Vector2 tmp2 = new Vector2();
 
+    public void draw(Batch batch) {
+        Sprite hullSprite = new Sprite(new Texture("hull.png"));
+        hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
+        hullSprite.setOrigin(width/2, height/2);
+        hullSprite.setPosition(hull.getPosition().x - width/2, hull.getPosition().y - height/2);
+        hullSprite.setSize(width, height);
+        hullSprite.draw(batch);
+
+        Sprite towerSprite = new Sprite(new Texture("tower.png"));
+        towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
+        towerSprite.setOrigin(13/2f, 16);
+        towerSprite.setPosition(tower.getPosition().x - 13/2f, tower.getPosition().y - 16);
+        towerSprite.setSize(13, 32);
+        towerSprite.draw(batch);
+
+
+    }
+
 
     public void update() {
 
@@ -125,7 +154,10 @@ public class Tank extends Sprite {
         turnHullCalculation(x, y);
 
         moveHullCalculation(x, y);
+
+
     }
+
 
     private void turnHullCalculation(float x, float y) {
         hull.applyForce(tmp.set(leftAcc * x, leftAcc * y), hull.getWorldPoint(tmp2.set(-width / 2, 0)), true);
@@ -304,5 +336,13 @@ public class Tank extends Sprite {
 
     public void setGoingBackward(boolean goingBackward) {
         isGoingBackward = goingBackward;
+    }
+
+    public Fixture getHullFixture() {
+        return hullFixture;
+    }
+
+    public Fixture getTowerFixture() {
+        return towerFixture;
     }
 }

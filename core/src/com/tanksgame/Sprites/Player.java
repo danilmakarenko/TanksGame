@@ -33,20 +33,24 @@ public class Player extends Sprite implements InputProcessor {
     public Player(PlayScreen playScreen) {
         this.playScreen = playScreen;
         this.world = playScreen.getWorld();
-        tank = new Tank(world, 0, 0, 3, 5, playScreen);
+        tank = new Tank(world, 0, 0, 32, 32, playScreen);
 
     }
 
     public void draw(Batch batch) {
-
+        super.draw(batch);
     }
 
     public void update(float dt) {
         tank.update();
-        setPosition(tank.hull.getPosition().x - getWidth() / 2, tank.hull.getPosition().y - getHeight() / 2);
+//        setPosition(tank.hull.getPosition().x - getWidth() / 2, tank.hull.getPosition().y - getHeight() / 2);
 
     }
 
+
+    public void render(float delta) {
+
+    }
 
     @Override
     public boolean keyDown(int keycode) {
