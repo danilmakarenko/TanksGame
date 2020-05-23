@@ -1,36 +1,51 @@
 package com.tanksgame.Sprites.TileObjects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.TanksGame;
 
 
-public class Tank extends Sprite implements InputProcessor{
+public class Tank extends Sprite {
     private TanksGame game;
-    public TextureRegion tankHullTexture;
-    public TextureRegion tankTowerTexture;
-    public TextureRegion flameTexture;
 
     public Body hull, tower;
     private RevoluteJoint joint;
-    public float acceleration = 20000, leftAcc, rightAcc;
-    private float width,height;
+
+    private BodyDef bulletBodyDef;
+    private FixtureDef bulletFixtureDef;
+
+    public float acceleration = 60000000;
+    public float leftAcc;
+    public float rightAcc;
+
+    public float tankSpeed = 20;
+    public float bulletSpeed = 50000;
+
+    private float forwardX = 0;
+    private float forwardY = 0;
+
+    private float width, height;
+
+    private float mouseX;
+    private float mouseY;
+
+    private float angle;
+
+    private PlayScreen playScreen;
+
+    private boolean isGoingForward = false;
+    private boolean isGoingBackward = false;
 
 
-    public Tank(World world, float x, float y, float width, float height, Texture tankHull, Texture tankTower, Texture flame) {
+    public Tank(World world, float x, float y, float width, float height, PlayScreen playScreen) {
+
+        this.playScreen = playScreen;
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
@@ -38,8 +53,7 @@ public class Tank extends Sprite implements InputProcessor{
         this.height = height;
 
         PolygonShape shape = new PolygonShape();
-        // ????????????????????????????????????????????????????????????????
-        shape.setAsBox(width/2 , height/2);
+        shape.setAsBox(width / 2, height / 2);
 
         FixtureDef fixDef = new FixtureDef();
         fixDef.shape = shape;
@@ -47,12 +61,11 @@ public class Tank extends Sprite implements InputProcessor{
         fixDef.restitution = .1f;
         fixDef.friction = .5f;
 
+
         hull = world.createBody(bodyDef);
         hull.createFixture(fixDef);
 
-        shape.setAsBox(width / 10 , height / 2);
-
-        fixDef.density = 100;
+        shape.setAsBox(width / 10, height / 3);
 
         tower = world.createBody(bodyDef);
         tower.createFixture(fixDef);
@@ -62,121 +75,234 @@ public class Tank extends Sprite implements InputProcessor{
         jointDef.bodyB = tower;
         jointDef.localAnchorB.y = -height / 3;
 
+        // set tower mass to 0
+        // потому что мешало
+        MassData md = new MassData();
+        md.mass = 0;
+        tower.setMassData(md);
+
         joint = (RevoluteJoint) world.createJoint(jointDef);
+
+        // making bullet body
+        bulletBodyDef = bodyDef;
+
+        CircleShape bulletShape = new CircleShape();
+        bulletShape.setRadius(width / 12);
+
+        fixDef.shape = bulletShape;
+        fixDef.density = (float) Math.pow(bulletShape.getRadius(), 25);
+        fixDef.restitution = 0;
+        fixDef.friction = 1;
+
+        bulletFixtureDef = fixDef;
 
     }
 
-    Vector2 tmp = new Vector2(), tmp2 = new Vector2();
+    public void shoot() {
+        float rotation = (float) ((float) tower.getTransform().getRotation() + Math.PI / 2);
+        float x = MathUtils.cos(rotation);
+        float y = MathUtils.sin(rotation);
+
+        bulletBodyDef.position.set(tower.getWorldPoint(tmp.set(0, height / 3)));
+
+        Body bullet = hull.getWorld().createBody(bulletBodyDef);
+        bullet.createFixture(bulletFixtureDef);
+
+        bullet.setLinearVelocity(bulletSpeed * x, bulletSpeed * y);
+    }
+
+    Vector2 tmp = new Vector2();
+    Vector2 tmp2 = new Vector2();
 
 
     public void update() {
+
         float rotation = (float) ((float) hull.getTransform().getRotation() + Math.PI / 2);
         float x = MathUtils.cos(rotation);
         float y = MathUtils.sin(rotation);
 
-//        hull.applyLinearImpulse(tmp.set(leftAcc * x, leftAcc * y), hull.getWorldPoint(tmp2.set(-width / 2, 0)), true);
-//        hull.applyLinearImpulse(tmp.set(rightAcc * x, rightAcc * y), hull.getWorldPoint(tmp2.set(width / 2, 0)), true);
 
-        hull.applyForce(tmp.set(leftAcc * x, leftAcc * y), hull.getWorldPoint(tmp2.set(-width/2, 0)), true);
+        turnHullCalculation(x, y);
+
+        moveHullCalculation(x, y);
+    }
+
+    private void turnHullCalculation(float x, float y) {
+        hull.applyForce(tmp.set(leftAcc * x, leftAcc * y), hull.getWorldPoint(tmp2.set(-width / 2, 0)), true);
         hull.applyForce(tmp.set(rightAcc * x, rightAcc * y), hull.getWorldPoint(tmp2.set(width / 2, 0)), true);
-
-    }
-    @Override
-    public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case Input.Keys.Q:
-                leftAcc = acceleration;
-                break;
-            case Input.Keys.A:
-                leftAcc = -acceleration;
-                break;
-            case Input.Keys.E:
-                rightAcc = acceleration;
-                break;
-            case Input.Keys.D:
-                rightAcc = -acceleration;
-                break;
-            default:
-                return false;
-//            case Input.Keys.UP:
-//                player.tank.rightAcc = player.tank.acceleration;
-//                player.tank.leftAcc = player.tank.acceleration;
-//                break;
-//            case Input.Keys.DOWN:
-//                player.tank.rightAcc = -player.tank.acceleration;
-//                player.tank.leftAcc = -player.tank.acceleration;
-//                break;
-//            case Input.Keys.LEFT:
-//                player.tank.leftAcc = player.tank.acceleration;
-//                break;
-//            case Input.Keys.RIGHT:
-//                player.tank.rightAcc = player.tank.acceleration;
-//                break;
-        }
-        return true;
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        switch (keycode) {
-            case Input.Keys.Q:
-            case Input.Keys.A:
-                leftAcc = 0;
-                break;
-            case Input.Keys.E:
-            case Input.Keys.D:
-                rightAcc = 0;
-                break;
-            default:
-                return false;
-            //            case Input.Keys.UP:
-//                player.tank.rightAcc = 0;
-//                player.tank.leftAcc = 0;
-//                break;
-//            case Input.Keys.DOWN:
-//                player.tank.rightAcc = 0;
-//                player.tank.leftAcc = 0;
-//                break;
-//            case Input.Keys.LEFT:
-//                player.tank.leftAcc = 0;
-//                break;
-//            case Input.Keys.RIGHT:
-//                player.tank.rightAcc = 0;
-//                break;
-//        }
+    private void moveHullCalculation(float x, float y) {
+        forwardX = tankSpeed * x;
+        forwardY = tankSpeed * y;
 
-        }
-        return false;
+        if (isGoingForward)
+            hull.setLinearVelocity(forwardX, forwardY);
+        if (isGoingBackward)
+            hull.setLinearVelocity(-forwardX, -forwardY);
+    }
+
+
+    public Body getHull() {
+        return hull;
+    }
+
+    public Body getTower() {
+        return tower;
+    }
+
+
+    public TanksGame getGame() {
+        return game;
+    }
+
+    public RevoluteJoint getJoint() {
+        return joint;
+    }
+
+    public BodyDef getBulletBodyDef() {
+        return bulletBodyDef;
+    }
+
+    public FixtureDef getBulletFixtureDef() {
+        return bulletFixtureDef;
+    }
+
+    public float getAcceleration() {
+        return acceleration;
+    }
+
+    public float getLeftAcc() {
+        return leftAcc;
+    }
+
+    public float getRightAcc() {
+        return rightAcc;
+    }
+
+    public float getSpeed() {
+        return tankSpeed;
+    }
+
+    public float getForwardX() {
+        return forwardX;
+    }
+
+    public float getForwardY() {
+        return forwardY;
     }
 
     @Override
-    public boolean keyTyped(char character) {
-        return false;
+    public float getWidth() {
+        return width;
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+    public float getHeight() {
+        return height;
     }
 
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+    public float getMouseX() {
+        return mouseX;
     }
 
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
+    public float getMouseY() {
+        return mouseY;
     }
 
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+    public float getAngle() {
+        return angle;
     }
 
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
+    public PlayScreen getPlayScreen() {
+        return playScreen;
     }
 
+    public boolean isGoingForward() {
+        return isGoingForward;
+    }
+
+    public boolean isGoingBackward() {
+        return isGoingBackward;
+    }
+
+    public void setGame(TanksGame game) {
+        this.game = game;
+    }
+
+    public void setHull(Body hull) {
+        this.hull = hull;
+    }
+
+    public void setTower(Body tower) {
+        this.tower = tower;
+    }
+
+    public void setJoint(RevoluteJoint joint) {
+        this.joint = joint;
+    }
+
+    public void setBulletBodyDef(BodyDef bulletBodyDef) {
+        this.bulletBodyDef = bulletBodyDef;
+    }
+
+    public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
+        this.bulletFixtureDef = bulletFixtureDef;
+    }
+
+    public void setAcceleration(float acceleration) {
+        this.acceleration = acceleration;
+    }
+
+    public void setLeftAcc(float leftAcc) {
+        this.leftAcc = leftAcc;
+    }
+
+    public void setRightAcc(float rightAcc) {
+        this.rightAcc = rightAcc;
+    }
+
+    public void setSpeed(float speed) {
+        this.tankSpeed = speed;
+    }
+
+    public void setForwardX(float forwardX) {
+        this.forwardX = forwardX;
+    }
+
+    public void setForwardY(float forwardY) {
+        this.forwardY = forwardY;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public void setMouseX(float mouseX) {
+        this.mouseX = mouseX;
+    }
+
+    public void setMouseY(float mouseY) {
+        this.mouseY = mouseY;
+    }
+
+    public void setAngle(float angle) {
+        this.angle = angle;
+    }
+
+    public void setPlayScreen(PlayScreen playScreen) {
+        this.playScreen = playScreen;
+    }
+
+    public void setGoingForward(boolean goingForward) {
+        isGoingForward = goingForward;
+    }
+
+    public void setGoingBackward(boolean goingBackward) {
+        isGoingBackward = goingBackward;
+    }
 }
