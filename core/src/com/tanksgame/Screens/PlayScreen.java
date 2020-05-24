@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tanksgame.Sprites.Enemies.Enemy;
+import com.tanksgame.Sprites.Other.Bullet;
 import com.tanksgame.Sprites.Player;
 import com.tanksgame.Sprites.TileObjects.Tank;
 import com.tanksgame.TanksGame;
@@ -95,13 +96,18 @@ public class PlayScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+
         batch.draw(backgroundTexture, 0, 0);
 
         player.tank.draw(batch);
 
+
         batch.end();
 
-//        b2dr.render(world, camera.combined);
+        b2dr.render(world, camera.combined);
+
+
+
 
     }
 
@@ -143,5 +149,7 @@ public class PlayScreen extends ScreenAdapter {
         return world;
     }
 
-
+    public Player getPlayer() {
+        return player;
+    }
 }

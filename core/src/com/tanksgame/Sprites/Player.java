@@ -43,14 +43,9 @@ public class Player extends Sprite implements InputProcessor {
 
     public void update(float dt) {
         tank.update();
-//        setPosition(tank.hull.getPosition().x - getWidth() / 2, tank.hull.getPosition().y - getHeight() / 2);
 
     }
 
-
-    public void render(float delta) {
-
-    }
 
     @Override
     public boolean keyDown(int keycode) {

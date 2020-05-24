@@ -10,13 +10,17 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.tanksgame.Screens.PlayScreen;
 
+import com.tanksgame.Sprites.Other.Bullet;
+import com.tanksgame.Sprites.Player;
 import com.tanksgame.TanksGame;
+
+import java.util.ArrayList;
 
 
 public class Tank extends Sprite {
     private TanksGame game;
 
-    public Body hull, tower;
+    public Body hull, tower, bullet;
     private RevoluteJoint joint;
 
     private BodyDef bulletBodyDef;
@@ -26,8 +30,8 @@ public class Tank extends Sprite {
     public float leftAcc;
     public float rightAcc;
 
-    public float tankSpeed = 100;
-    public float bulletSpeed = 50000;
+    public float tankSpeed = 50;
+    public float bulletSpeed = 500000;
 
     private float forwardX = 0;
     private float forwardY = 0;
@@ -47,7 +51,9 @@ public class Tank extends Sprite {
     private Fixture hullFixture;
     private Fixture towerFixture;
 
+    private float angleOfShoot = 0;
 
+    public ArrayList<Bullet> bullets;
 
 
     public Tank(World world, float x, float y, float width, float height, PlayScreen playScreen) {
@@ -63,11 +69,11 @@ public class Tank extends Sprite {
 
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2, height/2);
+        shape.setAsBox(width / 3, height / 2.5f);
 
         FixtureDef fixDef = new FixtureDef();
         fixDef.shape = shape;
-        fixDef.density = (float) Math.pow(2, 12);
+        fixDef.density = (float) Math.pow(2, 15);
         fixDef.restitution = .1f;
         fixDef.friction = .5f;
 
@@ -75,7 +81,7 @@ public class Tank extends Sprite {
         hull = world.createBody(bodyDef);
         hullFixture = hull.createFixture(fixDef);
 
-        shape.setAsBox(width/10, height/3);
+        shape.setAsBox(width / 10, height / 3);
 
         tower = world.createBody(bodyDef);
 
@@ -102,11 +108,13 @@ public class Tank extends Sprite {
         bulletShape.setRadius(width / 12);
 
         fixDef.shape = bulletShape;
-        fixDef.density = (float) Math.pow(bulletShape.getRadius(), 25);
-        fixDef.restitution = 0;
-        fixDef.friction = 1;
+//        fixDef.density = (float) Math.pow(bulletShape.getRadius(), 25);
+        fixDef.density = (float) Math.pow(2, 15);
+        fixDef.restitution = .1f;
+        fixDef.friction = .5f;
 
         bulletFixtureDef = fixDef;
+        bullets = new ArrayList<>();
     }
 
     public void shoot() {
@@ -115,11 +123,15 @@ public class Tank extends Sprite {
         float y = MathUtils.sin(rotation);
 
         bulletBodyDef.position.set(tower.getWorldPoint(tmp.set(0, height / 3)));
+//        bullet = hull.getWorld().createBody(bulletBodyDef);
+//        bullet.createFixture(bulletFixtureDef);
+//
+//        bullet.setLinearVelocity(bulletSpeed * x, bulletSpeed * y);
+        angleOfShoot = tower.getAngle();
+        bullets.add(new Bullet(playScreen, angleOfShoot, bullet, bulletBodyDef, bulletFixtureDef, x, y, bulletSpeed));
 
-        Body bullet = hull.getWorld().createBody(bulletBodyDef);
-        bullet.createFixture(bulletFixtureDef);
+        bullets.get(bullets.size() - 1).createBullet();
 
-        bullet.setLinearVelocity(bulletSpeed * x, bulletSpeed * y);
     }
 
     Vector2 tmp = new Vector2();
@@ -128,17 +140,39 @@ public class Tank extends Sprite {
     public void draw(Batch batch) {
         Sprite hullSprite = new Sprite(new Texture("hull.png"));
         hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
-        hullSprite.setOrigin(width/2, height/2);
-        hullSprite.setPosition(hull.getPosition().x - width/2, hull.getPosition().y - height/2);
+        hullSprite.setOrigin(width / 2, height / 2);
+        hullSprite.setPosition(hull.getPosition().x - width / 2, hull.getPosition().y - height / 2);
         hullSprite.setSize(width, height);
         hullSprite.draw(batch);
 
         Sprite towerSprite = new Sprite(new Texture("tower.png"));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
-        towerSprite.setOrigin(13/2f, 16);
-        towerSprite.setPosition(tower.getPosition().x - 13/2f, tower.getPosition().y - 16);
+        towerSprite.setOrigin(13 / 2f, 16);
+        towerSprite.setPosition(tower.getPosition().x - 13 / 2f, tower.getPosition().y - 16);
         towerSprite.setSize(13, 32);
         towerSprite.draw(batch);
+
+//        if (bullet != null) {
+//            Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
+//            bulletSprite.setRotation(angleOfShoot * 180 / (float) Math.PI);
+//            bulletSprite.setOrigin(width / 2, height / 2);
+//            bulletSprite.setPosition(bullet.getPosition().x - width / 2, bullet.getPosition().y - height / 2);
+//            bulletSprite.setSize(width, height);
+//            bulletSprite.draw(batch);
+//        }
+
+
+
+        if (bullets != null && bullets.size() > 0) {
+            for (Bullet bulletTmp : bullets) {
+                Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
+                bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
+                bulletSprite.setOrigin(width/2, height/2);
+                bulletSprite.setPosition(bulletTmp.getPosition().x - width/2, bulletTmp.getPosition().y - height/2);
+                bulletSprite.setSize(width, height);
+                bulletSprite.draw(batch);
+            }
+        }
 
 
     }
@@ -154,6 +188,7 @@ public class Tank extends Sprite {
         turnHullCalculation(x, y);
 
         moveHullCalculation(x, y);
+
 
 
     }
