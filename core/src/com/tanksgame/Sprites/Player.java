@@ -18,17 +18,21 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.TileObjects.Tank;
 import com.tanksgame.TanksGame;
 
 import java.awt.geom.RectangularShape;
+import java.util.TimerTask;
 
 public class Player extends Sprite implements InputProcessor {
 
     public World world;
     private PlayScreen playScreen;
     public Tank tank;
+    private boolean shoot = false;
+
 
     public Player(PlayScreen playScreen) {
         this.playScreen = playScreen;
@@ -103,11 +107,19 @@ public class Player extends Sprite implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         tank.shoot();
-        return false;
+        shoot = true;
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                shoot = false;
+            }
+        }, 0.1f);
+        return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        shoot = false;
         return false;
     }
 
@@ -142,5 +154,9 @@ public class Player extends Sprite implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public boolean isShoot() {
+        return shoot;
     }
 }

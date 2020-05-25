@@ -14,6 +14,8 @@ import com.tanksgame.Sprites.Other.Bullet;
 import com.tanksgame.Sprites.Player;
 import com.tanksgame.TanksGame;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 
@@ -54,6 +56,8 @@ public class Tank extends Sprite {
     private float angleOfShoot = 0;
 
     public ArrayList<Bullet> bullets;
+
+
 
 
     public Tank(World world, float x, float y, float width, float height, PlayScreen playScreen) {
@@ -108,7 +112,6 @@ public class Tank extends Sprite {
         bulletShape.setRadius(width / 12);
 
         fixDef.shape = bulletShape;
-//        fixDef.density = (float) Math.pow(bulletShape.getRadius(), 25);
         fixDef.density = (float) Math.pow(2, 15);
         fixDef.restitution = .1f;
         fixDef.friction = .5f;
@@ -122,12 +125,11 @@ public class Tank extends Sprite {
         float x = MathUtils.cos(rotation);
         float y = MathUtils.sin(rotation);
 
-        bulletBodyDef.position.set(tower.getWorldPoint(tmp.set(0, height / 3)));
-//        bullet = hull.getWorld().createBody(bulletBodyDef);
-//        bullet.createFixture(bulletFixtureDef);
-//
-//        bullet.setLinearVelocity(bulletSpeed * x, bulletSpeed * y);
+        bulletBodyDef.position.set(tower.getWorldPoint(tmp.set(0, height)));
+
         angleOfShoot = tower.getAngle();
+
+
         bullets.add(new Bullet(playScreen, angleOfShoot, bullet, bulletBodyDef, bulletFixtureDef, x, y, bulletSpeed));
 
         bullets.get(bullets.size() - 1).createBullet();
@@ -152,16 +154,6 @@ public class Tank extends Sprite {
         towerSprite.setSize(13, 32);
         towerSprite.draw(batch);
 
-//        if (bullet != null) {
-//            Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
-//            bulletSprite.setRotation(angleOfShoot * 180 / (float) Math.PI);
-//            bulletSprite.setOrigin(width / 2, height / 2);
-//            bulletSprite.setPosition(bullet.getPosition().x - width / 2, bullet.getPosition().y - height / 2);
-//            bulletSprite.setSize(width, height);
-//            bulletSprite.draw(batch);
-//        }
-
-
 
         if (bullets != null && bullets.size() > 0) {
             for (Bullet bulletTmp : bullets) {
@@ -174,7 +166,14 @@ public class Tank extends Sprite {
             }
         }
 
-
+        if (playScreen.getPlayer().isShoot()) {
+            Sprite flameSprite = new Sprite(new Texture("flame.png"));
+            flameSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI+90);
+            flameSprite.setOrigin(width/2,height/2);
+            flameSprite.setPosition(tower.getWorldPoint(tmp.set(0, height)).x-width/2,tower.getWorldPoint(tmp.set(0, height)).y-height/2);
+            flameSprite.setSize(width, height);
+            flameSprite.draw(batch);
+        }
     }
 
 

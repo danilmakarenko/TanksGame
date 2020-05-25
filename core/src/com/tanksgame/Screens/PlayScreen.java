@@ -104,7 +104,7 @@ public class PlayScreen extends ScreenAdapter {
 
         batch.end();
 
-        b2dr.render(world, camera.combined);
+//        b2dr.render(world, camera.combined);
 
 
 
