@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
@@ -59,9 +57,7 @@ public class Tank extends Sprite {
 
     public ArrayList<Bullet> bullets;
 
-    private Sprite hullSprite;
-    private Sprite towerSprite;
-    private Sprite flameSprite;
+
 
 
     public Tank(World world, float x, float y, float width, float height, PlayScreen playScreen) {
@@ -144,24 +140,19 @@ public class Tank extends Sprite {
     Vector2 tmp2 = new Vector2();
 
     public void draw(Batch batch) {
-        hullSprite = new Sprite(new Texture("hull.png"));
+        Sprite hullSprite = new Sprite(new Texture("hull.png"));
         hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
         hullSprite.setOrigin(width / 2, height / 2);
         hullSprite.setPosition(hull.getPosition().x - width / 2, hull.getPosition().y - height / 2);
         hullSprite.setSize(width, height);
-//        hullSprite.draw(batch);
-        playScreen.getRenderer().addSprite(hullSprite);
+        hullSprite.draw(batch);
 
-
-
-
-        towerSprite = new Sprite(new Texture("tower.png"));
+        Sprite towerSprite = new Sprite(new Texture("tower.png"));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
         towerSprite.setOrigin(13 / 2f, 16);
         towerSprite.setPosition(tower.getPosition().x - 13 / 2f, tower.getPosition().y - 16);
         towerSprite.setSize(13, 32);
-//        towerSprite.draw(batch);
-        playScreen.getRenderer().addSprite(towerSprite);
+        towerSprite.draw(batch);
 
 
         if (bullets != null && bullets.size() > 0) {
@@ -176,14 +167,12 @@ public class Tank extends Sprite {
         }
 
         if (playScreen.getPlayer().isShoot()) {
-            flameSprite = new Sprite(new Texture("flame.png"));
+            Sprite flameSprite = new Sprite(new Texture("flame.png"));
             flameSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI+90);
             flameSprite.setOrigin(width/2,height/2);
             flameSprite.setPosition(tower.getWorldPoint(tmp.set(0, height)).x-width/2,tower.getWorldPoint(tmp.set(0, height)).y-height/2);
             flameSprite.setSize(width, height);
-//            flameSprite.draw(batch);
-            playScreen.getRenderer().addSprite(flameSprite);
-
+            flameSprite.draw(batch);
         }
     }
 
@@ -389,17 +378,5 @@ public class Tank extends Sprite {
 
     public Fixture getTowerFixture() {
         return towerFixture;
-    }
-
-    public Sprite getHullSprite() {
-        return hullSprite;
-    }
-
-    public Sprite getTowerSprite() {
-        return towerSprite;
-    }
-
-    public Sprite getFlameSprite() {
-        return flameSprite;
     }
 }

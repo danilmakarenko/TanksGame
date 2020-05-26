@@ -141,8 +141,8 @@ public class Player extends Sprite implements InputProcessor {
         Vector2 d = sp2.sub(a);
 
 
-//        System.out.println(sp2);
-//        System.out.println("Tower: " + a);
+        System.out.println(sp2);
+        System.out.println("Tower: " + a);
 
         // Now you can set the angle;
         tank.tower.setTransform(tank.tower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
@@ -159,6 +159,4 @@ public class Player extends Sprite implements InputProcessor {
     public boolean isShoot() {
         return shoot;
     }
-
-
 }
