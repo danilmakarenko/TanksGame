@@ -170,7 +170,7 @@ public class Tank extends Sprite {
         flameGSprite = new Sprite(flameG);
         flameHSprite = new Sprite(flameH);
 
-        animation = new Animation(0.1f, flameASprite, flameBSprite, flameCSprite, flameDSprite, flameESprite,
+        animation = new Animation(0.2f, flameASprite, flameBSprite, flameCSprite, flameDSprite, flameESprite,
                 flameFSprite, flameGSprite, flameHSprite);
         animation.setPlayMode(Animation.PlayMode.NORMAL);
 
@@ -205,14 +205,16 @@ public class Tank extends Sprite {
         hullSprite.setOrigin(width / 2, height / 2);
         hullSprite.setPosition(hull.getPosition().x - width / 2, hull.getPosition().y - height / 2);
         hullSprite.setSize(width, height);
-        hullSprite.draw(batch);
+//        hullSprite.draw(batch);
+        playScreen.getRenderer().addSprite(hullSprite);
 
         Sprite towerSprite = new Sprite(new Texture("tower.png"));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
         towerSprite.setOrigin(13 / 2f, 16);
         towerSprite.setPosition(tower.getPosition().x - 13 / 2f, tower.getPosition().y - 16);
         towerSprite.setSize(13, 32);
-        towerSprite.draw(batch);
+//        towerSprite.draw(batch);
+        playScreen.getRenderer().addSprite(towerSprite);
 
 
         if (bullets != null && bullets.size() > 0) {
@@ -234,7 +236,7 @@ public class Tank extends Sprite {
         if (playScreen.getPlayer().isShoot())
             isReady = true;
         if (isReady) {
-            Sound sound = Gdx.audio.newSound(Gdx.files.absolute("/Users/kostia/Desktop/NaUKMA_1course_2sem_summer/TanksGame/core/sounds/shot_sound.mp3"));
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/shot_sound.mp3"));
             long id = sound.play(0.2f);
             sound.setPitch(id, 1.5f);
 
@@ -249,9 +251,12 @@ public class Tank extends Sprite {
                 ani.setOrigin(width / 2, height / 2);
                 ani.setPosition(tower.getWorldPoint(tmp.set(0, height)).x - width / 2, tower.getWorldPoint(tmp.set(0, height)).y - height / 2);
                 ani.setSize(width, height);
-                ani.draw(batch);
+//                ani.draw(batch);
+            playScreen.getRenderer().addSprite(ani);
 //            } else {
+            if (player != null) {
                 player.setShoot(false);
+            }
                 isReady = false;
 //                System.out.println("Here");
                 animation = new Animation(0.25f, flameASprite, flameBSprite, flameCSprite, flameDSprite, flameESprite,
