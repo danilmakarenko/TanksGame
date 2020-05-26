@@ -1,5 +1,7 @@
 package com.tanksgame.Sprites.TileObjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 
 import com.tanksgame.Sprites.Other.Bullet;
@@ -50,18 +53,48 @@ public class Tank extends Sprite {
     private boolean isGoingForward = false;
     private boolean isGoingBackward = false;
 
+    private boolean isReloaded = true;
+    private boolean isReady = false;
+
     private Fixture hullFixture;
     private Fixture towerFixture;
 
     private float angleOfShoot = 0;
 
+    private double timeOfShooting;
+
+    private int reloadTime = 5;
+
+    private float animationTimer = 0;
+
     public ArrayList<Bullet> bullets;
 
+    private Texture flameA;
+    private Texture flameB;
+    private Texture flameC;
+    private Texture flameD;
+    private Texture flameE;
+    private Texture flameF;
+    private Texture flameG;
+    private Texture flameH;
+
+    private Animation animation;
+
+    private Player player;
+
+    private Sprite flameASprite;
+    private Sprite flameBSprite;
+    private Sprite flameCSprite;
+    private Sprite flameDSprite;
+    private Sprite flameESprite;
+    private Sprite flameFSprite;
+    private Sprite flameGSprite;
+    private Sprite flameHSprite;
 
 
+    public Tank(World world, float x, float y, float width, float height, PlayScreen playScreen, Player player) {
 
-    public Tank(World world, float x, float y, float width, float height, PlayScreen playScreen) {
-
+        this.player = player;
 
         this.playScreen = playScreen;
 
@@ -70,7 +103,6 @@ public class Tank extends Sprite {
         bodyDef.position.set(x, y);
         this.width = width;
         this.height = height;
-
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width / 3, height / 2.5f);
@@ -118,6 +150,31 @@ public class Tank extends Sprite {
 
         bulletFixtureDef = fixDef;
         bullets = new ArrayList<>();
+
+
+        flameA = new Texture(Gdx.files.internal("flame/Flame_A.png"));
+        flameB = new Texture(Gdx.files.internal("flame/Flame_B.png"));
+        flameC = new Texture(Gdx.files.internal("flame/Flame_C.png"));
+        flameD = new Texture(Gdx.files.internal("flame/Flame_D.png"));
+        flameE = new Texture(Gdx.files.internal("flame/Flame_E.png"));
+        flameF = new Texture(Gdx.files.internal("flame/Flame_F.png"));
+        flameG = new Texture(Gdx.files.internal("flame/Flame_G.png"));
+        flameH = new Texture(Gdx.files.internal("flame/Flame_H.png"));
+
+        flameASprite = new Sprite(flameA);
+        flameBSprite = new Sprite(flameB);
+        flameCSprite = new Sprite(flameC);
+        flameDSprite = new Sprite(flameD);
+        flameESprite = new Sprite(flameE);
+        flameFSprite = new Sprite(flameF);
+        flameGSprite = new Sprite(flameG);
+        flameHSprite = new Sprite(flameH);
+
+        animation = new Animation(0.1f, flameASprite, flameBSprite, flameCSprite, flameDSprite, flameESprite,
+                flameFSprite, flameGSprite, flameHSprite);
+        animation.setPlayMode(Animation.PlayMode.NORMAL);
+
+
     }
 
     public void shoot() {
@@ -133,6 +190,9 @@ public class Tank extends Sprite {
         bullets.add(new Bullet(playScreen, angleOfShoot, bullet, bulletBodyDef, bulletFixtureDef, x, y, bulletSpeed));
 
         bullets.get(bullets.size() - 1).createBullet();
+        isReloaded = false;
+        timeOfShooting = System.nanoTime();
+        System.out.println("Reloaded!");
 
     }
 
@@ -159,35 +219,70 @@ public class Tank extends Sprite {
             for (Bullet bulletTmp : bullets) {
                 Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
                 bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
-                bulletSprite.setOrigin(width/2, height/2);
-                bulletSprite.setPosition(bulletTmp.getPosition().x - width/2, bulletTmp.getPosition().y - height/2);
+                bulletSprite.setOrigin(width / 2, height / 2);
+                bulletSprite.setPosition(bulletTmp.getPosition().x - width / 2, bulletTmp.getPosition().y - height / 2);
                 bulletSprite.setSize(width, height);
                 bulletSprite.draw(batch);
             }
         }
 
-        if (playScreen.getPlayer().isShoot()) {
-            Sprite flameSprite = new Sprite(new Texture("flame.png"));
-            flameSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI+90);
-            flameSprite.setOrigin(width/2,height/2);
-            flameSprite.setPosition(tower.getWorldPoint(tmp.set(0, height)).x-width/2,tower.getWorldPoint(tmp.set(0, height)).y-height/2);
-            flameSprite.setSize(width, height);
-            flameSprite.draw(batch);
+//        TextureRegion flameTexture = (TextureRegion) animation.getKeyFrame(animationTimer);
+//
+//        batch.draw(flameTexture, 0, 0);
+
+
+        if (playScreen.getPlayer().isShoot())
+            isReady = true;
+        if (isReady) {
+            Sound sound = Gdx.audio.newSound(Gdx.files.absolute("/Users/kostia/Desktop/NaUKMA_1course_2sem_summer/TanksGame/core/sounds/shot_sound.mp3"));
+            long id = sound.play(0.2f);
+            sound.setPitch(id, 1.5f);
+
+//            System.out.println(animation.getAnimationDuration());
+//            System.out.println(animation.getKeyFrame(animationTimer).toString());
+
+
+//            if (animation.isAnimationFinished(animationTimer) == false) {
+                Sprite ani = (Sprite) animation.getKeyFrame(animationTimer);
+                System.out.println(ani.getTexture().toString());
+                ani.setRotation(tower.getAngle() * 180 / (float) Math.PI);
+                ani.setOrigin(width / 2, height / 2);
+                ani.setPosition(tower.getWorldPoint(tmp.set(0, height)).x - width / 2, tower.getWorldPoint(tmp.set(0, height)).y - height / 2);
+                ani.setSize(width, height);
+                ani.draw(batch);
+//            } else {
+                player.setShoot(false);
+                isReady = false;
+//                System.out.println("Here");
+                animation = new Animation(0.25f, flameASprite, flameBSprite, flameCSprite, flameDSprite, flameESprite,
+                        flameFSprite, flameGSprite, flameHSprite);
+//                System.out.println("Test = " + animation.isAnimationFinished(animationTimer));
+                animation.setPlayMode(Animation.PlayMode.NORMAL);
+//            }
         }
     }
 
 
-    public void update() {
+//            Sprite flameSprite = new Sprite(new Texture("flame/flame.png"));
+//            flameSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI + 90);
+//            flameSprite.setOrigin(width / 2, height / 2);
+//            flameSprite.setPosition(tower.getWorldPoint(tmp.set(0, height)).x - width / 2, tower.getWorldPoint(tmp.set(0, height)).y - height / 2);
+//            flameSprite.setSize(width, height);
+//            flameSprite.draw(batch);
+//        }
+
+
+    public void update(float delta) {
 
         float rotation = (float) ((float) hull.getTransform().getRotation() + Math.PI / 2);
         float x = MathUtils.cos(rotation);
         float y = MathUtils.sin(rotation);
 
+        animationTimer += delta;
 
         turnHullCalculation(x, y);
 
         moveHullCalculation(x, y);
-
 
 
     }

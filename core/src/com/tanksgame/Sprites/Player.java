@@ -32,12 +32,20 @@ public class Player extends Sprite implements InputProcessor {
     private PlayScreen playScreen;
     public Tank tank;
     private boolean shoot = false;
+    private boolean isReloaded = true;
+    private boolean isEscapePressed = false;
+
+    private double shootingTime;
+
+    private int reloadTime = 2;
+
+    private PlayScreen.State state;
 
 
     public Player(PlayScreen playScreen) {
         this.playScreen = playScreen;
         this.world = playScreen.getWorld();
-        tank = new Tank(world, 0, 0, 32, 32, playScreen);
+        tank = new Tank(world, 0, 0, 32, 32, playScreen, this);
 
     }
 
@@ -46,10 +54,17 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public void update(float dt) {
-        tank.update();
+        tank.update(dt);
+
+        double now = System.nanoTime();
+        if ((now - shootingTime) / 1000000000 >= reloadTime)
+            isReloaded = true;
 
     }
 
+    public PlayScreen.State getState() {
+        return state;
+    }
 
     @Override
     public boolean keyDown(int keycode) {
@@ -67,6 +82,13 @@ public class Player extends Sprite implements InputProcessor {
                 break;
             case Input.Keys.D:
                 tank.rightAcc = -tank.acceleration;
+                break;
+            case Input.Keys.ESCAPE:
+                if (state == PlayScreen.State.PAUSE)
+                    state = PlayScreen.State.RUN;
+                else
+                    state = PlayScreen.State.PAUSE;
+                isEscapePressed = true;
                 break;
             default:
                 return false;
@@ -106,14 +128,18 @@ public class Player extends Sprite implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        tank.shoot();
-        shoot = true;
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                shoot = false;
-            }
-        }, 0.1f);
+        if (isReloaded) {
+            tank.shoot();
+            isReloaded = false;
+            shootingTime = System.nanoTime();
+            shoot = true;
+//            Timer.schedule(new Timer.Task() {
+//                @Override
+//                public void run() {
+//                    shoot = false;
+//                }
+//            }, 0.1f);
+        }
         return true;
     }
 
@@ -141,8 +167,8 @@ public class Player extends Sprite implements InputProcessor {
         Vector2 d = sp2.sub(a);
 
 
-        System.out.println(sp2);
-        System.out.println("Tower: " + a);
+//        System.out.println(sp2);
+//        System.out.println("Tower: " + a);
 
         // Now you can set the angle;
         tank.tower.setTransform(tank.tower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
@@ -158,5 +184,17 @@ public class Player extends Sprite implements InputProcessor {
 
     public boolean isShoot() {
         return shoot;
+    }
+
+    public void setShoot(boolean shoot) {
+        this.shoot = shoot;
+    }
+
+    public boolean isEscapePressed() {
+        return isEscapePressed;
+    }
+
+    public void setEscapePressed(boolean escapePressed) {
+        isEscapePressed = escapePressed;
     }
 }
