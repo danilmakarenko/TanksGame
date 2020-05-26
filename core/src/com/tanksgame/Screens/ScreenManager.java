@@ -14,7 +14,7 @@ public class ScreenManager {
 
     public boolean backgroundMusicIsPlaying = true;
 
-    public Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.absolute("/Users/kostia/Desktop/NaUKMA_1course_2sem_summer/TanksGame/core/music/background_menuScreen.mp3"));
+    public Music backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/background_menuScreen.mp3"));
     ;
 
     public ScreenManager(TanksGame game) {

@@ -234,7 +234,7 @@ public class Tank extends Sprite {
         if (playScreen.getPlayer().isShoot())
             isReady = true;
         if (isReady) {
-            Sound sound = Gdx.audio.newSound(Gdx.files.absolute("/Users/kostia/Desktop/NaUKMA_1course_2sem_summer/TanksGame/core/sounds/shot_sound.mp3"));
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/shot_sound.mp3"));
             long id = sound.play(0.2f);
             sound.setPitch(id, 1.5f);
 
@@ -243,21 +243,21 @@ public class Tank extends Sprite {
 
 
 //            if (animation.isAnimationFinished(animationTimer) == false) {
-                Sprite ani = (Sprite) animation.getKeyFrame(animationTimer);
-                System.out.println(ani.getTexture().toString());
-                ani.setRotation(tower.getAngle() * 180 / (float) Math.PI);
-                ani.setOrigin(width / 2, height / 2);
-                ani.setPosition(tower.getWorldPoint(tmp.set(0, height)).x - width / 2, tower.getWorldPoint(tmp.set(0, height)).y - height / 2);
-                ani.setSize(width, height);
-                ani.draw(batch);
+            Sprite ani = (Sprite) animation.getKeyFrame(animationTimer);
+            System.out.println(ani.getTexture().toString());
+            ani.setRotation(tower.getAngle() * 180 / (float) Math.PI);
+            ani.setOrigin(width / 2, height / 2);
+            ani.setPosition(tower.getWorldPoint(tmp.set(0, height)).x - width / 2, tower.getWorldPoint(tmp.set(0, height)).y - height / 2);
+            ani.setSize(width, height);
+            ani.draw(batch);
 //            } else {
-                player.setShoot(false);
-                isReady = false;
+            player.setShoot(false);
+            isReady = false;
 //                System.out.println("Here");
-                animation = new Animation(0.25f, flameASprite, flameBSprite, flameCSprite, flameDSprite, flameESprite,
-                        flameFSprite, flameGSprite, flameHSprite);
+            animation = new Animation(0.25f, flameASprite, flameBSprite, flameCSprite, flameDSprite, flameESprite,
+                    flameFSprite, flameGSprite, flameHSprite);
 //                System.out.println("Test = " + animation.isAnimationFinished(animationTimer));
-                animation.setPlayMode(Animation.PlayMode.NORMAL);
+            animation.setPlayMode(Animation.PlayMode.NORMAL);
 //            }
         }
     }
