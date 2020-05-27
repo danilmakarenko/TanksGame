@@ -6,10 +6,13 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tanksgame.TanksGame;
@@ -29,6 +32,8 @@ public class CreditsScreen extends ScreenAdapter {
     private Texture backgroundTexture;
     private Texture returnButtonTexture;
 
+    private GlyphLayout glyphLayout;
+
     CreditsScreen(TanksGame game) {
         this.game = game;
         screenManager = new ScreenManager(game);
@@ -40,23 +45,15 @@ public class CreditsScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
         batch = new SpriteBatch();
 
-        backgroundTexture = new Texture(Gdx.files.internal("creditsScreen/background_credits.png"));
+        backgroundTexture = new Texture(Gdx.files.internal("creditsScreen/background.jpg"));
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        Pixmap originalPixmap = new Pixmap(Gdx.files.internal("creditsScreen/return_button.png"));
-        Pixmap formattedPixmap = new Pixmap(Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 7, originalPixmap.getFormat());
-        formattedPixmap.drawPixmap(originalPixmap,
-                0, 0, originalPixmap.getWidth(), originalPixmap.getHeight(),
-                0, 0, formattedPixmap.getWidth(), formattedPixmap.getHeight()
-        );
 
-        returnButtonTexture = new Texture(formattedPixmap);
-        originalPixmap.dispose();
-        formattedPixmap.dispose();
+        returnButtonTexture = new Texture(Gdx.files.internal("creditsScreen/return_button.png"));
         Image returnButton = new Image(returnButtonTexture);
         returnButton.setSize(returnButtonTexture.getWidth(), returnButtonTexture.getHeight());
-        returnButton.setPosition(50, Gdx.graphics.getHeight() - 200);
+        returnButton.setPosition(Gdx.graphics.getWidth() / 100, 98 * Gdx.graphics.getHeight() / 100 - returnButton.getHeight());
         returnButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -65,6 +62,14 @@ public class CreditsScreen extends ScreenAdapter {
                 dispose();
             }
         });
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 32;
+        font = generator.generateFont(parameter);
+        generator.dispose();
+
+        glyphLayout = new GlyphLayout();
 
         stage.addActor(background);
         stage.addActor(returnButton);
@@ -82,7 +87,13 @@ public class CreditsScreen extends ScreenAdapter {
 
         batch.begin();
 
-        font.draw(batch, "Dania Makarenk0\nKostla Korzh", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+        String s = "The game was written by:\n\n\nDania Makarenko\nKostia Korzh\n\n\nAs a summer project for\nNaUKMA Java course";
+        String s1 = "May-June 2020";
+
+        glyphLayout.setText(font, s);
+        font.draw(batch, s, Gdx.graphics.getWidth() / 2 - glyphLayout.width / 2, Gdx.graphics.getHeight() * 0.90f);
+        glyphLayout.setText(font, s1);
+        font.draw(batch, s1, Gdx.graphics.getWidth() / 2 - glyphLayout.width / 2, Gdx.graphics.getHeight() * 0.1f);
 
         batch.end();
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -45,7 +46,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     private SpriteBatch batch;
 
-
     private Player player;
 
     private Window pauseWindow;
@@ -69,13 +69,10 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     private Image resumeButton;
     private Image exitButton;
 
-
     //Tiled map variables
     private TmxMapLoader maploader;
     private TiledMap map;
     private OrthogonalTiledMapRendererWithSprites renderer;
-
-
 
 
     public PlayScreen(TanksGame game) {
@@ -150,15 +147,16 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         stage.addActor(resumeButton);
         stage.addActor(exitButton);
 
-        multiplexer.addProcessor( stage);
-        multiplexer.addProcessor( player ); // Your screen
-        Gdx.input.setInputProcessor( multiplexer );
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(player); // Your screen
+        Gdx.input.setInputProcessor(multiplexer);
 
 
         //Load our map and setup our map renderer
         maploader = new TmxMapLoader();
         map = maploader.load("level1.tmx");
-        renderer = new OrthogonalTiledMapRendererWithSprites(map,player.tank);
+        renderer = new OrthogonalTiledMapRendererWithSprites(map, player.tank);
+
 
     }
 
@@ -190,7 +188,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
         switch (stateNew) {
             case RUN: {
-                Gdx.input.setInputProcessor( multiplexer );
+                Gdx.input.setInputProcessor(multiplexer);
                 clearScreen();
                 update(delta);
                 renderer.render();
@@ -209,7 +207,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
                 stage.act(delta);
                 stage.draw();
 //                Gdx.input.setInputProcessor(this);
-                Gdx.input.setInputProcessor( multiplexer );
+                Gdx.input.setInputProcessor(multiplexer);
             }
             break;
         }

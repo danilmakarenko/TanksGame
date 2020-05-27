@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -41,16 +42,21 @@ public class Player extends Sprite implements InputProcessor {
 
     private PlayScreen.State state;
 
+    private ShapeRenderer shapeRenderer;
 
     public Player(PlayScreen playScreen) {
         this.playScreen = playScreen;
         this.world = playScreen.getWorld();
         tank = new Tank(world, 0, 0, 32, 32, playScreen, this);
-
+        shapeRenderer = new ShapeRenderer();
     }
 
     public void draw(Batch batch) {
         super.draw(batch);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer.setColor(Color.WHITE);
+//        shapeRenderer.arc(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 10, 0, (float) 180);
+//        shapeRenderer.end();
     }
 
     public void update(float dt) {

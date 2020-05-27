@@ -3,9 +3,11 @@ package com.tanksgame.Sprites.TileObjects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
@@ -63,7 +65,7 @@ public class Tank extends Sprite {
 
     private double timeOfShooting;
 
-    private int reloadTime = 5;
+    private int reloadTime = 2;
 
     private float animationTimer = 0;
 
@@ -90,6 +92,10 @@ public class Tank extends Sprite {
     private Sprite flameFSprite;
     private Sprite flameGSprite;
     private Sprite flameHSprite;
+
+    private ShapeRenderer shapeRenderer;
+
+    private double reloadProgress;
 
 
     public Tank(World world, float x, float y, float width, float height, PlayScreen playScreen, Player player) {
@@ -174,6 +180,7 @@ public class Tank extends Sprite {
                 flameFSprite, flameGSprite, flameHSprite);
         animation.setPlayMode(Animation.PlayMode.NORMAL);
 
+        shapeRenderer = new ShapeRenderer();
 
     }
 
@@ -216,6 +223,22 @@ public class Tank extends Sprite {
 //        towerSprite.draw(batch);
         playScreen.getRenderer().addSprite(towerSprite);
 
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+////        if (isReloaded == false) {
+//        shapeRenderer.setColor(Color.WHITE);
+////        if ((int)(reloadProgress * 10) % 2 == 0)
+//
+//            shapeRenderer.arc(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 + 2 * height, 10, 0, (float) reloadProgress * 360);
+//        System.out.println((reloadProgress * 10));
+//        shapeRenderer.end();
+//        }
+
+//        Pixmap pixmap = new Pixmap(40, 40, Pixmap.Format.RGBA8888);
+//        pixmap.setColor(Color.BLACK);
+//        pixmap.fillCircle(Gdx.graphics.getWidth() / 2, (int) (Gdx.graphics.getHeight() / 2 + 2 * height), 10);
+//        Texture texture = new Texture(pixmap);
+//
+//        batch.draw(texture,Gdx.graphics.getWidth() / 2, (int) (Gdx.graphics.getHeight() / 2 + 2 * height));
 
         if (bullets != null && bullets.size() > 0) {
             for (Bullet bulletTmp : bullets) {
@@ -245,26 +268,28 @@ public class Tank extends Sprite {
 
 
 //            if (animation.isAnimationFinished(animationTimer) == false) {
-                Sprite ani = (Sprite) animation.getKeyFrame(animationTimer);
-                System.out.println(ani.getTexture().toString());
-                ani.setRotation(tower.getAngle() * 180 / (float) Math.PI);
-                ani.setOrigin(width / 2, height / 2);
-                ani.setPosition(tower.getWorldPoint(tmp.set(0, height)).x - width / 2, tower.getWorldPoint(tmp.set(0, height)).y - height / 2);
-                ani.setSize(width, height);
-//                ani.draw(batch);
+            Sprite ani = (Sprite) animation.getKeyFrame(animationTimer);
+            System.out.println(ani.getTexture().toString());
+            ani.setRotation(tower.getAngle() * 180 / (float) Math.PI);
+            ani.setOrigin(width / 2, height / 2);
+            ani.setPosition(tower.getWorldPoint(tmp.set(0, height)).x - width / 2, tower.getWorldPoint(tmp.set(0, height)).y - height / 2);
+            ani.setSize(width, height);
+                ani.draw(batch);
             playScreen.getRenderer().addSprite(ani);
 //            } else {
             if (player != null) {
                 player.setShoot(false);
             }
-                isReady = false;
+            isReady = false;
 //                System.out.println("Here");
-                animation = new Animation(0.25f, flameASprite, flameBSprite, flameCSprite, flameDSprite, flameESprite,
-                        flameFSprite, flameGSprite, flameHSprite);
+            animation = new Animation(0.25f, flameASprite, flameBSprite, flameCSprite, flameDSprite, flameESprite,
+                    flameFSprite, flameGSprite, flameHSprite);
 //                System.out.println("Test = " + animation.isAnimationFinished(animationTimer));
-                animation.setPlayMode(Animation.PlayMode.NORMAL);
+            animation.setPlayMode(Animation.PlayMode.NORMAL);
 //            }
         }
+
+
     }
 
 
@@ -289,6 +314,11 @@ public class Tank extends Sprite {
 
         moveHullCalculation(x, y);
 
+        if (isReloaded == false) {
+            double now = System.nanoTime();
+            reloadProgress = (now - timeOfShooting) / 1000000000 / reloadTime;
+//            System.out.println(reloadProgress);
+        }
 
     }
 
