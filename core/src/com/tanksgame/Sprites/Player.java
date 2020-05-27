@@ -47,7 +47,7 @@ public class Player extends Sprite implements InputProcessor {
     public Player(PlayScreen playScreen) {
         this.playScreen = playScreen;
         this.world = playScreen.getWorld();
-        tank = new Tank(world, 0, 0, 32, 32, playScreen, this);
+        tank = new Tank(world, 50, 50, 32, 32, playScreen, this);
         shapeRenderer = new ShapeRenderer();
     }
 

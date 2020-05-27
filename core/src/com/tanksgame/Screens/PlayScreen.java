@@ -1,6 +1,7 @@
 package com.tanksgame.Screens;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -89,9 +91,10 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
         world = new World(new Vector2(0, 0), true);
 
-        camera = new OrthographicCamera(200, 200 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
-        camera.position.set(0, 0, 0);
-        viewport = new FitViewport(TanksGame.WIDTH / TanksGame.PPM, TanksGame.HEIGHT / TanksGame.PPM, camera);
+//        camera = new OrthographicCamera(200, 200 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+        camera = new OrthographicCamera();
+//        camera.position.set(0, 0, 0);
+        viewport = new FitViewport(TanksGame.WIDTH , TanksGame.HEIGHT , camera);
 
         b2dr = new Box2DDebugRenderer();
 
@@ -167,12 +170,19 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     public void update(float dt) {
 
         player.update(dt);
-
+        renderer.setView(camera);
         world.step(1 / 60f, 8, 3);
 
-        camera.position.set(player.tank.getHull().getPosition().x, player.tank.getHull().getPosition().y, 0);
+        float startX = camera.viewportWidth/2;
+        float startY = camera.viewportHeight/2;
+
+
+//        camera.position.set(player.tank.getHull().getPosition().x, player.tank.getHull().getPosition().y, 0);
+        cameraToPlayer(camera, new Vector2(player.tank.hull.getPosition().x, player.tank.hull.getPosition().y));
+        setBoundariesForCamera(camera,startX,startY,map.getProperties().get("width",Integer.class)*32-startX*2,map.getProperties().get("height",Integer.class)*32-startY*2);
+
         camera.update();
-        renderer.setView(camera);
+
 
     }
 
@@ -326,5 +336,32 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     public OrthogonalTiledMapRendererWithSprites getRenderer() {
         return renderer;
+    }
+
+    private void setBoundariesForCamera(Camera camera, float startX, float startY, float width, float height) {
+        Vector3 position = camera.position;
+        if (position.x < startX) {
+            position.x = startX;
+        }
+        if (position.y < startY) {
+            position.y = startY;
+        }
+        if (position.x > startX+width) {
+            position.x = startX + width;
+
+        }
+        if (position.y > startY+height) {
+            position.y = startY + height;
+        }
+        camera.position.set(position);
+        camera.update();
+    }
+
+    public void cameraToPlayer(Camera camera, Vector2 player) {
+        Vector3 position = camera.position;
+        position.x = camera.position.x + (player.x - camera.position.x)*.1f;
+        position.y = camera.position.y + (player.y - camera.position.y)*.1f;
+        camera.position.set(position);
+        camera.update();
     }
 }
