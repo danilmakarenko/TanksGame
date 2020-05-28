@@ -20,13 +20,13 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
     private int drawSpritesAfterLayer = 1;
     private Tank tank;
 
-    public OrthogonalTiledMapRendererWithSprites(TiledMap map, Tank tank) {
-        super(map);
+    public OrthogonalTiledMapRendererWithSprites(TiledMap map, Tank tank, float unitSize) {
+        super(map, unitSize);
         sprites = new ArrayList<Sprite>();
         this.tank = tank;
     }
 
-    public void addSprite(Sprite sprite){
+    public void addSprite(Sprite sprite) {
         sprites.add(sprite);
     }
 
@@ -68,10 +68,10 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
         for (MapLayer layer : map.getLayers()) {
             if (layer.isVisible()) {
                 if (layer instanceof TiledMapTileLayer) {
-                    renderTileLayer((TiledMapTileLayer)layer);
+                    renderTileLayer((TiledMapTileLayer) layer);
                     currentLayer++;
-                    if(currentLayer == drawSpritesAfterLayer){
-                        for(Sprite sprite : sprites)
+                    if (currentLayer == drawSpritesAfterLayer) {
+                        for (Sprite sprite : sprites)
                             sprite.draw(this.getBatch());
                     }
                 } else {

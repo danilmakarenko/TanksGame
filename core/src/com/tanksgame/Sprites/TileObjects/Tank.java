@@ -27,12 +27,12 @@ public class Tank extends Sprite {
     private BodyDef bulletBodyDef;
     private FixtureDef bulletFixtureDef;
 
-    public float acceleration = 999999999;
+    public float acceleration = 9999999;
     public float leftAcc;
     public float rightAcc;
 
-    public float tankSpeed = 999999999;
-    public float bulletSpeed = 500000;
+    public float tankSpeed = 25;
+    public float bulletSpeed = 100;
 
     private float forwardX = 0;
     private float forwardY = 0;
@@ -108,8 +108,8 @@ public class Tank extends Sprite {
 
         FixtureDef fixDef = new FixtureDef();
         fixDef.filter.categoryBits = TanksGame.PLAYER_BIT;
-        fixDef.filter.maskBits = TanksGame.EDGE_BIT|
-                TanksGame.BUILDING_BIT|
+        fixDef.filter.maskBits = TanksGame.EDGE_BIT |
+                TanksGame.BUILDING_BIT |
                 TanksGame.TREE_BIT;
         fixDef.shape = shape;
         fixDef.density = (float) Math.pow(2, 15);
@@ -214,9 +214,9 @@ public class Tank extends Sprite {
 
         Sprite towerSprite = new Sprite(new Texture("tower.png"));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
-        towerSprite.setOrigin(13 / 2f, 16);
-        towerSprite.setPosition(tower.getPosition().x - 13 / 2f, tower.getPosition().y - 16);
-        towerSprite.setSize(13, 32);
+        towerSprite.setOrigin(width / 3, height / 6);
+        towerSprite.setPosition(hull.getPosition().x - width / 3, hull.getPosition().y - height / 4f);
+        towerSprite.setSize(width / 1.5f, height / 1.5f);
 //        towerSprite.draw(batch);
         playScreen.getRenderer().addSprite(towerSprite);
 

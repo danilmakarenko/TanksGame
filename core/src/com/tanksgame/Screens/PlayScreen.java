@@ -98,7 +98,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 //        camera = new OrthographicCamera(200, 200 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera = new OrthographicCamera();
 //        camera.position.set(0, 0, 0);
-        viewport = new FitViewport(TanksGame.WIDTH , TanksGame.HEIGHT , camera);
+        viewport = new FitViewport(TanksGame.WIDTH, TanksGame.HEIGHT, camera);
 
         b2dr = new Box2DDebugRenderer();
 
@@ -162,7 +162,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         //Load our map and setup our map renderer
         maploader = new TmxMapLoader();
         map = maploader.load("level1.tmx");
-        renderer = new OrthogonalTiledMapRendererWithSprites(map, player.tank);
+        renderer = new OrthogonalTiledMapRendererWithSprites(map, player.tank, 0.2f);
         creator = new Box2DWorldCreator(this);
 
     }
@@ -177,12 +177,12 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         renderer.setView(camera);
         world.step(1 / 60f, 8, 3);
 
-        float startX = camera.viewportWidth/2;
-        float startY = camera.viewportHeight/2;
+        float startX = camera.viewportWidth / 12;
+        float startY = camera.viewportHeight / 12;
 
 
         cameraToPlayer(camera, new Vector2(player.tank.hull.getPosition().x, player.tank.hull.getPosition().y));
-        setBoundariesForCamera(camera,startX,startY,map.getProperties().get("width",Integer.class)*32-startX*2,map.getProperties().get("height",Integer.class)*32-startY*2);
+        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) * 32 / 12f - startX * 2, map.getProperties().get("height", Integer.class) * 32 / 12f - startY * 2);
 
         camera.update();
 
@@ -235,8 +235,8 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width / 2;
-        camera.viewportHeight = height / 2;
+        camera.viewportWidth = width / 12;
+        camera.viewportHeight = height / 12;
     }
 
     @Override
@@ -349,11 +349,11 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         if (position.y < startY) {
             position.y = startY;
         }
-        if (position.x > startX+width) {
+        if (position.x > startX + width) {
             position.x = startX + width;
 
         }
-        if (position.y > startY+height) {
+        if (position.y > startY + height) {
             position.y = startY + height;
         }
         camera.position.set(position);
@@ -362,8 +362,8 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     public void cameraToPlayer(Camera camera, Vector2 player) {
         Vector3 position = camera.position;
-        position.x = camera.position.x + (player.x - camera.position.x)*.1f;
-        position.y = camera.position.y + (player.y - camera.position.y)*.1f;
+        position.x = camera.position.x + (player.x - camera.position.x) * .1f;
+        position.y = camera.position.y + (player.y - camera.position.y) * .1f;
         camera.position.set(position);
         camera.update();
     }
