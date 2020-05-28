@@ -26,9 +26,6 @@ public class Box2DWorldCreator {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-        //Tanks.PPM
-        //Tanks.PPM
-        //Tanks.PPM
 
         //create edges bodies/fixtures
         for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
@@ -75,17 +72,5 @@ public class Box2DWorldCreator {
 
     }
 
-
-    public Array<Enemy> getEnemies(){
-        return null;
-    }
-
-    private static CircleShape getCircle(CircleMapObject circleObject) {
-        Circle circle = circleObject.getCircle();
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(circle.radius);
-        circleShape.setPosition(new Vector2(circle.x, circle.y));
-        return circleShape;
-    }
 
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.TileObjects.Tank;
+import com.tanksgame.TanksGame;
 
 public class Player extends Sprite implements InputProcessor {
 

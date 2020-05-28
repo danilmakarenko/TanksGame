@@ -31,7 +31,7 @@ public class Tank extends Sprite {
     public float leftAcc;
     public float rightAcc;
 
-    public float tankSpeed = 999999999;
+    public float tankSpeed = 50;
     public float bulletSpeed = 500000;
 
     private float forwardX = 0;
@@ -115,6 +115,7 @@ public class Tank extends Sprite {
         fixDef.density = (float) Math.pow(2, 15);
         fixDef.restitution = .1f;
         fixDef.friction = .5f;
+
 
 
         hull = world.createBody(bodyDef);
