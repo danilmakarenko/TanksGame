@@ -107,6 +107,10 @@ public class Tank extends Sprite {
         shape.setAsBox(width / 3, height / 2.5f);
 
         FixtureDef fixDef = new FixtureDef();
+        fixDef.filter.categoryBits = TanksGame.PLAYER_BIT;
+        fixDef.filter.maskBits = TanksGame.EDGE_BIT|
+                TanksGame.BUILDING_BIT|
+                TanksGame.TREE_BIT;
         fixDef.shape = shape;
         fixDef.density = (float) Math.pow(2, 15);
         fixDef.restitution = .1f;
@@ -174,7 +178,7 @@ public class Tank extends Sprite {
         animation.setPlayMode(Animation.PlayMode.LOOP);
 
         shapeRenderer = new ShapeRenderer();
-
+        shape.dispose();
     }
 
     public void shoot() {

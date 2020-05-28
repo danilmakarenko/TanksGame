@@ -57,6 +57,10 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     private boolean resumeIsPressed = false;
 
+    public TiledMap getMap() {
+        return map;
+    }
+
     public enum State {
         RUN,
         PAUSE
@@ -159,7 +163,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         maploader = new TmxMapLoader();
         map = maploader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRendererWithSprites(map, player.tank);
-
+        creator = new Box2DWorldCreator(this);
 
     }
 
@@ -177,7 +181,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         float startY = camera.viewportHeight/2;
 
 
-//        camera.position.set(player.tank.getHull().getPosition().x, player.tank.getHull().getPosition().y, 0);
         cameraToPlayer(camera, new Vector2(player.tank.hull.getPosition().x, player.tank.hull.getPosition().y));
         setBoundariesForCamera(camera,startX,startY,map.getProperties().get("width",Integer.class)*32-startX*2,map.getProperties().get("height",Integer.class)*32-startY*2);
 
@@ -210,7 +213,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
                 batch.end();
 
-//                b2dr.render(world, camera.combined);
+                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {
