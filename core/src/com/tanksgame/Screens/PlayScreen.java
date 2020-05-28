@@ -23,7 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.tanksgame.Sprites.Enemies.Enemy;
 import com.tanksgame.Sprites.Player;
+import com.tanksgame.Sprites.TileObjects.Tower;
 import com.tanksgame.TanksGame;
 import com.tanksgame.Tools.Box2DWorldCreator;
 import com.tanksgame.Tools.OrthogonalTiledMapRendererWithSprites;
@@ -55,7 +57,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     private Texture pauseBackgroundTexture;
     private Texture exitTexture;
 
-    private boolean resumeIsPressed = false;
 
     public TiledMap getMap() {
         return map;
@@ -79,6 +80,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     private TmxMapLoader maploader;
     private TiledMap map;
     private OrthogonalTiledMapRendererWithSprites renderer;
+    private boolean towersDrawn = false;
 
 
     public PlayScreen(TanksGame game) {
@@ -167,15 +169,20 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     }
 
-    public void draw() {
-
-    }
 
     public void update(float dt) {
 
         player.update(dt);
         renderer.setView(camera);
         world.step(1 / 60f, 8, 3);
+
+        for(Tower tower : creator.getTowers()) {
+            tower.update(dt);
+            //чтобы не стреляла просто так, подобрать значения
+            if(tower.getX() < player.getX() + 224) {
+                tower.b2body.setActive(true);
+            }
+        }
 
         float startX = camera.viewportWidth/2;
         float startY = camera.viewportHeight/2;
@@ -210,10 +217,13 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
 
                 player.tank.draw(batch);
+                for(Tower tower : creator.getTowers()) {
+                    tower.draw(batch);
+                }
 
                 batch.end();
 
-                b2dr.render(world, camera.combined);
+//                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {

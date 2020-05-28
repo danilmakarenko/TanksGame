@@ -24,7 +24,7 @@ public class ScreenManager {
     }
 
     public void setOnMenuScreenFirst() {
-//        backgroundMusic.play();
+        backgroundMusic.play();
 
         menuScreen = new MenuScreen(game);
         game.setScreen(menuScreen);

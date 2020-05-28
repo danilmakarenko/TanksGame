@@ -12,9 +12,14 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.Enemies.Enemy;
+import com.tanksgame.Sprites.TileObjects.Tower;
 import com.tanksgame.TanksGame;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Box2DWorldCreator {
+    private List<Tower> towers;
 
 
     public Box2DWorldCreator(PlayScreen screen){
@@ -69,8 +74,16 @@ public class Box2DWorldCreator {
             body.createFixture(fdef);
         }
 
-
+        //create all towers
+        towers = new ArrayList<>();
+        for(MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            towers.add(new Tower(screen, rect.getX()+rect.getWidth()/2, rect.getY()+rect.getHeight()));
+        }
     }
 
 
+    public List<Tower> getTowers() {
+        return towers;
+    }
 }
