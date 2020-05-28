@@ -101,7 +101,7 @@ public class MenuScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                screenManager.setOnPlayScene();
+                screenManager.setOnLevelsScreen();
                 dispose();
             }
         });
@@ -169,9 +169,10 @@ public class MenuScreen extends ScreenAdapter {
                 0, 0, originalPixmap.getWidth(), originalPixmap.getHeight(),
                 0, 0, formattedPixmap.getWidth(), formattedPixmap.getHeight()
         );
-//        originalPixmap.dispose();
-//        formattedPixmap.dispose();
-        return new Texture(formattedPixmap);
+        Texture temp = new Texture(formattedPixmap);
+        originalPixmap.dispose();
+        formattedPixmap.dispose();
+        return temp;
     }
 
 }

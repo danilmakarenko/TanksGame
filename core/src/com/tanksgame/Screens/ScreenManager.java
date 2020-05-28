@@ -46,5 +46,8 @@ public class ScreenManager {
         game.setScreen(new PlayScreen(game));
     }
 
+    public void setOnLevelsScreen() {
+        game.setScreen(new LevelsScreen(game));
+    }
 
 }

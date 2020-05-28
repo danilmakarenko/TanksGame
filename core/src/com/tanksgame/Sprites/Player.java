@@ -3,29 +3,15 @@ package com.tanksgame.Sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.TileObjects.Tank;
-import com.tanksgame.TanksGame;
-
-import java.awt.geom.RectangularShape;
-import java.util.TimerTask;
 
 public class Player extends Sprite implements InputProcessor {
 
@@ -34,6 +20,8 @@ public class Player extends Sprite implements InputProcessor {
     public Tank tank;
     private boolean shoot = false;
     private boolean isReloaded = true;
+    public boolean isSound = false;
+    public boolean isFlame = false;
     private boolean isEscapePressed = false;
 
     private double shootingTime;
@@ -137,14 +125,16 @@ public class Player extends Sprite implements InputProcessor {
         if (isReloaded) {
             tank.shoot();
             isReloaded = false;
+            isSound = true;
+            isFlame = true;
             shootingTime = System.nanoTime();
             shoot = true;
-//            Timer.schedule(new Timer.Task() {
-//                @Override
-//                public void run() {
-//                    shoot = false;
-//                }
-//            }, 0.1f);
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    isFlame = false;
+                }
+            }, 0.5f);
         }
         return true;
     }
@@ -152,6 +142,8 @@ public class Player extends Sprite implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         shoot = false;
+        isSound = false;
+//        isFlame = false;
         return false;
     }
 
@@ -202,5 +194,9 @@ public class Player extends Sprite implements InputProcessor {
 
     public void setEscapePressed(boolean escapePressed) {
         isEscapePressed = escapePressed;
+    }
+
+    public int getReloadTime() {
+        return reloadTime;
     }
 }

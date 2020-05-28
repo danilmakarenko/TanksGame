@@ -7,7 +7,7 @@ import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.Player;
 import com.tanksgame.Sprites.TileObjects.Tank;
 
-public class Bullet{
+public class Bullet {
     private float bulletSpeed;
     private float angleOfShoot = 0;
     private Body bullet;
@@ -19,7 +19,7 @@ public class Bullet{
     private Vector2 position;
 
 
-    public Bullet(PlayScreen playScreen, float angleOfShoot, Body bullet, BodyDef bodyDef, FixtureDef fixtureDef, float x, float y,float bulletSpeed) {
+    public Bullet(PlayScreen playScreen, float angleOfShoot, Body bullet, BodyDef bodyDef, FixtureDef fixtureDef, float x, float y, float bulletSpeed) {
         this.x = x;
         this.y = y;
         this.angleOfShoot = angleOfShoot;
@@ -33,7 +33,7 @@ public class Bullet{
 
 
     public Vector2 getPosition() {
-        return  bullet.getPosition();
+        return bullet.getPosition();
     }
 
 
@@ -43,7 +43,7 @@ public class Bullet{
         bullet.createFixture(fixtureDef);
 
 
-        bullet.setLinearVelocity(bulletSpeed*x,bulletSpeed*y);
+        bullet.setLinearVelocity(bulletSpeed * x, bulletSpeed * y);
     }
 
     public float getAngleOfShoot() {
