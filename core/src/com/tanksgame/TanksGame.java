@@ -17,6 +17,7 @@ public class TanksGame extends Game {
     public static final int HEIGHT = 208;
     public static final float PPM = 100;
 
+    public static final short NOTHING_BIT = 0;
     public static final short EDGE_BIT = 1;
     public static final short BUILDING_BIT = 2;
     public static final short TREE_BIT = 4;

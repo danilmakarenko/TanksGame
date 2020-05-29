@@ -158,6 +158,7 @@ public class Player extends Sprite implements InputProcessor {
         tank.setMouseX(Gdx.input.getX());
         tank.setMouseY(Gdx.input.getY());
 
+
         Vector3 sp3 = playScreen.camera.unproject(new Vector3(screenX, screenY, 0));
         Vector2 sp2 = new Vector2(sp3.x, sp3.y);
 
@@ -165,14 +166,12 @@ public class Player extends Sprite implements InputProcessor {
         Vector2 a = tank.tower.getPosition();
         Vector2 d = sp2.sub(a);
 
+        System.out.println(d);
+        if ((d.x >= 5 || d.x <= -5) && (d.y >= 5 || d.y <= -5)) {
 
-//        System.out.println(sp2);
-//        System.out.println("Tower: " + a);
-
-        // Now you can set the angle;
-        tank.tower.setTransform(tank.tower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
-
-
+            // Now you can set the angle;
+            tank.tower.setTransform(tank.tower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
+        }
         return false;
     }
 
