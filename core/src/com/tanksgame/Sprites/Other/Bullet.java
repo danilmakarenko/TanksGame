@@ -52,6 +52,7 @@ public class Bullet {
         bullet.createFixture(fixtureDef);
 
 
+
         bullet.setLinearVelocity(bulletSpeed * x, bulletSpeed * y);
     }
 

@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.Enemies.Enemy;
 import com.tanksgame.Sprites.Other.Bullet;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,8 @@ public class Tower extends Sprite {
     private int reloadTime = 2;
     private float width = getWidth();
     private float height = getHeight();
+
+    private float angleOfShoot;
 
     public Tower(PlayScreen screen, float x, float y) {
         this.world = screen.getWorld();
@@ -75,7 +78,7 @@ public class Tower extends Sprite {
 //            System.out.println(reloadProgress);
         }
 //        System.out.println(isReloaded);
-        if (isReloaded&&b2body.isActive()) {
+        if (isReloaded && b2body.isActive()) {
             shoot();
             isReloaded = false;
             shootingTime = System.nanoTime();
@@ -92,18 +95,16 @@ public class Tower extends Sprite {
 //        System.out.println("Hull x : " + screen.getPlayer().tank.hull.getPosition().x);
 //        System.out.println("Hull y : " + screen.getPlayer().tank.hull.getPosition().y);
     }
+
     Vector2 tmp = new Vector2();
     Vector2 tmp2 = new Vector2();
+
     public void shoot() {
-        Vector2 sp2 = new Vector2(x, y);
-        Vector2 sss = new Vector2(this.x, this.y);
-        Vector2 d = sp2.sub(sss);
-        b2body.setTransform(b2body.getPosition(), (float) (d.angleRad() - Math.PI / 2));
+
         float rotation = (float) ((float) b2body.getTransform().getRotation() + Math.PI / 2);
         float xTower = MathUtils.cos(rotation);
         float yTower = MathUtils.sin(rotation);
 
-        float angleOfShoot = 0;
         angleOfShoot = b2body.getAngle();
 
         float x = screen.getPlayer().tank.hull.getPosition().x;
@@ -113,6 +114,11 @@ public class Tower extends Sprite {
         bodyDef.position.set(this.x, this.y);
         // making bullet body
         bulletBodyDef = bodyDef;
+
+        Vector2 sp2 = new Vector2(x, y);
+        Vector2 sss = new Vector2(this.x, this.y);
+        Vector2 d = sp2.sub(sss);
+        b2body.setTransform(b2body.getPosition(), (float) (d.angleRad() - Math.PI / 2));
 
         CircleShape bulletShape = new CircleShape();
         bulletShape.setRadius(10);
@@ -129,28 +135,14 @@ public class Tower extends Sprite {
 
         bulletBodyDef.position.set(b2body.getWorldPoint(tmp.set(0, getHeight())));
 
-//        if (x <= this.x&&y>=this.y) {
-//            x -= x;
-//        }
-//        if (x <= this.x&&y<=this.y) {
-//            x -= x;
-//            y -= y;
-//        }
-//        if (x <= this.x&&y>=this.y) {
-//            x -= x;
-//        }
-//        if (x <= this.x&&y>=this.y) {
-//            x -= x;
-//        }
-
-
-        bullets.add(new Bullet(screen,angleOfShoot, b2body,bulletBodyDef, bulletFixtureDef, xTower, yTower, bulletSpeed));
+        bullets.add(new Bullet(screen, angleOfShoot, b2body, bulletBodyDef, bulletFixtureDef, xTower, yTower, bulletSpeed));
+        System.out.println(angleOfShoot);
         isReloaded = true;
         bullets.get(bullets.size() - 1).createBullet();
 //        false
 
         timeOfShooting = System.nanoTime();
-        System.out.println("Tower Reloaded!");
+//        System.out.println("Tower Reloaded!");
 
     }
 
@@ -179,8 +171,8 @@ public class Tower extends Sprite {
         if (bullets != null && bullets.size() > 0) {
             for (Bullet bulletTmp : bullets) {
                 Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
-//                bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
-                bulletSprite.setOrigin(100/ 2, 100 / 2);
+                bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
+                bulletSprite.setOrigin(100 / 2, 100 / 2);
                 bulletSprite.setPosition(bulletTmp.getPosition().x - 100 / 2, bulletTmp.getPosition().y - 100 / 2);
                 bulletSprite.setSize(100, 100);
                 bulletSprite.draw(batch);
