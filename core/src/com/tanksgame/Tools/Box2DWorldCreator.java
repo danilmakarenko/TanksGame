@@ -43,6 +43,7 @@ public class Box2DWorldCreator {
 
             shape.setAsBox(rect.getWidth() / 2 , rect.getHeight() / 2);
             fdef.shape = shape;
+            fdef.filter.categoryBits = TanksGame.EDGE_BIT;
             body.createFixture(fdef);
         }
 
@@ -57,6 +58,7 @@ public class Box2DWorldCreator {
 
             shape.setAsBox(rect.getWidth() / 2 , rect.getHeight() / 2);
             fdef.shape = shape;
+            fdef.filter.categoryBits = TanksGame.BUILDING_BIT;
             body.createFixture(fdef);
         }
 
@@ -70,6 +72,7 @@ public class Box2DWorldCreator {
             body = world.createBody(bdef);
 
             shape.setAsBox(rect.getWidth() / 2 , rect.getHeight() / 2);
+            fdef.filter.categoryBits = TanksGame.TREE_BIT;
             fdef.shape = shape;
             body.createFixture(fdef);
         }

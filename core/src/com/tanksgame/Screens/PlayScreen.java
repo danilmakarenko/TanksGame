@@ -179,7 +179,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         for(Tower tower : creator.getTowers()) {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
-            if(tower.getX() < player.getX() + 224) {
+            if(tower.getX() < player.tank.hull.getPosition().x + 50) {
                 tower.b2body.setActive(true);
             }
         }
@@ -223,7 +223,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
                 batch.end();
 
-//                b2dr.render(world, camera.combined);
+                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {
@@ -322,7 +322,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             System.out.println("Resume");
             stateNew = State.RUN;
         }
-        System.out.println("Screen x and y = " + screenX + "; " + screenY);
+//        System.out.println("Screen x and y = " + screenX + "; " + screenY);
         System.out.println(pauseWindow.getX() + resumeButton.getWidth());
         return false;
     }

@@ -31,7 +31,7 @@ public class Tank extends Sprite {
     public float leftAcc;
     public float rightAcc;
 
-    public float tankSpeed = 50;
+    public float tankSpeed = 999999999;
     public float bulletSpeed = 500000;
 
     private float forwardX = 0;
@@ -108,9 +108,10 @@ public class Tank extends Sprite {
 
         FixtureDef fixDef = new FixtureDef();
         fixDef.filter.categoryBits = TanksGame.PLAYER_BIT;
-        fixDef.filter.maskBits = TanksGame.EDGE_BIT|
-                TanksGame.BUILDING_BIT|
-                TanksGame.TREE_BIT;
+        fixDef.filter.maskBits = TanksGame.TREE_BIT;
+//        fixDef.filter.maskBits = TanksGame.EDGE_BIT;
+//                TanksGame.BUILDING_BIT|
+//                TanksGame.TREE_BIT;
         fixDef.shape = shape;
         fixDef.density = (float) Math.pow(2, 15);
         fixDef.restitution = .1f;
@@ -266,8 +267,8 @@ public class Tank extends Sprite {
             soundPlayed = false;
         if (player.isFlame) {
             Sprite ani = (Sprite) animation.getKeyFrame(animationTimer);
-            System.out.println(ani.getTexture().toString());
-            System.out.println(animationTimer);
+//            System.out.println(ani.getTexture().toString());
+//            System.out.println(animationTimer);
             ani.setRotation(tower.getAngle() * 180 / (float) Math.PI);
             ani.setOrigin(width / 2, height / 2);
             ani.setPosition(tower.getWorldPoint(tmp.set(0, height)).x - width / 2, tower.getWorldPoint(tmp.set(0, height)).y - height / 2);
@@ -289,7 +290,7 @@ public class Tank extends Sprite {
 
         moveHullCalculation(x, y);
 
-        if (isReloaded == false) {
+        if (!isReloaded) {
             double now = System.nanoTime();
             reloadProgress = (now - timeOfShooting) / 1000000000 / player.getReloadTime();
 //            System.out.println(reloadProgress);
@@ -323,46 +324,6 @@ public class Tank extends Sprite {
     }
 
 
-    public TanksGame getGame() {
-        return game;
-    }
-
-    public RevoluteJoint getJoint() {
-        return joint;
-    }
-
-    public BodyDef getBulletBodyDef() {
-        return bulletBodyDef;
-    }
-
-    public FixtureDef getBulletFixtureDef() {
-        return bulletFixtureDef;
-    }
-
-    public float getAcceleration() {
-        return acceleration;
-    }
-
-    public float getLeftAcc() {
-        return leftAcc;
-    }
-
-    public float getRightAcc() {
-        return rightAcc;
-    }
-
-    public float getSpeed() {
-        return tankSpeed;
-    }
-
-    public float getForwardX() {
-        return forwardX;
-    }
-
-    public float getForwardY() {
-        return forwardY;
-    }
-
     @Override
     public float getWidth() {
         return width;
@@ -371,78 +332,6 @@ public class Tank extends Sprite {
     @Override
     public float getHeight() {
         return height;
-    }
-
-    public float getMouseX() {
-        return mouseX;
-    }
-
-    public float getMouseY() {
-        return mouseY;
-    }
-
-    public float getAngle() {
-        return angle;
-    }
-
-    public PlayScreen getPlayScreen() {
-        return playScreen;
-    }
-
-    public boolean isGoingForward() {
-        return isGoingForward;
-    }
-
-    public boolean isGoingBackward() {
-        return isGoingBackward;
-    }
-
-    public void setGame(TanksGame game) {
-        this.game = game;
-    }
-
-    public void setHull(Body hull) {
-        this.hull = hull;
-    }
-
-    public void setTower(Body tower) {
-        this.tower = tower;
-    }
-
-    public void setJoint(RevoluteJoint joint) {
-        this.joint = joint;
-    }
-
-    public void setBulletBodyDef(BodyDef bulletBodyDef) {
-        this.bulletBodyDef = bulletBodyDef;
-    }
-
-    public void setBulletFixtureDef(FixtureDef bulletFixtureDef) {
-        this.bulletFixtureDef = bulletFixtureDef;
-    }
-
-    public void setAcceleration(float acceleration) {
-        this.acceleration = acceleration;
-    }
-
-    public void setLeftAcc(float leftAcc) {
-        this.leftAcc = leftAcc;
-    }
-
-    public void setRightAcc(float rightAcc) {
-        this.rightAcc = rightAcc;
-    }
-
-    public void setSpeed(float speed) {
-        this.tankSpeed = speed;
-    }
-
-    public void setForwardX(float forwardX) {
-        this.forwardX = forwardX;
-    }
-
-    public void setForwardY(float forwardY) {
-        this.forwardY = forwardY;
     }
 
     public void setWidth(float width) {
@@ -461,14 +350,6 @@ public class Tank extends Sprite {
         this.mouseY = mouseY;
     }
 
-    public void setAngle(float angle) {
-        this.angle = angle;
-    }
-
-    public void setPlayScreen(PlayScreen playScreen) {
-        this.playScreen = playScreen;
-    }
-
     public void setGoingForward(boolean goingForward) {
         isGoingForward = goingForward;
     }
@@ -477,11 +358,4 @@ public class Tank extends Sprite {
         isGoingBackward = goingBackward;
     }
 
-    public Fixture getHullFixture() {
-        return hullFixture;
-    }
-
-    public Fixture getTowerFixture() {
-        return towerFixture;
-    }
 }

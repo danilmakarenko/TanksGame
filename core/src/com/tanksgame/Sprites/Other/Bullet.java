@@ -16,7 +16,7 @@ public class Bullet {
     private float x;
     private float y;
     private PlayScreen playScreen;
-    private Vector2 position;
+
 
 
     public Bullet(PlayScreen playScreen, float angleOfShoot, Body bullet, BodyDef bodyDef, FixtureDef fixtureDef, float x, float y, float bulletSpeed) {
@@ -28,7 +28,16 @@ public class Bullet {
         this.fixtureDef = fixtureDef;
         this.bulletSpeed = bulletSpeed;
         this.playScreen = playScreen;
-        position = new Vector2();
+    }
+
+    public Bullet(PlayScreen playScreen, Body b2body, BodyDef bulletBodyDef, FixtureDef bulletFixtureDef, float x, float y, float bulletSpeed) {
+        this.x = x;
+        this.y = y;
+        this.bullet = b2body;
+        this.bodyDef = bulletBodyDef;
+        this.fixtureDef = bulletFixtureDef;
+        this.bulletSpeed = bulletSpeed;
+        this.playScreen = playScreen;
     }
 
 
@@ -39,12 +48,13 @@ public class Bullet {
 
     public void createBullet() {
 
-        bullet = playScreen.getPlayer().tank.hull.getWorld().createBody(bodyDef);
+        bullet = playScreen.getWorld().createBody(bodyDef);
         bullet.createFixture(fixtureDef);
 
 
         bullet.setLinearVelocity(bulletSpeed * x, bulletSpeed * y);
     }
+
 
     public float getAngleOfShoot() {
         return angleOfShoot;
