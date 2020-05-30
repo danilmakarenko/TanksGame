@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tanksgame.Screens.PlayScreen;
 
 import com.tanksgame.Sprites.Other.Bullet;
@@ -54,6 +55,9 @@ public class Tank extends Sprite {
     private boolean soundPlayed = false;
 
     private Fixture hullFixture;
+
+
+
     private Fixture towerFixture;
 
     private float angleOfShoot = 0;
@@ -103,26 +107,40 @@ public class Tank extends Sprite {
         this.width = width;
         this.height = height;
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 3, height / 2.5f);
+        PolygonShape shapeTank = new PolygonShape();
+        shapeTank.setAsBox(width / 3, height / 2.5f);
 
+        FixtureDef fixDefHull = new FixtureDef();
+        fixDefHull.filter.categoryBits = TanksGame.PLAYER_BIT;
+        fixDefHull.filter.maskBits = TanksGame.TREE_BIT|TanksGame.LAKE_BIT;
+//        fixDef.filter.maskBits = TanksGame.EDGE_BIT;
+//                TanksGame.BUILDING_BIT|
+//                TanksGame.TREE_BIT;
+        fixDefHull.shape = shapeTank;
+        fixDefHull.density = (float) Math.pow(2, 15);
+        fixDefHull.restitution = .1f;
+        fixDefHull.friction = .5f;
+
+
+
+        hull = world.createBody(bodyDef);
+        hullFixture = hull.createFixture(fixDefHull);
+
+
+        PolygonShape shape = new PolygonShape();
         FixtureDef fixDef = new FixtureDef();
         fixDef.filter.categoryBits = TanksGame.PLAYER_BIT;
         fixDef.filter.maskBits = TanksGame.NOTHING_BIT;
 //        fixDef.filter.maskBits = TanksGame.EDGE_BIT;
 //                TanksGame.BUILDING_BIT|
 //                TanksGame.TREE_BIT;
+
+
+        shape.setAsBox(width / 10, height / 3);
         fixDef.shape = shape;
         fixDef.density = (float) Math.pow(2, 15);
         fixDef.restitution = .1f;
         fixDef.friction = .5f;
-
-
-
-        hull = world.createBody(bodyDef);
-        hullFixture = hull.createFixture(fixDef);
-
-        shape.setAsBox(width / 10, height / 3);
 
         tower = world.createBody(bodyDef);
 
@@ -154,7 +172,7 @@ public class Tank extends Sprite {
         fixDef.friction = .5f;
 
         fixDef.filter.categoryBits = TanksGame.BULLET_BIT;
-        fixDef.filter.maskBits = TanksGame.NOTHING_BIT;
+        fixDef.filter.maskBits = TanksGame.EDGE_BIT | TanksGame.TREE_BIT | TanksGame.BUILDING_BIT;
 
         bulletFixtureDef = fixDef;
         bullets = new ArrayList<>();
@@ -247,12 +265,14 @@ public class Tank extends Sprite {
 
         if (bullets != null && bullets.size() > 0) {
             for (Bullet bulletTmp : bullets) {
-                Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
-                bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
-                bulletSprite.setOrigin(width / 2, height / 2);
-                bulletSprite.setPosition(bulletTmp.getPosition().x - width / 2, bulletTmp.getPosition().y - height / 2);
-                bulletSprite.setSize(width, height);
-                bulletSprite.draw(batch);
+                if (!bulletTmp.isDestroyed()) {
+                    Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
+                    bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
+                    bulletSprite.setOrigin(width / 2, height / 2);
+                    bulletSprite.setPosition(bulletTmp.getPosition().x - width / 2, bulletTmp.getPosition().y - height / 2);
+                    bulletSprite.setSize(width, height);
+                    bulletSprite.draw(batch);
+                }
             }
         }
 
@@ -360,5 +380,6 @@ public class Tank extends Sprite {
     public void setGoingBackward(boolean goingBackward) {
         isGoingBackward = goingBackward;
     }
+
 
 }

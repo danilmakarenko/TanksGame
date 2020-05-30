@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.TileObjects.Tank;
 import com.tanksgame.TanksGame;
+import org.graalvm.compiler.phases.common.NodeCounterPhase;
 
 public class Player extends Sprite implements InputProcessor {
 
@@ -155,18 +157,17 @@ public class Player extends Sprite implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        tank.setMouseX(Gdx.input.getX());
-        tank.setMouseY(Gdx.input.getY());
+            tank.setMouseX(Gdx.input.getX());
+            tank.setMouseY(Gdx.input.getY());
 
 
-        Vector3 sp3 = playScreen.camera.unproject(new Vector3(screenX, screenY, 0));
-        Vector2 sp2 = new Vector2(sp3.x, sp3.y);
+            Vector3 sp3 = playScreen.camera.unproject(new Vector3(screenX, screenY, 0));
+            Vector2 sp2 = new Vector2(sp3.x, sp3.y);
 
-        // Take the vector that goes from body origin to mouse in camera space
-        Vector2 a = tank.tower.getPosition();
-        Vector2 d = sp2.sub(a);
+            // Take the vector that goes from body origin to mouse in camera space
+            Vector2 a = tank.tower.getPosition();
+            Vector2 d = sp2.sub(a);
 
-        System.out.println(d);
         if ((d.x >= 5 || d.x <= -5) && (d.y >= 5 || d.y <= -5)) {
 
             // Now you can set the angle;
@@ -174,6 +175,7 @@ public class Player extends Sprite implements InputProcessor {
         }
         return false;
     }
+    
 
     @Override
     public boolean scrolled(int amount) {
@@ -199,4 +201,5 @@ public class Player extends Sprite implements InputProcessor {
     public int getReloadTime() {
         return reloadTime;
     }
+
 }

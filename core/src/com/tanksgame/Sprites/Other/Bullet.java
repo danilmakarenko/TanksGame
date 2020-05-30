@@ -16,6 +16,8 @@ public class Bullet {
     private float x;
     private float y;
     private PlayScreen playScreen;
+    private boolean setToDestroy;
+    private boolean destroyed;
 
 
 
@@ -28,17 +30,10 @@ public class Bullet {
         this.fixtureDef = fixtureDef;
         this.bulletSpeed = bulletSpeed;
         this.playScreen = playScreen;
+        setToDestroy = false;
+        destroyed = false;
     }
 
-    public Bullet(PlayScreen playScreen, Body b2body, BodyDef bulletBodyDef, FixtureDef bulletFixtureDef, float x, float y, float bulletSpeed) {
-        this.x = x;
-        this.y = y;
-        this.bullet = b2body;
-        this.bodyDef = bulletBodyDef;
-        this.fixtureDef = bulletFixtureDef;
-        this.bulletSpeed = bulletSpeed;
-        this.playScreen = playScreen;
-    }
 
 
     public Vector2 getPosition() {
@@ -46,11 +41,17 @@ public class Bullet {
     }
 
 
+    public void update(float dt) {
+        if (setToDestroy && !destroyed) {
+            playScreen.getWorld().destroyBody(bullet);
+            destroyed = true;
+        }
+    }
+
     public void createBullet() {
 
         bullet = playScreen.getWorld().createBody(bodyDef);
-        bullet.createFixture(fixtureDef);
-
+        bullet.createFixture(fixtureDef).setUserData(this);
 
 
         bullet.setLinearVelocity(bulletSpeed * x, bulletSpeed * y);
@@ -59,5 +60,17 @@ public class Bullet {
 
     public float getAngleOfShoot() {
         return angleOfShoot;
+    }
+
+    public void setToDestroyMethod() {
+        this.setToDestroy = true;
+    }
+
+    public boolean isSetToDestroy() {
+        return setToDestroy;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
     }
 }

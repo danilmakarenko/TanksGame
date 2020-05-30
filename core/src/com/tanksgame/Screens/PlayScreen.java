@@ -24,11 +24,15 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tanksgame.Sprites.Enemies.Enemy;
+import com.tanksgame.Sprites.Other.Bullet;
 import com.tanksgame.Sprites.Player;
 import com.tanksgame.Sprites.TileObjects.Tower;
 import com.tanksgame.TanksGame;
 import com.tanksgame.Tools.Box2DWorldCreator;
 import com.tanksgame.Tools.OrthogonalTiledMapRendererWithSprites;
+import com.tanksgame.Tools.WorldContactListener;
+
+import java.util.Iterator;
 
 public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
@@ -100,7 +104,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 //        camera = new OrthographicCamera(200, 200 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera = new OrthographicCamera();
 //        camera.position.set(0, 0, 0);
-        viewport = new FitViewport(TanksGame.WIDTH , TanksGame.HEIGHT , camera);
+        viewport = new FitViewport(TanksGame.WIDTH, TanksGame.HEIGHT, camera);
 
         b2dr = new Box2DDebugRenderer();
 
@@ -166,7 +170,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         map = maploader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRendererWithSprites(map, player.tank);
         creator = new Box2DWorldCreator(this);
-
+        world.setContactListener(new WorldContactListener());
     }
 
 
@@ -176,23 +180,26 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         renderer.setView(camera);
         world.step(1 / 60f, 8, 3);
 
-        for(Tower tower : creator.getTowers()) {
+        for (Tower tower : creator.getTowers()) {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
-            if(tower.getX() < player.tank.hull.getPosition().x + 50) {
+            if (tower.getX() < player.tank.hull.getPosition().x + 50) {
                 tower.b2body.setActive(true);
             }
         }
 
-        float startX = camera.viewportWidth/2;
-        float startY = camera.viewportHeight/2;
+        for (Bullet bullet : player.tank.bullets) {
+            bullet.update(dt);
+        }
+
+        float startX = camera.viewportWidth / 2;
+        float startY = camera.viewportHeight / 2;
 
 
         cameraToPlayer(camera, new Vector2(player.tank.hull.getPosition().x, player.tank.hull.getPosition().y));
-        setBoundariesForCamera(camera,startX,startY,map.getProperties().get("width",Integer.class)*32-startX*2,map.getProperties().get("height",Integer.class)*32-startY*2);
+        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) * 32 - startX * 2, map.getProperties().get("height", Integer.class) * 32 - startY * 2);
 
         camera.update();
-
 
     }
 
@@ -217,7 +224,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
 
                 player.tank.draw(batch);
-                for(Tower tower : creator.getTowers()) {
+                for (Tower tower : creator.getTowers()) {
                     tower.draw(batch);
                 }
 
@@ -279,22 +286,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         return player;
     }
 
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public TanksGame getGame() {
-        return game;
-    }
-
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -323,7 +314,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             stateNew = State.RUN;
         }
 //        System.out.println("Screen x and y = " + screenX + "; " + screenY);
-        System.out.println(pauseWindow.getX() + resumeButton.getWidth());
+//        System.out.println(pauseWindow.getX() + resumeButton.getWidth());
         return false;
     }
 
@@ -359,11 +350,11 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         if (position.y < startY) {
             position.y = startY;
         }
-        if (position.x > startX+width) {
+        if (position.x > startX + width) {
             position.x = startX + width;
 
         }
-        if (position.y > startY+height) {
+        if (position.y > startY + height) {
             position.y = startY + height;
         }
         camera.position.set(position);
@@ -372,8 +363,8 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     public void cameraToPlayer(Camera camera, Vector2 player) {
         Vector3 position = camera.position;
-        position.x = camera.position.x + (player.x - camera.position.x)*.1f;
-        position.y = camera.position.y + (player.y - camera.position.y)*.1f;
+        position.x = camera.position.x + (player.x - camera.position.x) * .1f;
+        position.y = camera.position.y + (player.y - camera.position.y) * .1f;
         camera.position.set(position);
         camera.update();
     }

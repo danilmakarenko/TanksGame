@@ -48,7 +48,7 @@ public class Box2DWorldCreator {
             body.createFixture(fdef);
 
             fdef.filter.categoryBits = TanksGame.EDGE_BIT;
-            body.setUserData("edge");
+            body.setUserData(this);
         }
 
         //create buildings bodies/fixtures
@@ -66,7 +66,7 @@ public class Box2DWorldCreator {
             body.createFixture(fdef);
 
             fdef.filter.categoryBits = TanksGame.BUILDING_BIT;
-            body.setUserData("building");
+            body.setUserData(this);
         }
 
         //create trees bodies/fixtures
@@ -84,7 +84,7 @@ public class Box2DWorldCreator {
             body.createFixture(fdef);
 
             fdef.filter.categoryBits = TanksGame.TREE_BIT;
-            body.setUserData("tree");
+            body.setUserData(this);
         }
 
         //create all towers
@@ -92,6 +92,25 @@ public class Box2DWorldCreator {
         for (MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             towers.add(new Tower(screen, rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight()));
+        }
+
+
+        //create lakes bodies/fixtures
+        for (MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2));
+
+
+            body = world.createBody(bdef);
+            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            fdef.shape = shape;
+            fdef.filter.categoryBits = TanksGame.LAKE_BIT;
+            body.createFixture(fdef);
+
+            fdef.filter.categoryBits = TanksGame.LAKE_BIT;
+            body.setUserData(this);
         }
     }
 
