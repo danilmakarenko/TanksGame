@@ -95,7 +95,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     @Override
     public void show() {
 
-        stage = new Stage(new FitViewport(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth()/ 2, Gdx.graphics.getHeight() / 2));
 
         batch = new SpriteBatch();
 
@@ -104,7 +104,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 //        camera = new OrthographicCamera(200, 200 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera = new OrthographicCamera();
 //        camera.position.set(0, 0, 0);
-        viewport = new FitViewport(TanksGame.WIDTH, TanksGame.HEIGHT, camera);
+        viewport = new FitViewport(TanksGame.WIDTH/TanksGame.PPM*1.7f, TanksGame.HEIGHT/TanksGame.PPM*1.7f, camera);
 
         b2dr = new Box2DDebugRenderer();
 
@@ -168,7 +168,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         //Load our map and setup our map renderer
         maploader = new TmxMapLoader();
         map = maploader.load("level1.tmx");
-        renderer = new OrthogonalTiledMapRendererWithSprites(map, player.tank);
+        renderer = new OrthogonalTiledMapRendererWithSprites(map, 1 / TanksGame.PPM, player.tank);
         creator = new Box2DWorldCreator(this);
         world.setContactListener(new WorldContactListener());
     }
@@ -183,8 +183,8 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         for (Tower tower : creator.getTowers()) {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
-            if (tower.getX() < player.tank.hull.getPosition().x + 50) {
-                tower.b2body.setActive(true);
+            if (tower.getX() < player.tank.hull.getPosition().x + 50/TanksGame.PPM) {
+                tower.b2body.setActive(false);
             }
         }
 
@@ -192,12 +192,12 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             bullet.update(dt);
         }
 
-        float startX = camera.viewportWidth / 2;
-        float startY = camera.viewportHeight / 2;
+        float startX = camera.viewportWidth/2;
+        float startY = camera.viewportHeight/2;
 
 
         cameraToPlayer(camera, new Vector2(player.tank.hull.getPosition().x, player.tank.hull.getPosition().y));
-        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) * 32 - startX * 2, map.getProperties().get("height", Integer.class) * 32 - startY * 2);
+        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class)- startX*1.1f, map.getProperties().get("height", Integer.class)- startY*1.85f);
 
         camera.update();
 
@@ -230,7 +230,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
                 batch.end();
 
-//                b2dr.render(world, camera.combined);
+                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {
@@ -252,8 +252,9 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width / 2;
-        camera.viewportHeight = height / 2;
+
+        viewport.update(width,height);
+
     }
 
     @Override

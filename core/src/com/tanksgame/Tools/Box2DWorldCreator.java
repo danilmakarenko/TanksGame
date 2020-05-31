@@ -38,11 +38,12 @@ public class Box2DWorldCreator {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2));
+            bdef.position.set((rect.getX()/TanksGame.PPM + rect.getWidth()/TanksGame.PPM / 2), (rect.getY()/TanksGame.PPM + rect.getHeight()/TanksGame.PPM / 2));
+
 
 
             body = world.createBody(bdef);
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox(rect.getWidth()/TanksGame.PPM / 2, rect.getHeight()/TanksGame.PPM / 2);
             fdef.shape = shape;
             fdef.filter.categoryBits = TanksGame.EDGE_BIT;
             body.createFixture(fdef);
@@ -56,11 +57,11 @@ public class Box2DWorldCreator {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2));
+            bdef.position.set((rect.getX()/TanksGame.PPM + rect.getWidth()/TanksGame.PPM / 2), (rect.getY()/TanksGame.PPM + rect.getHeight()/TanksGame.PPM / 2));
 
             body = world.createBody(bdef);
 
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox(rect.getWidth()/TanksGame.PPM / 2, rect.getHeight()/TanksGame.PPM / 2);
             fdef.shape = shape;
             fdef.filter.categoryBits = TanksGame.BUILDING_BIT;
             body.createFixture(fdef);
@@ -74,11 +75,11 @@ public class Box2DWorldCreator {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2));
+            bdef.position.set((rect.getX()/TanksGame.PPM + rect.getWidth()/TanksGame.PPM / 2), (rect.getY()/TanksGame.PPM + rect.getHeight()/TanksGame.PPM / 2));
 
             body = world.createBody(bdef);
 
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox(rect.getWidth()/TanksGame.PPM / 2, rect.getHeight()/TanksGame.PPM / 2);
             fdef.filter.categoryBits = TanksGame.TREE_BIT;
             fdef.shape = shape;
             body.createFixture(fdef);
@@ -91,7 +92,7 @@ public class Box2DWorldCreator {
         towers = new ArrayList<>();
         for (MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            towers.add(new Tower(screen, rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight()));
+            towers.add(new Tower(screen, rect.getX()/TanksGame.PPM + rect.getWidth()/TanksGame.PPM / 2, rect.getY()/TanksGame.PPM + rect.getHeight()/TanksGame.PPM));
         }
 
 
@@ -100,11 +101,11 @@ public class Box2DWorldCreator {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2));
+            bdef.position.set((rect.getX()/TanksGame.PPM + rect.getWidth()/TanksGame.PPM / 2), (rect.getY()/TanksGame.PPM + rect.getHeight()/TanksGame.PPM / 2));
 
 
             body = world.createBody(bdef);
-            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            shape.setAsBox(rect.getWidth()/TanksGame.PPM / 2, rect.getHeight()/TanksGame.PPM / 2);
             fdef.shape = shape;
             fdef.filter.categoryBits = TanksGame.LAKE_BIT;
             body.createFixture(fdef);

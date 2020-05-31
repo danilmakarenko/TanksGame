@@ -20,8 +20,8 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
     private int drawSpritesAfterLayer = 1;
     private Tank tank;
 
-    public OrthogonalTiledMapRendererWithSprites(TiledMap map, Tank tank) {
-        super(map);
+    public OrthogonalTiledMapRendererWithSprites(TiledMap map,float unitScale, Tank tank) {
+        super(map,unitScale);
         sprites = new ArrayList<Sprite>();
         this.tank = tank;
     }

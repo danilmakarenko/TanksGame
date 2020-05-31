@@ -28,12 +28,12 @@ public class Tank extends Sprite {
     private BodyDef bulletBodyDef;
     private FixtureDef bulletFixtureDef;
 
-    public float acceleration = 999999999;
+    public float acceleration = 100000;
     public float leftAcc;
     public float rightAcc;
 
-    public float tankSpeed = 999999999;
-    public float bulletSpeed = 500000;
+    public float tankSpeed = 6;
+    public float bulletSpeed = 15;
 
     private float forwardX = 0;
     private float forwardY = 0;
@@ -112,7 +112,7 @@ public class Tank extends Sprite {
 
         FixtureDef fixDefHull = new FixtureDef();
         fixDefHull.filter.categoryBits = TanksGame.PLAYER_BIT;
-        fixDefHull.filter.maskBits = TanksGame.TREE_BIT|TanksGame.LAKE_BIT;
+        fixDefHull.filter.maskBits = TanksGame.TREE_BIT|TanksGame.LAKE_BIT|TanksGame.EDGE_BIT|TanksGame.BUILDING_BIT;
 //        fixDef.filter.maskBits = TanksGame.EDGE_BIT;
 //                TanksGame.BUILDING_BIT|
 //                TanksGame.TREE_BIT;
@@ -227,7 +227,7 @@ public class Tank extends Sprite {
     Vector2 tmp2 = new Vector2();
 
     public void draw(Batch batch) {
-        Sprite hullSprite = new Sprite(new Texture("hullRed.png"));
+        Sprite hullSprite = new Sprite(new Texture("hullSea.png"));
         hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
         hullSprite.setOrigin(width / 2, height / 2);
         hullSprite.setPosition(hull.getPosition().x - width / 2, hull.getPosition().y - height / 2);
@@ -235,11 +235,11 @@ public class Tank extends Sprite {
 //        hullSprite.draw(batch);
         playScreen.getRenderer().addSprite(hullSprite);
 
-        Sprite towerSprite = new Sprite(new Texture("towerRed.png"));
+        Sprite towerSprite = new Sprite(new Texture("towerSea.png"));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
-        towerSprite.setOrigin(13 / 2f, 16);
-        towerSprite.setPosition(tower.getPosition().x - 13 / 2f, tower.getPosition().y - 16);
-        towerSprite.setSize(13, 32);
+        towerSprite.setOrigin(13 / 2f/TanksGame.PPM, 16/TanksGame.PPM);
+        towerSprite.setPosition(tower.getPosition().x - 13 / 2f/TanksGame.PPM, tower.getPosition().y - 16/TanksGame.PPM);
+        towerSprite.setSize(13/TanksGame.PPM, 32/TanksGame.PPM);
 //        towerSprite.draw(batch);
         playScreen.getRenderer().addSprite(towerSprite);
 

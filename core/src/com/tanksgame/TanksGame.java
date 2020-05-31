@@ -13,9 +13,9 @@ import com.tanksgame.Sprites.Player;
 
 public class TanksGame extends Game {
     //Virtual Screen size and Box2D Scale(Pixels Per Meter)
-    public static final int WIDTH = 400;
+    public static final int WIDTH = 410;
     public static final int HEIGHT = 208;
-    public static final float PPM = 100;
+    public static final float PPM = 30;
 
     public static final short NOTHING_BIT = 0;
     public static final short EDGE_BIT = 1;

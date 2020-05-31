@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.Enemies.Enemy;
 import com.tanksgame.Sprites.Other.Bullet;
+import com.tanksgame.TanksGame;
 import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
@@ -121,7 +122,7 @@ public class Tower extends Sprite {
         b2body.setTransform(b2body.getPosition(), (float) (d.angleRad() - Math.PI / 2));
 
         CircleShape bulletShape = new CircleShape();
-        bulletShape.setRadius(10);
+        bulletShape.setRadius(10/ TanksGame.PPM);
 
 
         FixtureDef fixDef = new FixtureDef();
@@ -136,7 +137,6 @@ public class Tower extends Sprite {
         bulletBodyDef.position.set(b2body.getWorldPoint(tmp.set(0, getHeight())));
 
         bullets.add(new Bullet(screen, angleOfShoot, b2body, bulletBodyDef, bulletFixtureDef, xTower, yTower, bulletSpeed));
-        System.out.println(angleOfShoot);
         isReloaded = true;
         bullets.get(bullets.size() - 1).createBullet();
 //        false
@@ -155,13 +155,13 @@ public class Tower extends Sprite {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(25, 35);
+        shape.setAsBox(25/TanksGame.PPM, 35/TanksGame.PPM);
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
         Sprite tower = new Sprite(new Texture("stoneTower.png"));
         tower.setPosition(b2body.getPosition().x, b2body.getPosition().y);
-        tower.setSize(100, 100);
-        setBounds(x, y, 100, 100);
+        tower.setSize(100/TanksGame.PPM, 100/TanksGame.PPM);
+        setBounds(x, y, 100/TanksGame.PPM, 100/TanksGame.PPM);
         setRegion(tower);
         shape.dispose();
     }
@@ -172,9 +172,9 @@ public class Tower extends Sprite {
             for (Bullet bulletTmp : bullets) {
                 Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
                 bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
-                bulletSprite.setOrigin(100 / 2, 100 / 2);
-                bulletSprite.setPosition(bulletTmp.getPosition().x - 100 / 2, bulletTmp.getPosition().y - 100 / 2);
-                bulletSprite.setSize(100, 100);
+                bulletSprite.setOrigin(100 / 2/TanksGame.PPM, 100 / 2/TanksGame.PPM);
+                bulletSprite.setPosition(bulletTmp.getPosition().x - 100 / 2/TanksGame.PPM, bulletTmp.getPosition().y - 100 / 2/TanksGame.PPM);
+                bulletSprite.setSize(100/TanksGame.PPM, 100/TanksGame.PPM);
                 bulletSprite.draw(batch);
             }
         }

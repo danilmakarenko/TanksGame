@@ -38,7 +38,7 @@ public class Player extends Sprite implements InputProcessor {
     public Player(PlayScreen playScreen) {
         this.playScreen = playScreen;
         this.world = playScreen.getWorld();
-        tank = new Tank(world, 50, 50, 32, 32, playScreen, this);
+        tank = new Tank(world, 60/TanksGame.PPM, 60/TanksGame.PPM, 32/TanksGame.PPM, 32/TanksGame.PPM, playScreen, this);
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -168,7 +168,7 @@ public class Player extends Sprite implements InputProcessor {
             Vector2 a = tank.tower.getPosition();
             Vector2 d = sp2.sub(a);
 
-        if ((d.x >= 5 || d.x <= -5) && (d.y >= 5 || d.y <= -5)) {
+        if ((d.x >= 5/TanksGame.PPM || d.x <= -5/TanksGame.PPM) && (d.y >= 5/TanksGame.PPM || d.y <= -5/TanksGame.PPM)) {
 
             // Now you can set the angle;
             tank.tower.setTransform(tank.tower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
