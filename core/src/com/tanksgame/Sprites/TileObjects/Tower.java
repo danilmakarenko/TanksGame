@@ -31,13 +31,13 @@ public class Tower extends Sprite {
     public Body b2body;
     private float x;
     private float y;
-    private List<Bullet> bullets;
+    public List<Bullet> bullets;
     private double timeOfShooting;
     private double reloadProgress;
     private boolean isReloaded;
     private BodyDef bulletBodyDef;
     private FixtureDef bulletFixtureDef;
-    public float bulletSpeed = 500000;
+    public float bulletSpeed = 20;
     private boolean isShoot;
     private double shootingTime;
     private int reloadTime = 2;
@@ -63,15 +63,19 @@ public class Tower extends Sprite {
 
     public void update(float dt) {
         stateTime += dt;
-        if (setToDestroy && !destroyed) {
-            world.destroyBody(b2body);
-            destroyed = true;
-            //добавить текстуру уничтоженной башни
-//            setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), 32, 0, 16, 16));
-            stateTime = 0;
-        } else if (!destroyed) {
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 + getHeight() / 10);
-        }
+        for (Bullet bullet : bullets)
+            bullet.update(dt);
+//        if (setToDestroy && !destroyed) {
+//            world.destroyBody(b2body);
+//            destroyed = true;
+//            //добавить текстуру уничтоженной башни
+////            setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), 32, 0, 16, 16));
+//            stateTime = 0;
+//        } else if (!destroyed) {
+//            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 + getHeight() / 10);
+//        }
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 + getHeight() / 10);
+
 
         if (!isReloaded) {
             double now = System.nanoTime();
@@ -92,9 +96,6 @@ public class Tower extends Sprite {
         double now = System.nanoTime();
         if ((now - shootingTime) / 1000000000 >= reloadTime)
             isReloaded = true;
-
-//        System.out.println("Hull x : " + screen.getPlayer().tank.hull.getPosition().x);
-//        System.out.println("Hull y : " + screen.getPlayer().tank.hull.getPosition().y);
     }
 
     Vector2 tmp = new Vector2();
@@ -122,7 +123,7 @@ public class Tower extends Sprite {
         b2body.setTransform(b2body.getPosition(), (float) (d.angleRad() - Math.PI / 2));
 
         CircleShape bulletShape = new CircleShape();
-        bulletShape.setRadius(10/ TanksGame.PPM);
+        bulletShape.setRadius(10 / TanksGame.PPM);
 
 
         FixtureDef fixDef = new FixtureDef();
@@ -133,13 +134,16 @@ public class Tower extends Sprite {
 
         bulletFixtureDef = fixDef;
 
+        bulletFixtureDef.filter.categoryBits = TanksGame.TOWER_BULLET_BIT;
+        bulletFixtureDef.filter.maskBits = TanksGame.EDGE_BIT |
+                TanksGame.PLAYER_BIT |
+                TanksGame.TREE_BIT;
 
         bulletBodyDef.position.set(b2body.getWorldPoint(tmp.set(0, getHeight())));
 
         bullets.add(new Bullet(screen, angleOfShoot, b2body, bulletBodyDef, bulletFixtureDef, xTower, yTower, bulletSpeed));
         isReloaded = true;
         bullets.get(bullets.size() - 1).createBullet();
-//        false
 
         timeOfShooting = System.nanoTime();
 //        System.out.println("Tower Reloaded!");
@@ -155,13 +159,13 @@ public class Tower extends Sprite {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(25/TanksGame.PPM, 35/TanksGame.PPM);
+        shape.setAsBox(25 / TanksGame.PPM, 35 / TanksGame.PPM);
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
         Sprite tower = new Sprite(new Texture("stoneTower.png"));
         tower.setPosition(b2body.getPosition().x, b2body.getPosition().y);
-        tower.setSize(100/TanksGame.PPM, 100/TanksGame.PPM);
-        setBounds(x, y, 100/TanksGame.PPM, 100/TanksGame.PPM);
+        tower.setSize(100 / TanksGame.PPM, 100 / TanksGame.PPM);
+        setBounds(x, y, 100 / TanksGame.PPM, 100 / TanksGame.PPM);
         setRegion(tower);
         shape.dispose();
     }
@@ -170,14 +174,15 @@ public class Tower extends Sprite {
         super.draw(batch);
         if (bullets != null && bullets.size() > 0) {
             for (Bullet bulletTmp : bullets) {
-                Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
-                bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
-                bulletSprite.setOrigin(100 / 2/TanksGame.PPM, 100 / 2/TanksGame.PPM);
-                bulletSprite.setPosition(bulletTmp.getPosition().x - 100 / 2/TanksGame.PPM, bulletTmp.getPosition().y - 100 / 2/TanksGame.PPM);
-                bulletSprite.setSize(100/TanksGame.PPM, 100/TanksGame.PPM);
-                bulletSprite.draw(batch);
+                if (!bulletTmp.isDestroyed()) {
+                    Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
+                    bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
+                    bulletSprite.setOrigin(100 / 2 / TanksGame.PPM, 100 / 2 / TanksGame.PPM);
+                    bulletSprite.setPosition(bulletTmp.getPosition().x - 100 / 2 / TanksGame.PPM, bulletTmp.getPosition().y - 100 / 2 / TanksGame.PPM);
+                    bulletSprite.setSize(100 / TanksGame.PPM, 100 / TanksGame.PPM);
+                    bulletSprite.draw(batch);
+                }
             }
         }
     }
-
 }

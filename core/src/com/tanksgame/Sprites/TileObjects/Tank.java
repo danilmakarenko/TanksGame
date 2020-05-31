@@ -57,7 +57,6 @@ public class Tank extends Sprite {
     private Fixture hullFixture;
 
 
-
     private Fixture towerFixture;
 
     private float angleOfShoot = 0;
@@ -112,15 +111,15 @@ public class Tank extends Sprite {
 
         FixtureDef fixDefHull = new FixtureDef();
         fixDefHull.filter.categoryBits = TanksGame.PLAYER_BIT;
-        fixDefHull.filter.maskBits = TanksGame.TREE_BIT|TanksGame.LAKE_BIT|TanksGame.EDGE_BIT|TanksGame.BUILDING_BIT;
-//        fixDef.filter.maskBits = TanksGame.EDGE_BIT;
-//                TanksGame.BUILDING_BIT|
-//                TanksGame.TREE_BIT;
+        fixDefHull.filter.maskBits = TanksGame.TREE_BIT |
+                TanksGame.LAKE_BIT |
+                TanksGame.EDGE_BIT |
+                TanksGame.BUILDING_BIT |
+                TanksGame.TOWER_BULLET_BIT;
         fixDefHull.shape = shapeTank;
         fixDefHull.density = (float) Math.pow(2, 15);
         fixDefHull.restitution = .1f;
         fixDefHull.friction = .5f;
-
 
 
         hull = world.createBody(bodyDef);
@@ -237,9 +236,9 @@ public class Tank extends Sprite {
 
         Sprite towerSprite = new Sprite(new Texture("towerSea.png"));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
-        towerSprite.setOrigin(13 / 2f/TanksGame.PPM, 16/TanksGame.PPM);
-        towerSprite.setPosition(tower.getPosition().x - 13 / 2f/TanksGame.PPM, tower.getPosition().y - 16/TanksGame.PPM);
-        towerSprite.setSize(13/TanksGame.PPM, 32/TanksGame.PPM);
+        towerSprite.setOrigin(13 / 2f / TanksGame.PPM, 16 / TanksGame.PPM);
+        towerSprite.setPosition(tower.getPosition().x - 13 / 2f / TanksGame.PPM, tower.getPosition().y - 16 / TanksGame.PPM);
+        towerSprite.setSize(13 / TanksGame.PPM, 32 / TanksGame.PPM);
 //        towerSprite.draw(batch);
         playScreen.getRenderer().addSprite(towerSprite);
 

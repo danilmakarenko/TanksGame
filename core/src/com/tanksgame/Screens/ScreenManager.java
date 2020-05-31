@@ -50,4 +50,7 @@ public class ScreenManager {
         game.setScreen(new LevelsScreen(game));
     }
 
+    public void setOnGameOverScreen() {
+        game.setScreen(new GameOverScreen(game));
+    }
 }

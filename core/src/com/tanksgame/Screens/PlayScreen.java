@@ -1,10 +1,7 @@
 package com.tanksgame.Screens;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -16,10 +13,12 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -51,6 +50,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     private Box2DWorldCreator creator;
 
     private Stage stage;
+    private Stage stageHealthBar;
 
     private SpriteBatch batch;
 
@@ -95,7 +95,8 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     @Override
     public void show() {
 
-        stage = new Stage(new FitViewport(Gdx.graphics.getWidth()/ 2, Gdx.graphics.getHeight() / 2));
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
+        stageHealthBar = new Stage(new FitViewport(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
 
         batch = new SpriteBatch();
 
@@ -104,7 +105,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 //        camera = new OrthographicCamera(200, 200 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera = new OrthographicCamera();
 //        camera.position.set(0, 0, 0);
-        viewport = new FitViewport(TanksGame.WIDTH/TanksGame.PPM*1.7f, TanksGame.HEIGHT/TanksGame.PPM*1.7f, camera);
+        viewport = new FitViewport(TanksGame.WIDTH / TanksGame.PPM * 1.7f, TanksGame.HEIGHT / TanksGame.PPM * 1.7f, camera);
 
         b2dr = new Box2DDebugRenderer();
 
@@ -170,7 +171,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         map = maploader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRendererWithSprites(map, 1 / TanksGame.PPM, player.tank);
         creator = new Box2DWorldCreator(this);
-        world.setContactListener(new WorldContactListener());
+        world.setContactListener(new WorldContactListener(player, screenManager));
     }
 
 
@@ -183,8 +184,8 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         for (Tower tower : creator.getTowers()) {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
-            if (tower.getX() < player.tank.hull.getPosition().x + 50/TanksGame.PPM) {
-                tower.b2body.setActive(false);
+            if (tower.getX() < player.tank.hull.getPosition().x + 50 / TanksGame.PPM) {
+                tower.b2body.setActive(true);
             }
         }
 
@@ -192,12 +193,12 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             bullet.update(dt);
         }
 
-        float startX = camera.viewportWidth/2;
-        float startY = camera.viewportHeight/2;
+        float startX = camera.viewportWidth / 2;
+        float startY = camera.viewportHeight / 2;
 
 
         cameraToPlayer(camera, new Vector2(player.tank.hull.getPosition().x, player.tank.hull.getPosition().y));
-        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class)- startX*1.1f, map.getProperties().get("height", Integer.class)- startY*1.85f);
+        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) - startX * 1.1f, map.getProperties().get("height", Integer.class) - startY * 1.85f);
 
         camera.update();
 
@@ -230,6 +231,13 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
                 batch.end();
 
+                ProgressBar progressBar = healthBarUpdate((int) player.health);
+//                progressBar.setValue((float) player.health);
+                stageHealthBar.addActor(progressBar);
+                stageHealthBar.act(delta);
+                stageHealthBar.draw();
+                System.out.println("Bar = " + progressBar.getValue());
+
                 b2dr.render(world, camera.combined);
             }
             break;
@@ -253,7 +261,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     @Override
     public void resize(int width, int height) {
 
-        viewport.update(width,height);
+        viewport.update(width, height);
 
     }
 
@@ -369,4 +377,32 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         camera.position.set(position);
         camera.update();
     }
+
+    private ProgressBar healthBarUpdate(int health) {
+        Pixmap pixmap = new Pixmap(100 - health, 20, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.RED);
+        pixmap.fill();
+        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+
+        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
+        progressBarStyle.knob = drawable;
+
+        Pixmap pixmap1 = new Pixmap(health, 20, Pixmap.Format.RGBA8888);
+        pixmap1.setColor(Color.GREEN);
+        pixmap1.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap1)));
+        pixmap1.dispose();
+
+        progressBarStyle.knobBefore = drawable;
+
+        ProgressBar healthBar = new ProgressBar(0.0f, 100f, 1f, false, progressBarStyle);
+//        healthBar.setAnimateDuration(0.25f);
+        healthBar.setValue(100);
+        healthBar.setBounds(10, 10, 100, 20);
+
+        return healthBar;
+
+    }
+
 }

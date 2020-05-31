@@ -3,18 +3,23 @@ package com.tanksgame.Sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.TileObjects.Tank;
 import com.tanksgame.TanksGame;
-import org.graalvm.compiler.phases.common.NodeCounterPhase;
 
 public class Player extends Sprite implements InputProcessor {
 
@@ -35,12 +40,15 @@ public class Player extends Sprite implements InputProcessor {
 
     private ShapeRenderer shapeRenderer;
 
+    public double health = 100;
+
     public Player(PlayScreen playScreen) {
         this.playScreen = playScreen;
         this.world = playScreen.getWorld();
-        tank = new Tank(world, 60/TanksGame.PPM, 60/TanksGame.PPM, 32/TanksGame.PPM, 32/TanksGame.PPM, playScreen, this);
+        tank = new Tank(world, 60 / TanksGame.PPM, 60 / TanksGame.PPM, 32 / TanksGame.PPM, 32 / TanksGame.PPM, playScreen, this);
         shapeRenderer = new ShapeRenderer();
     }
+
 
     public void draw(Batch batch) {
         super.draw(batch);
@@ -48,6 +56,9 @@ public class Player extends Sprite implements InputProcessor {
 //        shapeRenderer.setColor(Color.WHITE);
 //        shapeRenderer.arc(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 10, 0, (float) 180);
 //        shapeRenderer.end();
+
+//        healthBar();
+//        healthBarDrawable.draw(batch, getX() + 100, getY() + 100, getWidth(), getHeight());
     }
 
     public void update(float dt) {
@@ -56,6 +67,9 @@ public class Player extends Sprite implements InputProcessor {
         double now = System.nanoTime();
         if ((now - shootingTime) / 1000000000 >= reloadTime)
             isReloaded = true;
+
+        if (health <= 0)
+            System.out.println("Game Over");
 
     }
 
@@ -157,25 +171,25 @@ public class Player extends Sprite implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-            tank.setMouseX(Gdx.input.getX());
-            tank.setMouseY(Gdx.input.getY());
+        tank.setMouseX(Gdx.input.getX());
+        tank.setMouseY(Gdx.input.getY());
 
 
-            Vector3 sp3 = playScreen.camera.unproject(new Vector3(screenX, screenY, 0));
-            Vector2 sp2 = new Vector2(sp3.x, sp3.y);
+        Vector3 sp3 = playScreen.camera.unproject(new Vector3(screenX, screenY, 0));
+        Vector2 sp2 = new Vector2(sp3.x, sp3.y);
 
-            // Take the vector that goes from body origin to mouse in camera space
-            Vector2 a = tank.tower.getPosition();
-            Vector2 d = sp2.sub(a);
+        // Take the vector that goes from body origin to mouse in camera space
+        Vector2 a = tank.tower.getPosition();
+        Vector2 d = sp2.sub(a);
 
-        if ((d.x >= 5/TanksGame.PPM || d.x <= -5/TanksGame.PPM) && (d.y >= 5/TanksGame.PPM || d.y <= -5/TanksGame.PPM)) {
+        if ((d.x >= 5 / TanksGame.PPM || d.x <= -5 / TanksGame.PPM) && (d.y >= 5 / TanksGame.PPM || d.y <= -5 / TanksGame.PPM)) {
 
             // Now you can set the angle;
             tank.tower.setTransform(tank.tower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
         }
         return false;
     }
-    
+
 
     @Override
     public boolean scrolled(int amount) {
@@ -201,5 +215,6 @@ public class Player extends Sprite implements InputProcessor {
     public int getReloadTime() {
         return reloadTime;
     }
+
 
 }

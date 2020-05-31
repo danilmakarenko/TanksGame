@@ -1,10 +1,20 @@
 package com.tanksgame.Tools;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.tanksgame.Screens.ScreenManager;
 import com.tanksgame.Sprites.Other.Bullet;
+import com.tanksgame.Sprites.Player;
 import com.tanksgame.TanksGame;
 
 public class WorldContactListener implements ContactListener {
+
+    private Player player;
+    private ScreenManager screenManager;
+
+    public WorldContactListener(Player player, ScreenManager screenManager) {
+        this.player = player;
+        this.screenManager = screenManager;
+    }
 
     @Override
     public void beginContact(Contact contact) {
@@ -13,7 +23,7 @@ public class WorldContactListener implements ContactListener {
 
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
-        switch (cDef){
+        switch (cDef) {
             case TanksGame.BULLET_BIT | TanksGame.TREE_BIT:
             case TanksGame.BULLET_BIT | TanksGame.BUILDING_BIT:
             case TanksGame.BULLET_BIT | TanksGame.EDGE_BIT:
@@ -22,53 +32,28 @@ public class WorldContactListener implements ContactListener {
                 } else {
                     ((Bullet) fixB.getUserData()).setToDestroyMethod();
                 }
-//            case MarioBros.MARIO_HEAD_BIT | MarioBros.BRICK_BIT:
-//            case MarioBros.MARIO_HEAD_BIT | MarioBros.COIN_BIT:
-//                if(fixA.getFilterData().categoryBits == MarioBros.MARIO_HEAD_BIT)
-//                    ((InteractiveTileObject) fixB.getUserData()).onHeadHit((Mario) fixA.getUserData());
-//                else
-//                    ((InteractiveTileObject) fixA.getUserData()).onHeadHit((Mario) fixB.getUserData());
-//                break;
-//            case MarioBros.ENEMY_HEAD_BIT | MarioBros.MARIO_BIT:
-//                if(fixA.getFilterData().categoryBits == MarioBros.ENEMY_HEAD_BIT)
-//                    ((Enemy)fixA.getUserData()).hitOnHead((Mario) fixB.getUserData());
-//                else
-//                    ((Enemy)fixB.getUserData()).hitOnHead((Mario) fixA.getUserData());
-//                break;
-//            case MarioBros.ENEMY_BIT | MarioBros.OBJECT_BIT:
-//                if(fixA.getFilterData().categoryBits == MarioBros.ENEMY_BIT)
-//                    ((Enemy)fixA.getUserData()).reverseVelocity(true, false);
-//                else
-//                    ((Enemy)fixB.getUserData()).reverseVelocity(true, false);
-//                break;
-//            case MarioBros.MARIO_BIT | MarioBros.ENEMY_BIT:
-//                if(fixA.getFilterData().categoryBits == MarioBros.MARIO_BIT)
-//                    ((Mario) fixA.getUserData()).hit((Enemy)fixB.getUserData());
-//                else
-//                    ((Mario) fixB.getUserData()).hit((Enemy)fixA.getUserData());
-//                break;
-//            case MarioBros.ENEMY_BIT | MarioBros.ENEMY_BIT:
-//                ((Enemy)fixA.getUserData()).hitByEnemy((Enemy)fixB.getUserData());
-//                ((Enemy)fixB.getUserData()).hitByEnemy((Enemy)fixA.getUserData());
-//                break;
-//            case MarioBros.ITEM_BIT | MarioBros.OBJECT_BIT:
-//                if(fixA.getFilterData().categoryBits == MarioBros.ITEM_BIT)
-//                    ((Item)fixA.getUserData()).reverseVelocity(true, false);
-//                else
-//                    ((Item)fixB.getUserData()).reverseVelocity(true, false);
-//                break;
-//            case MarioBros.ITEM_BIT | MarioBros.MARIO_BIT:
-//                if(fixA.getFilterData().categoryBits == MarioBros.ITEM_BIT)
-//                    ((Item)fixA.getUserData()).use((Mario) fixB.getUserData());
-//                else
-//                    ((Item)fixB.getUserData()).use((Mario) fixA.getUserData());
-//                break;
-//            case MarioBros.FIREBALL_BIT | MarioBros.OBJECT_BIT:
-//                if(fixA.getFilterData().categoryBits == MarioBros.FIREBALL_BIT)
-//                    ((FireBall)fixA.getUserData()).setToDestroy();
-//                else
-//                    ((FireBall)fixB.getUserData()).setToDestroy();
-//                break;
+                break;
+            case TanksGame.TOWER_BULLET_BIT | TanksGame.TREE_BIT:
+            case TanksGame.TOWER_BULLET_BIT | TanksGame.BUILDING_BIT:
+            case TanksGame.TOWER_BULLET_BIT | TanksGame.EDGE_BIT:
+            case TanksGame.TOWER_BULLET_BIT | TanksGame.LAKE_BIT:
+                if (fixA.getFilterData().categoryBits == TanksGame.TOWER_BULLET_BIT) {
+                    ((Bullet) fixA.getUserData()).setToDestroyMethod();
+                } else {
+                    ((Bullet) fixB.getUserData()).setToDestroyMethod();
+                }
+                break;
+            case TanksGame.TOWER_BULLET_BIT | TanksGame.PLAYER_BIT:
+                if (fixA.getFilterData().categoryBits == TanksGame.TOWER_BULLET_BIT) {
+                    ((Bullet) fixA.getUserData()).setToDestroyMethod();
+                } else {
+                    ((Bullet) fixB.getUserData()).setToDestroyMethod();
+                }
+                if (player.health > 10)
+                    player.health -= 10;
+                else
+                    screenManager.setOnGameOverScreen();
+                System.out.println("Health = " + player.health);
         }
     }
 
