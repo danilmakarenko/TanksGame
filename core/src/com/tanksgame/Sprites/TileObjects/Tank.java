@@ -220,14 +220,14 @@ public class Tank extends Sprite {
         isReloaded = false;
         timeOfShooting = System.nanoTime();
         System.out.println("Reloaded!");
-
+        System.out.println(bullets.size());
     }
 
     Vector2 tmp = new Vector2();
     Vector2 tmp2 = new Vector2();
 
     public void draw(Batch batch) {
-        Sprite hullSprite = new Sprite(new Texture("hull.png"));
+        Sprite hullSprite = new Sprite(new Texture("hullRed.png"));
         hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
         hullSprite.setOrigin(width / 2, height / 2);
         hullSprite.setPosition(hull.getPosition().x - width / 2, hull.getPosition().y - height / 2);
@@ -235,7 +235,7 @@ public class Tank extends Sprite {
 //        hullSprite.draw(batch);
         playScreen.getRenderer().addSprite(hullSprite);
 
-        Sprite towerSprite = new Sprite(new Texture("tower.png"));
+        Sprite towerSprite = new Sprite(new Texture("towerRed.png"));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
         towerSprite.setOrigin(13 / 2f, 16);
         towerSprite.setPosition(tower.getPosition().x - 13 / 2f, tower.getPosition().y - 16);

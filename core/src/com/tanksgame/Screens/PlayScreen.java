@@ -230,7 +230,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
                 batch.end();
 
-                b2dr.render(world, camera.combined);
+//                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {
