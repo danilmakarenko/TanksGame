@@ -184,7 +184,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + 50 / TanksGame.PPM) {
-                tower.b2body.setActive(false);
+                tower.b2body.setActive(true);
             }
         }
 

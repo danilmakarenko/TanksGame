@@ -48,7 +48,11 @@ public class Tower extends Sprite {
     private float width = getWidth();
     private float height = getHeight();
 
+    private Texture bulletTexture;
+
     public ArrayList<Explosion> explosions;
+
+    private Texture stoneTower;
 
     private float angleOfShoot;
 
@@ -66,6 +70,7 @@ public class Tower extends Sprite {
         destroyed = false;
         bullets = new ArrayList<>();
         explosions = new ArrayList<Explosion>();
+
     }
 
     public void update(float dt) {
@@ -170,6 +175,10 @@ public class Tower extends Sprite {
 
 
     private void defineEnemy() {
+
+        bulletTexture = screen.getGame().assetManager.get("bullet.png");
+        stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTower.png");
+
         BodyDef bdef = new BodyDef();
         bdef.position.set(x - getWidth() / 2, y - getHeight() / 2);
         bdef.type = BodyDef.BodyType.StaticBody;
@@ -180,7 +189,6 @@ public class Tower extends Sprite {
         shape.setAsBox(25 / TanksGame.PPM, 35 / TanksGame.PPM);
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
-        Texture stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTower.png");
         Sprite tower = new Sprite(stoneTower);
         tower.setPosition(b2body.getPosition().x, b2body.getPosition().y);
         tower.setSize(100 / TanksGame.PPM, 100 / TanksGame.PPM);
@@ -195,7 +203,7 @@ public class Tower extends Sprite {
             for (Bullet bulletTmp : bullets) {
                 if (!bulletTmp.isDestroyed()) {
 //                    bulletTmp.draw(batch);
-                    Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
+                    Sprite bulletSprite = new Sprite(bulletTexture);
                     bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
                     bulletSprite.setOrigin(100 / 2 / TanksGame.PPM, 100 / 2 / TanksGame.PPM);
                     bulletSprite.setPosition(bulletTmp.getPosition().x - 100 / 2 / TanksGame.PPM, bulletTmp.getPosition().y - 100 / 2 / TanksGame.PPM);

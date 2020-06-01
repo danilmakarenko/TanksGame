@@ -79,6 +79,9 @@ public class TanksGame extends Game {
         assetManager.load("stoneTower/stoneTowerAfterOneHit.png", Texture.class);
         assetManager.load("stoneTower/stoneTowerAfterSecondHit.png", Texture.class);
         assetManager.load("stoneTower/stoneTowerAfterThirdHit.png", Texture.class);
+
+        assetManager.load("bullet.png", Texture.class);
+
         assetManager.finishLoading();
 //        assets.assetManager.finishLoading();
         screenManager = new ScreenManager(this);
