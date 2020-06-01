@@ -1,6 +1,7 @@
 package com.tanksgame.Tools;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Screens.ScreenManager;
 import com.tanksgame.Sprites.Other.Bullet;
 import com.tanksgame.Sprites.Player;
@@ -10,10 +11,12 @@ public class WorldContactListener implements ContactListener {
 
     private Player player;
     private ScreenManager screenManager;
+    private PlayScreen playScreen;
 
-    public WorldContactListener(Player player, ScreenManager screenManager) {
+    public WorldContactListener(Player player, ScreenManager screenManager, PlayScreen playScreen) {
         this.player = player;
         this.screenManager = screenManager;
+        this.playScreen = playScreen;
     }
 
     @Override
@@ -26,11 +29,21 @@ public class WorldContactListener implements ContactListener {
         switch (cDef) {
             case TanksGame.BULLET_BIT | TanksGame.TREE_BIT:
             case TanksGame.BULLET_BIT | TanksGame.BUILDING_BIT:
-            case TanksGame.BULLET_BIT | TanksGame.EDGE_BIT:
                 if (fixA.getFilterData().categoryBits == TanksGame.BULLET_BIT) {
                     ((Bullet) fixA.getUserData()).setToDestroyMethod();
+
                 } else {
                     ((Bullet) fixB.getUserData()).setToDestroyMethod();
+                }
+                break;
+            case TanksGame.BULLET_BIT | TanksGame.EDGE_BIT:
+                if (fixA.getFilterData().categoryBits == TanksGame.BULLET_BIT) {
+                    Bullet temp = ((Bullet) fixA.getUserData());
+                    temp.setToDestroyMethod();
+
+                } else {
+                    Bullet temp = ((Bullet) fixB.getUserData());
+                    temp.setToDestroyMethod();
                 }
                 break;
             case TanksGame.TOWER_BULLET_BIT | TanksGame.TREE_BIT:

@@ -43,11 +43,12 @@ public class LevelsScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("levelsScreen/background.jpg"));
+        backgroundTexture = game.assetManager.get("levelsScreen/background.jpg");
+//        backgroundTexture = new Texture(Gdx.files.internal("levelsScreen/background.jpg"));
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        firstLevelTexture = new Texture(Gdx.files.internal("levelsScreen/first_level_button.png"));
+        firstLevelTexture = game.assetManager.get("levelsScreen/first_level_button.png");
         Image firstLevelButton = new Image(firstLevelTexture);
         firstLevelButton.setSize(actorWidth, actorHeight);
         firstLevelButton.setPosition(0, Gdx.graphics.getHeight() - actorHeight);
@@ -60,22 +61,22 @@ public class LevelsScreen extends ScreenAdapter {
             }
         });
 
-        secondLevelTexture = new Texture(Gdx.files.internal("levelsScreen/second_level_button.png"));
+        secondLevelTexture = game.assetManager.get("levelsScreen/second_level_button.png");
         Image secondLevelButton = new Image(secondLevelTexture);
         secondLevelButton.setSize(actorWidth, actorHeight);
         secondLevelButton.setPosition(actorWidth, Gdx.graphics.getHeight() - actorHeight);
 
-        thirdLevelTexture = new Texture(Gdx.files.internal("levelsScreen/third_level_button.png"));
+        thirdLevelTexture = game.assetManager.get("levelsScreen/third_level_button.png");
         Image thirdLevelButton = new Image(thirdLevelTexture);
         thirdLevelButton.setSize(actorWidth, actorHeight);
         thirdLevelButton.setPosition(actorWidth * 2, Gdx.graphics.getHeight() - actorHeight);
 
-        fourthLevelTexture = new Texture(Gdx.files.internal("levelsScreen/fourth_level_button.png"));
+        fourthLevelTexture = game.assetManager.get("levelsScreen/fourth_level_button.png");
         Image fourthLevelButton = new Image(fourthLevelTexture);
         fourthLevelButton.setSize(actorWidth, actorHeight);
         fourthLevelButton.setPosition(0, Gdx.graphics.getHeight() - 2 * actorHeight);
 
-        fifthLevelTexture = new Texture(Gdx.files.internal("levelsScreen/fifth_level_button.png"));
+        fifthLevelTexture = game.assetManager.get("levelsScreen/fifth_level_button.png");
         Image fifthLevelButton = new Image(fifthLevelTexture);
         fifthLevelButton.setSize(actorWidth, actorHeight);
         fifthLevelButton.setPosition(actorWidth, Gdx.graphics.getHeight() - 2 * actorHeight);

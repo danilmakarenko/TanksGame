@@ -226,7 +226,9 @@ public class Tank extends Sprite {
     Vector2 tmp2 = new Vector2();
 
     public void draw(Batch batch) {
-        Sprite hullSprite = new Sprite(new Texture("hullSea.png"));
+//        Texture hullTexture = game.assetManager.get("hulls/hullSea.png");
+//        Sprite hullSprite = new Sprite(hullTexture);
+        Sprite hullSprite = new Sprite(new Texture(Gdx.files.internal("hulls/hullSea.png")));
         hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
         hullSprite.setOrigin(width / 2, height / 2);
         hullSprite.setPosition(hull.getPosition().x - width / 2, hull.getPosition().y - height / 2);
@@ -234,7 +236,9 @@ public class Tank extends Sprite {
 //        hullSprite.draw(batch);
         playScreen.getRenderer().addSprite(hullSprite);
 
-        Sprite towerSprite = new Sprite(new Texture("towerSea.png"));
+//        Texture towerTexture = game.assetManager.get("towers/towerSea.png");
+//        Sprite towerSprite = new Sprite(towerTexture);
+        Sprite towerSprite = new Sprite(new Texture(Gdx.files.internal("towers/towerSea.png")));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
         towerSprite.setOrigin(13 / 2f / TanksGame.PPM, 16 / TanksGame.PPM);
         towerSprite.setPosition(tower.getPosition().x - 13 / 2f / TanksGame.PPM, tower.getPosition().y - 16 / TanksGame.PPM);

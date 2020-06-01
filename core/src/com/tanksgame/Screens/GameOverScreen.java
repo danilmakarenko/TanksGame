@@ -46,7 +46,7 @@ public class GameOverScreen extends ScreenAdapter implements InputProcessor {
 
         batch = new SpriteBatch();
 
-        backgroundTexture = new Texture(Gdx.files.internal("creditsScreen/background.jpg"));
+        backgroundTexture = game.assetManager.get("GameOverScreen/background.jpg");
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

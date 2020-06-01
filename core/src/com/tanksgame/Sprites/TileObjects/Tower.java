@@ -4,7 +4,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -15,7 +17,9 @@ import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.Enemies.Enemy;
 import com.tanksgame.Sprites.Other.Bullet;
+import com.tanksgame.Sprites.Other.Explosion;
 import com.tanksgame.TanksGame;
+import org.w3c.dom.Text;
 import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
@@ -44,6 +48,8 @@ public class Tower extends Sprite {
     private float width = getWidth();
     private float height = getHeight();
 
+    public ArrayList<Explosion> explosions;
+
     private float angleOfShoot;
 
     public Tower(PlayScreen screen, float x, float y) {
@@ -59,12 +65,24 @@ public class Tower extends Sprite {
         setToDestroy = false;
         destroyed = false;
         bullets = new ArrayList<>();
+        explosions = new ArrayList<Explosion>();
     }
 
     public void update(float dt) {
         stateTime += dt;
-        for (Bullet bullet : bullets)
+        for (Bullet bullet : bullets) {
             bullet.update(dt);
+//            if (bullet.setToDestroy)
+//                explosions.add(new Explosion(bullet.x, bullet.y, screen.player.tank));
+//            System.out.println("Bullet: " + bullet.x + "; " + bullet.y);
+        }
+        ArrayList<Explosion> explosionsToRemove = new ArrayList<>();
+        for (Explosion explosion : explosions) {
+            explosion.update(dt);
+            if (explosion.remove)
+                explosionsToRemove.add(explosion);
+        }
+//        explosions.removeAll(explosionsToRemove);
 //        if (setToDestroy && !destroyed) {
 //            world.destroyBody(b2body);
 //            destroyed = true;
@@ -162,7 +180,8 @@ public class Tower extends Sprite {
         shape.setAsBox(25 / TanksGame.PPM, 35 / TanksGame.PPM);
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
-        Sprite tower = new Sprite(new Texture("stoneTower.png"));
+        Texture stoneTower = screen.game.assetManager.get("stoneTower/stoneTower.png");
+        Sprite tower = new Sprite(stoneTower);
         tower.setPosition(b2body.getPosition().x, b2body.getPosition().y);
         tower.setSize(100 / TanksGame.PPM, 100 / TanksGame.PPM);
         setBounds(x, y, 100 / TanksGame.PPM, 100 / TanksGame.PPM);
@@ -175,6 +194,7 @@ public class Tower extends Sprite {
         if (bullets != null && bullets.size() > 0) {
             for (Bullet bulletTmp : bullets) {
                 if (!bulletTmp.isDestroyed()) {
+//                    bulletTmp.draw(batch);
                     Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
                     bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
                     bulletSprite.setOrigin(100 / 2 / TanksGame.PPM, 100 / 2 / TanksGame.PPM);

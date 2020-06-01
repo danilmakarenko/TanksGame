@@ -45,12 +45,12 @@ public class CreditsScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
         batch = new SpriteBatch();
 
-        backgroundTexture = new Texture(Gdx.files.internal("creditsScreen/background.jpg"));
+        backgroundTexture = game.assetManager.get("creditsScreen/background.jpg");
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 
-        returnButtonTexture = new Texture(Gdx.files.internal("creditsScreen/return_button.png"));
+        returnButtonTexture = game.assetManager.get("creditsScreen/return_button.png");
         Image returnButton = new Image(returnButtonTexture);
         returnButton.setSize(returnButtonTexture.getWidth(), returnButtonTexture.getHeight());
         returnButton.setPosition(Gdx.graphics.getWidth() / 100, 98 * Gdx.graphics.getHeight() / 100 - returnButton.getHeight());
