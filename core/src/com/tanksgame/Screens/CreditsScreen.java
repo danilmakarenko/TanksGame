@@ -101,6 +101,8 @@ public class CreditsScreen extends ScreenAdapter {
     public void dispose() {
         font.dispose();
         backgroundTexture.dispose();
+        stage.dispose();
+        batch.dispose();
     }
 
 }

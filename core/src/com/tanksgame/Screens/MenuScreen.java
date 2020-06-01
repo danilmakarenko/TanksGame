@@ -160,6 +160,10 @@ public class MenuScreen extends ScreenAdapter {
         playButtonTexture.dispose();
         creditsButtonTexture.dispose();
         exitButtonTexture.dispose();
+        stageExitWindow.dispose();
+        exitWindowBackgroundTexture.dispose();
+        yesButtonTexture.dispose();
+        noButtonTexture.dispose();
     }
 
     private Texture changeSizeOfTexture(String path, int prefferedWidth, int prefferedHeight) {

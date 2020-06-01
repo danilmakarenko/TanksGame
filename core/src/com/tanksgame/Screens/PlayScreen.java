@@ -185,7 +185,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + 50 / TanksGame.PPM) {
-                tower.b2body.setActive(true);
+                tower.b2body.setActive(false);
             }
         }
 
@@ -236,9 +236,9 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
                 stageHealthBar.addActor(progressBar);
                 stageHealthBar.act(delta);
                 stageHealthBar.draw();
-                System.out.println("Bar = " + progressBar.getValue());
+//                System.out.println("Bar = " + progressBar.getValue());
 
-                b2dr.render(world, camera.combined);
+//                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {
@@ -285,6 +285,13 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         world.dispose();
         batch.dispose();
         b2dr.dispose();
+        map.dispose();
+        renderer.dispose();
+        stage.dispose();
+        skin.dispose();
+        stageHealthBar.dispose();
+        screenManager.dispose();
+        player.tank.dispose();
     }
 
     public World getWorld() {

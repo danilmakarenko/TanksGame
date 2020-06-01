@@ -53,4 +53,8 @@ public class ScreenManager {
     public void setOnGameOverScreen() {
         game.setScreen(new GameOverScreen(game));
     }
+
+    public void dispose() {
+        backgroundMusic.dispose();
+    }
 }

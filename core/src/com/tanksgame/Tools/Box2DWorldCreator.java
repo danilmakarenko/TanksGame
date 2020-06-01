@@ -62,7 +62,6 @@ public class Box2DWorldCreator {
             body = world.createBody(bdef);
 
             shape.setAsBox(rect.getWidth()/TanksGame.PPM / 2, rect.getHeight()/TanksGame.PPM / 2);
-            fdef.shape = shape;
             fdef.filter.categoryBits = TanksGame.BUILDING_BIT;
             body.createFixture(fdef);
 

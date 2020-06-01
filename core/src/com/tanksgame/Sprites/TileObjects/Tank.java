@@ -380,5 +380,23 @@ public class Tank extends Sprite {
         isGoingBackward = goingBackward;
     }
 
-
+    public void dispose() {
+        flameA.dispose();
+        flameASprite.getTexture().dispose();
+        flameB.dispose();
+        flameBSprite.getTexture().dispose();
+        flameC.dispose();
+        flameCSprite.getTexture().dispose();
+        flameD.dispose();
+        flameDSprite.getTexture().dispose();
+        flameE.dispose();
+        flameESprite.getTexture().dispose();
+        flameF.dispose();
+        flameFSprite.getTexture().dispose();
+        flameH.dispose();
+        flameHSprite.getTexture().dispose();
+        flameG.dispose();
+        flameGSprite.getTexture().dispose();
+        shapeRenderer.dispose();
+    }
 }

@@ -147,7 +147,7 @@ public class Tower extends Sprite {
 
         timeOfShooting = System.nanoTime();
 //        System.out.println("Tower Reloaded!");
-
+        System.out.println("Fire");
     }
 
 
