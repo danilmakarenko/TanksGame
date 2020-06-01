@@ -2,6 +2,7 @@ package com.tanksgame.Tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -80,6 +81,9 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
                     }
                 }
             }
+        }
+        for (Sprite spriteTmp : sprites) {
+            spriteTmp.getTexture().dispose();
         }
         endRender();
         sprites.clear();
