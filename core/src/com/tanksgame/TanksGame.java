@@ -3,6 +3,7 @@ package com.tanksgame;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Logger;
 import com.tanksgame.Screens.ScreenManager;
 
 public class TanksGame extends Game {
@@ -30,6 +31,7 @@ public class TanksGame extends Game {
     public void create() {
         assetManager = new AssetManager();
 //        load();
+//        assetManager.getLogger().setLevel(Logger.DEBUG);
         assetManager.load("creditsScreen/background.jpg", Texture.class);
         assetManager.load("creditsScreen/return_button.png", Texture.class);
 

@@ -20,7 +20,6 @@ public class Bullet {
     private boolean destroyed;
 
 
-
     public Bullet(PlayScreen playScreen, float angleOfShoot, Body bullet, BodyDef bodyDef, FixtureDef fixtureDef, float x, float y, float bulletSpeed) {
         this.x = x;
         this.y = y;
@@ -33,7 +32,6 @@ public class Bullet {
         setToDestroy = false;
         destroyed = false;
     }
-
 
 
     public Vector2 getPosition() {
@@ -73,4 +71,5 @@ public class Bullet {
     public boolean isDestroyed() {
         return destroyed;
     }
+
 }

@@ -76,6 +76,9 @@ public class Tank extends Sprite {
     private Texture flameG;
     private Texture flameH;
 
+    private Texture hullTexture;
+    private Texture towerTexture;
+
     private Animation animation;
 
     private Player player;
@@ -95,6 +98,8 @@ public class Tank extends Sprite {
 
 
     public Tank(World world, float x, float y, float width, float height, PlayScreen playScreen, Player player) {
+
+        this.game = playScreen.getGame();
 
         this.player = player;
 
@@ -177,14 +182,14 @@ public class Tank extends Sprite {
         bullets = new ArrayList<>();
 
 
-        flameA = new Texture(Gdx.files.internal("flame/Flame_A.png"));
-        flameB = new Texture(Gdx.files.internal("flame/Flame_B.png"));
-        flameC = new Texture(Gdx.files.internal("flame/Flame_C.png"));
-        flameD = new Texture(Gdx.files.internal("flame/Flame_D.png"));
-        flameE = new Texture(Gdx.files.internal("flame/Flame_E.png"));
-        flameF = new Texture(Gdx.files.internal("flame/Flame_F.png"));
-        flameG = new Texture(Gdx.files.internal("flame/Flame_G.png"));
-        flameH = new Texture(Gdx.files.internal("flame/Flame_H.png"));
+        flameA = game.assetManager.get("flame/Flame_A.png");
+        flameB = game.assetManager.get("flame/Flame_B.png");
+        flameC = game.assetManager.get("flame/Flame_C.png");
+        flameD = game.assetManager.get("flame/Flame_D.png");
+        flameE = game.assetManager.get("flame/Flame_E.png");
+        flameF = game.assetManager.get("flame/Flame_F.png");
+        flameG = game.assetManager.get("flame/Flame_G.png");
+        flameH = game.assetManager.get("flame/Flame_H.png");
 
         flameASprite = new Sprite(flameA);
         flameBSprite = new Sprite(flameB);
@@ -226,21 +231,23 @@ public class Tank extends Sprite {
     Vector2 tmp2 = new Vector2();
 
     public void draw(Batch batch) {
-        Sprite hullSprite = new Sprite(new Texture("hulls/hullSea.png"));
+        hullTexture = game.assetManager.get("hulls/hullSea.png");
+        Sprite hullSprite = new Sprite(hullTexture);
         hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
         hullSprite.setOrigin(width / 2, height / 2);
         hullSprite.setPosition(hull.getPosition().x - width / 2, hull.getPosition().y - height / 2);
         hullSprite.setSize(width, height);
-//        hullSprite.draw(batch);
-        playScreen.getRenderer().addSprite(hullSprite);
+        hullSprite.draw(batch);
+//        playScreen.getRenderer().addSprite(hullSprite);
 
-        Sprite towerSprite = new Sprite(new Texture("towers/towerSea.png"));
+        towerTexture = game.assetManager.get("towers/towerSea.png");
+        Sprite towerSprite = new Sprite(towerTexture);
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
         towerSprite.setOrigin(13 / 2f / TanksGame.PPM, 16 / TanksGame.PPM);
         towerSprite.setPosition(tower.getPosition().x - 13 / 2f / TanksGame.PPM, tower.getPosition().y - 16 / TanksGame.PPM);
         towerSprite.setSize(13 / TanksGame.PPM, 32 / TanksGame.PPM);
-//        towerSprite.draw(batch);
-        playScreen.getRenderer().addSprite(towerSprite);
+        towerSprite.draw(batch);
+//        playScreen.getRenderer().addSprite(towerSprite);
 
 
         //        System.out.println(Gdx.graphics.getWidth() / 2 + "; " + Gdx.graphics.getHeight() / 2);
@@ -380,6 +387,8 @@ public class Tank extends Sprite {
     }
 
     public void dispose() {
+        hullTexture.dispose();
+        towerTexture.dispose();
         flameA.dispose();
         flameASprite.getTexture().dispose();
         flameB.dispose();

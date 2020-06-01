@@ -211,6 +211,9 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         if (stateNew == null)
             stateNew = State.RUN;
 
+//        System.out.println(Gdx.app.getJavaHeap() / 1048576);
+
+
         switch (stateNew) {
             case RUN: {
                 Gdx.input.setInputProcessor(multiplexer);
