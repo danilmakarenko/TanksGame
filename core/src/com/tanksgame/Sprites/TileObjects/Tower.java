@@ -56,6 +56,17 @@ public class Tower extends Sprite {
 
     private float angleOfShoot;
 
+    private Sprite tower;
+
+    public int hits = 0;
+
+    private int newHits;
+
+    private float towerX;
+    private float towerY;
+
+    public boolean isDestroyed = false;
+
     public Tower(PlayScreen screen, float x, float y) {
         this.world = screen.getWorld();
         this.screen = screen;
@@ -87,25 +98,17 @@ public class Tower extends Sprite {
             if (explosion.remove)
                 explosionsToRemove.add(explosion);
         }
-//        explosions.removeAll(explosionsToRemove);
-//        if (setToDestroy && !destroyed) {
-//            world.destroyBody(b2body);
-//            destroyed = true;
-//            //добавить текстуру уничтоженной башни
-////            setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), 32, 0, 16, 16));
-//            stateTime = 0;
-//        } else if (!destroyed) {
-//            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 + getHeight() / 10);
-//        }
+
+        if (hits != newHits && hits <= 3)
+            updateStoneTower();
+
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 + getHeight() / 10);
 
 
         if (!isReloaded) {
             double now = System.nanoTime();
             reloadProgress = (now - timeOfShooting) / 1000000000 / screen.getPlayer().getReloadTime();
-//            System.out.println(reloadProgress);
         }
-//        System.out.println(isReloaded);
         if (isReloaded && b2body.isActive()) {
             shoot();
             isReloaded = false;
@@ -119,6 +122,8 @@ public class Tower extends Sprite {
         double now = System.nanoTime();
         if ((now - shootingTime) / 1000000000 >= reloadTime)
             isReloaded = true;
+
+        newHits = hits;
     }
 
     Vector2 tmp = new Vector2();
@@ -169,18 +174,20 @@ public class Tower extends Sprite {
         bullets.get(bullets.size() - 1).createBullet();
 
         timeOfShooting = System.nanoTime();
-//        System.out.println("Tower Reloaded!");
-        System.out.println("Fire");
     }
 
-
-    private void defineEnemy() {
-
-        bulletTexture = screen.getGame().assetManager.get("bullet.png");
-        stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTower.png");
-
+    private void updateStoneTower() {
+        System.out.println("Hits = " + hits);
+        world.destroyBody(b2body);
+        if (hits == 1)
+            stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTowerAfterOneHit.png");
+        if (hits == 2)
+            stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTowerAfterSecondHit.png");
+        if (hits >= 3) {
+            stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTowerAfterThirdHit.png");
+        }
         BodyDef bdef = new BodyDef();
-        bdef.position.set(x - getWidth() / 2, y - getHeight() / 2);
+        bdef.position.set(towerX, towerY);
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
 
@@ -188,14 +195,52 @@ public class Tower extends Sprite {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(25 / TanksGame.PPM, 35 / TanksGame.PPM);
         fdef.shape = shape;
+
+        fdef.filter.categoryBits = TanksGame.TOWER_BIT;
+        fdef.filter.maskBits = TanksGame.BULLET_BIT;
+
+
         b2body.createFixture(fdef).setUserData(this);
-        Sprite tower = new Sprite(stoneTower);
+        tower = new Sprite(stoneTower);
+        tower.setPosition(b2body.getPosition().x, b2body.getPosition().y);
+        tower.setSize(100 / TanksGame.PPM, 100 / TanksGame.PPM);
+        setBounds(x, y, 100 / TanksGame.PPM, 100 / TanksGame.PPM);
+        setRegion(tower);
+        if (hits >= 3) {
+            isDestroyed = true;
+            b2body.setActive(false);
+        }
+        shape.dispose();
+    }
+
+    private void defineEnemy() {
+
+        bulletTexture = screen.getGame().assetManager.get("bullet.png");
+        stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTower.png");
+        BodyDef bdef = new BodyDef();
+        towerX = x - getWidth() / 2;
+        towerY = y - getHeight() / 2;
+        bdef.position.set(towerX, towerY);
+        bdef.type = BodyDef.BodyType.StaticBody;
+        b2body = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(25 / TanksGame.PPM, 35 / TanksGame.PPM);
+        fdef.shape = shape;
+
+        fdef.filter.categoryBits = TanksGame.TOWER_BIT;
+        fdef.filter.maskBits = TanksGame.BULLET_BIT;
+
+        b2body.createFixture(fdef).setUserData(this);
+        tower = new Sprite(stoneTower);
         tower.setPosition(b2body.getPosition().x, b2body.getPosition().y);
         tower.setSize(100 / TanksGame.PPM, 100 / TanksGame.PPM);
         setBounds(x, y, 100 / TanksGame.PPM, 100 / TanksGame.PPM);
         setRegion(tower);
         shape.dispose();
     }
+
 
     public void draw(Batch batch) {
         super.draw(batch);

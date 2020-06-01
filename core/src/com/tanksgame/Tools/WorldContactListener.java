@@ -5,6 +5,7 @@ import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Screens.ScreenManager;
 import com.tanksgame.Sprites.Other.Bullet;
 import com.tanksgame.Sprites.Player;
+import com.tanksgame.Sprites.TileObjects.Tower;
 import com.tanksgame.TanksGame;
 
 public class WorldContactListener implements ContactListener {
@@ -44,6 +45,21 @@ public class WorldContactListener implements ContactListener {
                 } else {
                     Bullet temp = ((Bullet) fixB.getUserData());
                     temp.setToDestroyMethod();
+                }
+                break;
+            case TanksGame.BULLET_BIT | TanksGame.TOWER_BIT:
+                if (fixA.getFilterData().categoryBits == TanksGame.TOWER_BIT) {
+                    Tower temp = ((Tower) fixA.getUserData());
+                    temp.hits++;
+                    Bullet tempBullet = ((Bullet) fixB.getUserData());
+                    tempBullet.setToDestroyMethod();
+                    System.out.println("Here");
+                } else {
+                    Tower temp = ((Tower) fixB.getUserData());
+                    temp.hits++;
+                    Bullet tempBullet = ((Bullet) fixA.getUserData());
+                    tempBullet.setToDestroyMethod();
+                    System.out.println("Here");
                 }
                 break;
             case TanksGame.TOWER_BULLET_BIT | TanksGame.TREE_BIT:

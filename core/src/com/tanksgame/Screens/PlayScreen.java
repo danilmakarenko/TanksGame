@@ -187,7 +187,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         for (Tower tower : creator.getTowers()) {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
-            if (tower.getX() < player.tank.hull.getPosition().x + 50 / TanksGame.PPM) {
+            if (tower.getX() < player.tank.hull.getPosition().x + 50 / TanksGame.PPM && tower.isDestroyed == false) {
                 tower.b2body.setActive(true);
             }
         }
@@ -237,7 +237,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
                 batch.setProjectionMatrix(info.stage.getCamera().combined);
                 info.stage.draw();
 
-//                b2dr.render(world, camera.combined);
+                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {

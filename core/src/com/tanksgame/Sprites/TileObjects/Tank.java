@@ -176,7 +176,10 @@ public class Tank extends Sprite {
         fixDef.friction = .5f;
 
         fixDef.filter.categoryBits = TanksGame.BULLET_BIT;
-        fixDef.filter.maskBits = TanksGame.EDGE_BIT | TanksGame.TREE_BIT | TanksGame.BUILDING_BIT;
+        fixDef.filter.maskBits = TanksGame.EDGE_BIT |
+                TanksGame.TREE_BIT |
+                TanksGame.BUILDING_BIT |
+                TanksGame.TOWER_BIT;
 
         bulletFixtureDef = fixDef;
         bullets = new ArrayList<>();
