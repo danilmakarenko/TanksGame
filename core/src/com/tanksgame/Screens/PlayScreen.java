@@ -28,6 +28,7 @@ import com.tanksgame.Sprites.Player;
 import com.tanksgame.Sprites.TileObjects.Tower;
 import com.tanksgame.TanksGame;
 import com.tanksgame.Tools.Box2DWorldCreator;
+import com.tanksgame.Tools.Info;
 import com.tanksgame.Tools.OrthogonalTiledMapRendererWithSprites;
 import com.tanksgame.Tools.WorldContactListener;
 
@@ -61,6 +62,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     private Texture pauseBackgroundTexture;
     private Texture exitTexture;
 
+    private Info info;
 
     public TiledMap getMap() {
         return map;
@@ -99,6 +101,8 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         stageHealthBar = new Stage(new FitViewport(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
 
         batch = new SpriteBatch();
+
+        info = new Info(batch, this);
 
         world = new World(new Vector2(0, 0), true);
 
@@ -170,7 +174,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         map = maploader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRendererWithSprites(map, 1 / TanksGame.PPM, player.tank);
         creator = new Box2DWorldCreator(this);
-        world.setContactListener(new WorldContactListener(player, screenManager,this));
+        world.setContactListener(new WorldContactListener(player, screenManager, this));
     }
 
 
@@ -194,6 +198,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         float startX = camera.viewportWidth / 2;
         float startY = camera.viewportHeight / 2;
 
+        info.update(dt);
 
         cameraToPlayer(camera, new Vector2(player.tank.hull.getPosition().x, player.tank.hull.getPosition().y));
         setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) - startX * 1.1f, map.getProperties().get("height", Integer.class) - startY * 1.85f);
@@ -210,8 +215,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         }
         if (stateNew == null)
             stateNew = State.RUN;
-
-//        System.out.println(Gdx.app.getJavaHeap() / 1048576);
 
 
         switch (stateNew) {
@@ -231,12 +234,8 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
                 batch.end();
 
-                ProgressBar progressBar = healthBarUpdate((int) player.health);
-//                progressBar.setValue((float) player.health);
-                stageHealthBar.addActor(progressBar);
-                stageHealthBar.act(delta);
-                stageHealthBar.draw();
-//                System.out.println("Bar = " + progressBar.getValue());
+                batch.setProjectionMatrix(info.stage.getCamera().combined);
+                info.stage.draw();
 
 //                b2dr.render(world, camera.combined);
             }
@@ -329,8 +328,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             System.out.println("Resume");
             stateNew = State.RUN;
         }
-//        System.out.println("Screen x and y = " + screenX + "; " + screenY);
-//        System.out.println(pauseWindow.getX() + resumeButton.getWidth());
         return false;
     }
 
@@ -383,33 +380,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         position.y = camera.position.y + (player.y - camera.position.y) * .1f;
         camera.position.set(position);
         camera.update();
-    }
-
-    private ProgressBar healthBarUpdate(int health) {
-        Pixmap pixmap = new Pixmap(100 - health, 20, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.RED);
-        pixmap.fill();
-        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        pixmap.dispose();
-
-        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
-        progressBarStyle.knob = drawable;
-
-        Pixmap pixmap1 = new Pixmap(health, 20, Pixmap.Format.RGBA8888);
-        pixmap1.setColor(Color.GREEN);
-        pixmap1.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap1)));
-        pixmap1.dispose();
-
-        progressBarStyle.knobBefore = drawable;
-
-        ProgressBar healthBar = new ProgressBar(0.0f, 100f, 1f, false, progressBarStyle);
-//        healthBar.setAnimateDuration(0.25f);
-        healthBar.setValue(100);
-        healthBar.setBounds(10, 10, 100, 20);
-
-        return healthBar;
-
     }
 
     public TanksGame getGame() {

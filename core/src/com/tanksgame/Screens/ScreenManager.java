@@ -45,6 +45,7 @@ public class ScreenManager {
     public void setOnPlayScene() {
 //        backgroundMusic = null;
         game.setScreen(new PlayScreen(game));
+
     }
 
     public void setOnLevelsScreen() {
