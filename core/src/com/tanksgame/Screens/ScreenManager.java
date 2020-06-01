@@ -1,6 +1,7 @@
 package com.tanksgame.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.tanksgame.TanksGame;
 
@@ -56,5 +57,9 @@ public class ScreenManager {
 
     public void dispose() {
         backgroundMusic.dispose();
+        game.dispose();
+        menuScreen.dispose();
+        playScreen.dispose();
+        creditsScreen.dispose();
     }
 }

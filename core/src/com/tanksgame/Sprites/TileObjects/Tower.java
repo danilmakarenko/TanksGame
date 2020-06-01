@@ -180,7 +180,7 @@ public class Tower extends Sprite {
         shape.setAsBox(25 / TanksGame.PPM, 35 / TanksGame.PPM);
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
-        Texture stoneTower = screen.game.assetManager.get("stoneTower/stoneTower.png");
+        Texture stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTower.png");
         Sprite tower = new Sprite(stoneTower);
         tower.setPosition(b2body.getPosition().x, b2body.getPosition().y);
         tower.setSize(100 / TanksGame.PPM, 100 / TanksGame.PPM);
@@ -204,5 +204,10 @@ public class Tower extends Sprite {
                 }
             }
         }
+    }
+
+    public void dispose() {
+        screen.dispose();
+        world.dispose();
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRenderer {
     private Sprite sprite;
-    private List<Sprite> sprites;
+    private ArrayList<Sprite> sprites;
     private int drawSpritesAfterLayer = 1;
     private Tank tank;
 
@@ -31,36 +31,10 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
         sprites.add(sprite);
     }
 
-
-    public void infoForUpdating(Sprite sprite) {
-
-    }
-
     public void update() {
 
     }
 
-//    public void init() {
-//        beginRender();
-//        int currentLayer = 0;
-//        for (MapLayer layer : map.getLayers()) {
-//            if (layer.isVisible()) {
-//                if (layer instanceof TiledMapTileLayer) {
-//                    renderTileLayer((TiledMapTileLayer)layer);
-//                    currentLayer++;
-//                    if(currentLayer == drawSpritesAfterLayer){
-//                        for(Sprite sprite : sprites)
-//                            sprite.draw(this.getBatch());
-//                    }
-//                } else {
-//                    for (MapObject object : layer.getObjects()) {
-//                        renderObject(object);
-//                    }
-//                }
-//            }
-//        }
-//        endRender();
-//    }
 
     @Override
     public void render() {
@@ -86,6 +60,9 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
             spriteTmp.getTexture().dispose();
         }
         endRender();
+
         sprites.clear();
+        sprites.trimToSize();
     }
+
 }

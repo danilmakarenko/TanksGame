@@ -106,6 +106,13 @@ public class LevelsScreen extends ScreenAdapter {
         thirdLevelTexture.dispose();
         fourthLevelTexture.dispose();
         fifthLevelTexture.dispose();
+        game.dispose();
+        backgroundTexture.dispose();
+        fifthLevelTexture.dispose();
+        firstLevelTexture.dispose();
+        secondLevelTexture.dispose();
+        thirdLevelTexture.dispose();
+        fourthLevelTexture.dispose();
     }
 
     private Texture changeSizeOfTexture(String path, int prefferedWidth, int prefferedHeight) {

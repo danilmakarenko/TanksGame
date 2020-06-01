@@ -216,5 +216,10 @@ public class Player extends Sprite implements InputProcessor {
         return reloadTime;
     }
 
-
+    public void dispose() {
+        tank.dispose();
+        shapeRenderer.dispose();
+        playScreen.dispose();
+        world.dispose();
+    }
 }

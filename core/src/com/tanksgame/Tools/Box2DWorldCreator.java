@@ -112,10 +112,12 @@ public class Box2DWorldCreator {
             fdef.filter.categoryBits = TanksGame.LAKE_BIT;
             body.setUserData(this);
         }
+        shape.dispose();
     }
 
 
     public List<Tower> getTowers() {
         return towers;
     }
+
 }

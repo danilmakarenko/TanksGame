@@ -24,7 +24,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tanksgame.Sprites.Enemies.Enemy;
 import com.tanksgame.Sprites.Other.Bullet;
-import com.tanksgame.Sprites.Other.Explosion;
 import com.tanksgame.Sprites.Player;
 import com.tanksgame.Sprites.TileObjects.Tower;
 import com.tanksgame.TanksGame;
@@ -32,12 +31,11 @@ import com.tanksgame.Tools.Box2DWorldCreator;
 import com.tanksgame.Tools.OrthogonalTiledMapRendererWithSprites;
 import com.tanksgame.Tools.WorldContactListener;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
-    public TanksGame game;
+    private TanksGame game;
 
     private ScreenManager screenManager;
 
@@ -54,18 +52,15 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     private Stage stage;
     private Stage stageHealthBar;
 
-    public SpriteBatch batch;
+    private SpriteBatch batch;
 
-    public Player player;
+    private Player player;
 
     private Window pauseWindow;
 
     private Texture pauseBackgroundTexture;
     private Texture exitTexture;
 
-//    private Texture explosionATexture;
-//
-//    private Sprite explosionASprite;
 
     public TiledMap getMap() {
         return map;
@@ -117,14 +112,11 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         player = new Player(this);
 //        Gdx.input.setInputProcessor(player);
 
+
         player.tank.getHull().setAngularDamping(6);
         player.tank.getTower().setAngularDamping(6);
 
         state = State.RUN;
-
-//        explosionATexture = new Texture(Gdx.files.internal("explosion/Explosion_A.png"));
-//
-//        explosionASprite = new Sprite(explosionATexture);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -161,7 +153,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 screenManager.setOnMenuScreenFirst();
-                dispose();
             }
         });
 
@@ -179,7 +170,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         map = maploader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRendererWithSprites(map, 1 / TanksGame.PPM, player.tank);
         creator = new Box2DWorldCreator(this);
-        world.setContactListener(new WorldContactListener(player, screenManager, this));
+        world.setContactListener(new WorldContactListener(player, screenManager,this));
     }
 
 
@@ -187,20 +178,19 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
         player.update(dt);
         renderer.setView(camera);
-        world.step(1 / 60f, 8, 3);
+        world.step(1 / 60f, 6, 2);
 
         for (Tower tower : creator.getTowers()) {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + 50 / TanksGame.PPM) {
-                tower.b2body.setActive(true);
+                tower.b2body.setActive(false);
             }
         }
 
         for (Bullet bullet : player.tank.bullets) {
             bullet.update(dt);
         }
-
         float startX = camera.viewportWidth / 2;
         float startY = camera.viewportHeight / 2;
 
@@ -209,7 +199,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) - startX * 1.1f, map.getProperties().get("height", Integer.class) - startY * 1.85f);
 
         camera.update();
-
     }
 
     @Override
@@ -231,16 +220,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
 
-//                for (Tower tower : creator.getTowers()) {
-////                    for (Explosion explosion : tower.explosions) {
-////                        explosion.render(batch);
-////                    }
-//                    for (Bullet bullet : tower.bullets) {
-//                        if (bullet.setToDestroy) {
-//                            batch.draw(explosionASprite, bullet.x, bullet.y);
-//                        }
-//                    }
-//                }
 
                 player.tank.draw(batch);
                 for (Tower tower : creator.getTowers()) {
@@ -249,16 +228,14 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
                 batch.end();
 
-//                System.out.println("Tank: " + player.tank.hull.getPosition().x + "; " + player.tank.hull.getPosition().y);
-
-
                 ProgressBar progressBar = healthBarUpdate((int) player.health);
 //                progressBar.setValue((float) player.health);
                 stageHealthBar.addActor(progressBar);
                 stageHealthBar.act(delta);
                 stageHealthBar.draw();
+//                System.out.println("Bar = " + progressBar.getValue());
 
-                b2dr.render(world, camera.combined);
+//                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {
@@ -305,6 +282,13 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         world.dispose();
         batch.dispose();
         b2dr.dispose();
+        map.dispose();
+        renderer.dispose();
+        stage.dispose();
+        skin.dispose();
+        stageHealthBar.dispose();
+        screenManager.dispose();
+        player.tank.dispose();
     }
 
     public World getWorld() {
@@ -425,4 +409,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     }
 
+    public TanksGame getGame() {
+        return game;
+    }
 }
