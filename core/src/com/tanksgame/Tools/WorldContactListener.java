@@ -83,12 +83,24 @@ public class WorldContactListener implements ContactListener {
                 else
                     screenManager.setOnGameOverScreen();
                 System.out.println("Health = " + player.health);
+                break;
+            case TanksGame.BASE_BIT | TanksGame.PLAYER_BIT:
+                player.isOnBase = true;
+                break;
         }
     }
 
     @Override
     public void endContact(Contact contact) {
+        Fixture fixA = contact.getFixtureA();
+        Fixture fixB = contact.getFixtureB();
 
+        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
+        switch (cDef) {
+            case TanksGame.BASE_BIT | TanksGame.PLAYER_BIT:
+                player.isOnBase = false;
+                break;
+        }
     }
 
     @Override

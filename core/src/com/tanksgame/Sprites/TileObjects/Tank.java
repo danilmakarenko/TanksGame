@@ -32,7 +32,7 @@ public class Tank extends Sprite {
     public float leftAcc;
     public float rightAcc;
 
-    public float tankSpeed = 6;
+    public float tankSpeed = 10;
     public float bulletSpeed = 15;
 
     private float forwardX = 0;
@@ -118,8 +118,9 @@ public class Tank extends Sprite {
                 TanksGame.LAKE_BIT |
                 TanksGame.EDGE_BIT |
                 TanksGame.BUILDING_BIT |
-                TanksGame.TOWER_BULLET_BIT|
-                TanksGame.TOWER_GROUND_BIT;
+                TanksGame.TOWER_BULLET_BIT |
+                TanksGame.TOWER_GROUND_BIT |
+                TanksGame.BASE_BIT;
         fixDefHull.shape = shapeTank;
         fixDefHull.density = (float) Math.pow(2, 15);
         fixDefHull.restitution = .1f;

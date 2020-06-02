@@ -24,6 +24,8 @@ public class Player extends Sprite implements InputProcessor {
     public boolean isFlame = false;
     private boolean isEscapePressed = false;
 
+    public boolean isOnBase = false;
+
     private double shootingTime;
 
     private int reloadTime = 2;
@@ -34,11 +36,14 @@ public class Player extends Sprite implements InputProcessor {
 
     public double health = 100;
 
+    public float baseTime;
+
     public Player(PlayScreen playScreen) {
         this.playScreen = playScreen;
         this.world = playScreen.getWorld();
         tank = new Tank(world, 60 / TanksGame.PPM, 60 / TanksGame.PPM, 32 / TanksGame.PPM, 32 / TanksGame.PPM, playScreen, this);
         shapeRenderer = new ShapeRenderer();
+        baseTime = 0;
     }
 
 
@@ -181,7 +186,6 @@ public class Player extends Sprite implements InputProcessor {
         }
         return false;
     }
-
 
     @Override
     public boolean scrolled(int amount) {

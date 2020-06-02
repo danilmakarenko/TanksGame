@@ -41,8 +41,6 @@ public class Info {
 
     private BitmapFont font;
 
-    private GlyphLayout glyphLayout;
-
     private ProgressBar healthBar;
 
 
@@ -75,7 +73,6 @@ public class Info {
         progressBarStyle.knobBefore = drawable;
 
         healthBar = new ProgressBar(0.0f, 100f, 1f, false, progressBarStyle);
-//        healthBar.setAnimateDuration(0.25f);
         healthBar.setValue(health);
         healthBar.setBounds(10, 10, 50, 20);
 
@@ -85,16 +82,8 @@ public class Info {
         font = generator.generateFont(parameter);
         generator.dispose();
 
-
-        Table names = new Table();
-        names.top();
-        names.setFillParent(true);
-
         levelNameLabel = new Label("  Level", new Label.LabelStyle(font, Color.WHITE));
         baseTimeNameLabel = new Label(" Base time", new Label.LabelStyle(font, Color.WHITE));
-
-        names.add(levelNameLabel).expandX();
-        names.add(baseTimeNameLabel).expandX();
 
         Table tableTop = new Table();
         tableTop.top();
@@ -103,15 +92,17 @@ public class Info {
         levelLabel = new Label(String.format("%01d", level), new Label.LabelStyle(font, Color.WHITE));
         baseTimeLabel = new Label(String.format("%02d", baseTime), new Label.LabelStyle(font, Color.WHITE));
 
-        tableTop.add(levelLabel).expandX().padTop(10);
-        tableTop.add(baseTimeLabel).expandX().padTop(10);
+        tableTop.add(levelNameLabel).expandX();
+        tableTop.add(baseTimeNameLabel).expandX();
+        tableTop.row();
+        tableTop.add(levelLabel).expandX().padTop(5);
+        tableTop.add(baseTimeLabel).expandX().padTop(5);
 
         Table tableBottom = new Table();
         tableBottom.bottom();
         tableBottom.setFillParent(true);
         tableBottom.add(healthBar).padBottom(10).expandX();
 
-        stage.addActor(names);
         stage.addActor(tableTop);
         stage.addActor(tableBottom);
     }
@@ -119,7 +110,20 @@ public class Info {
     public void update(float delta) {
         health = (int) playScreen.getPlayer().health;
         healthBar.setValue(health);
-//        healthLabel.setText(String.format("%03d", health));
+        baseTimeCheck();
     }
+
+    public void baseTimeCheck() {
+        if (playScreen.getPlayer().baseTime >= 5)
+            playScreen.screenManager.setOnGameOverScreen();
+        if (playScreen.getPlayer().isOnBase) {
+            playScreen.getPlayer().baseTime += 1 / 60f;
+            baseTimeLabel.setText((int) playScreen.getPlayer().baseTime);
+        } else {
+            playScreen.getPlayer().baseTime = 0;
+            baseTimeLabel.setText(0);
+        }
+    }
+
 
 }
