@@ -56,7 +56,7 @@ public class LevelsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                screenManager.setOnPlayScene();
+                screenManager.setOnPlayScene(1);
                 dispose();
             }
         });
@@ -65,21 +65,53 @@ public class LevelsScreen extends ScreenAdapter {
         Image secondLevelButton = new Image(secondLevelTexture);
         secondLevelButton.setSize(actorWidth, actorHeight);
         secondLevelButton.setPosition(actorWidth, Gdx.graphics.getHeight() - actorHeight);
+        secondLevelButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                screenManager.setOnPlayScene(2);
+                dispose();
+            }
+        });
 
         thirdLevelTexture = game.assetManager.get("levelsScreen/third_level_button.png");
         Image thirdLevelButton = new Image(thirdLevelTexture);
         thirdLevelButton.setSize(actorWidth, actorHeight);
         thirdLevelButton.setPosition(actorWidth * 2, Gdx.graphics.getHeight() - actorHeight);
+        thirdLevelButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                screenManager.setOnPlayScene(3);
+                dispose();
+            }
+        });
 
         fourthLevelTexture = game.assetManager.get("levelsScreen/fourth_level_button.png");
         Image fourthLevelButton = new Image(fourthLevelTexture);
         fourthLevelButton.setSize(actorWidth, actorHeight);
         fourthLevelButton.setPosition(0, Gdx.graphics.getHeight() - 2 * actorHeight);
+        fourthLevelButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                screenManager.setOnPlayScene(4);
+                dispose();
+            }
+        });
 
         fifthLevelTexture = game.assetManager.get("levelsScreen/fifth_level_button.png");
         Image fifthLevelButton = new Image(fifthLevelTexture);
         fifthLevelButton.setSize(actorWidth, actorHeight);
         fifthLevelButton.setPosition(actorWidth, Gdx.graphics.getHeight() - 2 * actorHeight);
+        fifthLevelButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                screenManager.setOnPlayScene(5);
+                dispose();
+            }
+        });
 
         stage.addActor(background);
         stage.addActor(firstLevelButton);

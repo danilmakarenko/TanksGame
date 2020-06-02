@@ -114,8 +114,13 @@ public class Info {
     }
 
     public void baseTimeCheck() {
-        if (playScreen.getPlayer().baseTime >= 5)
-            playScreen.screenManager.setOnGameOverScreen();
+        if (playScreen.getPlayer().baseTime >= 5) {
+            if (playScreen.level < 5) {
+                int newLevel = level += 1;
+//                playScreen.dispose();
+                playScreen.screenManager.setOnPlayScene(newLevel);
+            }
+        }
         if (playScreen.getPlayer().isOnBase) {
             playScreen.getPlayer().baseTime += 1 / 60f;
             baseTimeLabel.setText((int) playScreen.getPlayer().baseTime);
@@ -125,5 +130,8 @@ public class Info {
         }
     }
 
+    public void setLevelInfo(int level) {
+        levelLabel.setText(level);
+    }
 
 }

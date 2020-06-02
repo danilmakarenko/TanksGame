@@ -219,12 +219,23 @@ public class Tower extends Sprite {
     private void updateStoneTower() {
         System.out.println("Hits = " + hits);
         world.destroyBody(b2body);
-        if (hits == 1)
-            stoneTower = screen.getGame().assetManager.get("stoneTower/stoneWinterTowerAfterOneHit.png");
-        if (hits == 2)
-            stoneTower = screen.getGame().assetManager.get("stoneTower/stoneWinterTowerAfterSecondHit.png");
-        if (hits >= 3) {
-            stoneTower = screen.getGame().assetManager.get("stoneTower/stoneWinterTowerAfterThirdHit.png");
+        switch (screen.level) {
+            case 1:
+                if (hits == 1)
+                    stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTowerAfterOneHit.png");
+                if (hits == 2)
+                    stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTowerAfterSecondHit.png");
+                if (hits >= 3)
+                    stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTowerAfterThirdHit.png");
+                break;
+            case 2:
+                if (hits == 1)
+                    stoneTower = screen.getGame().assetManager.get("stoneTower/stoneWinterTowerAfterOneHit.png");
+                if (hits == 2)
+                    stoneTower = screen.getGame().assetManager.get("stoneTower/stoneWinterTowerAfterSecondHit.png");
+                if (hits >= 3)
+                    stoneTower = screen.getGame().assetManager.get("stoneTower/stoneWinterTowerAfterThirdHit.png");
+                break;
         }
         BodyDef bdef = new BodyDef();
         bdef.position.set(towerX, towerY);
@@ -256,7 +267,14 @@ public class Tower extends Sprite {
     private void defineEnemy() {
 
         bulletTexture = screen.getGame().assetManager.get("bullet.png");
-        stoneTower = screen.getGame().assetManager.get("stoneTower/stoneWinterTower.png");
+        switch (screen.level) {
+            case 1:
+                stoneTower = screen.getGame().assetManager.get("stoneTower/stoneTower.png");
+                break;
+            case 2:
+                stoneTower = screen.getGame().assetManager.get("stoneTower/stoneWinterTower.png");
+                break;
+        }
         BodyDef bdef = new BodyDef();
         towerX = x - getWidth() / 2;
         towerY = y - getHeight() / 2;

@@ -42,9 +42,9 @@ public class ScreenManager {
         game.setScreen(new CreditsScreen(game));
     }
 
-    public void setOnPlayScene() {
+    public void setOnPlayScene(int level) {
 //        backgroundMusic = null;
-        game.setScreen(new PlayScreen(game));
+        game.setScreen(new PlayScreen(game, level));
 
     }
 
