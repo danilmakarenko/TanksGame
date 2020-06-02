@@ -41,7 +41,6 @@ public class WorldContactListener implements ContactListener {
                 if (fixA.getFilterData().categoryBits == TanksGame.BULLET_BIT) {
                     Bullet temp = ((Bullet) fixA.getUserData());
                     temp.setToDestroyMethod();
-
                 } else {
                     Bullet temp = ((Bullet) fixB.getUserData());
                     temp.setToDestroyMethod();
@@ -51,15 +50,11 @@ public class WorldContactListener implements ContactListener {
                 if (fixA.getFilterData().categoryBits == TanksGame.TOWER_BIT) {
                     Tower temp = ((Tower) fixA.getUserData());
                     temp.hits++;
-                    Bullet tempBullet = ((Bullet) fixB.getUserData());
-                    tempBullet.setToDestroyMethod();
-                    System.out.println("Here");
+                    ((Bullet) fixB.getUserData()).setToDestroyMethod();
                 } else {
                     Tower temp = ((Tower) fixB.getUserData());
                     temp.hits++;
-                    Bullet tempBullet = ((Bullet) fixA.getUserData());
-                    tempBullet.setToDestroyMethod();
-                    System.out.println("Here");
+                    ((Bullet) fixA.getUserData()).setToDestroyMethod();
                 }
                 break;
             case TanksGame.TOWER_BULLET_BIT | TanksGame.TREE_BIT:

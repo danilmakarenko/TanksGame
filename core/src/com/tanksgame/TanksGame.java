@@ -33,8 +33,23 @@ public class TanksGame extends Game {
     @Override
     public void create() {
         assetManager = new AssetManager();
-//        load();
-//        assetManager.getLogger().setLevel(Logger.DEBUG);
+        load();
+        screenManager = new ScreenManager(this);
+        screenManager.setOnMenuScreenFirst();
+    }
+
+    @Override
+    public void render() {
+        super.render();
+
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+    }
+
+    public void load() {
         assetManager.load("creditsScreen/background.jpg", Texture.class);
         assetManager.load("creditsScreen/return_button.png", Texture.class);
 
@@ -51,6 +66,16 @@ public class TanksGame extends Game {
         assetManager.load("flame/Flame_F.png", Texture.class);
         assetManager.load("flame/Flame_G.png", Texture.class);
         assetManager.load("flame/Flame_H.png", Texture.class);
+
+        assetManager.load("explosion/Explosion_A.png", Texture.class);
+        assetManager.load("explosion/Explosion_B.png", Texture.class);
+        assetManager.load("explosion/Explosion_C.png", Texture.class);
+        assetManager.load("explosion/Explosion_D.png", Texture.class);
+        assetManager.load("explosion/Explosion_E.png", Texture.class);
+        assetManager.load("explosion/Explosion_F.png", Texture.class);
+        assetManager.load("explosion/Explosion_G.png", Texture.class);
+        assetManager.load("explosion/Explosion_H.png", Texture.class);
+
 
         assetManager.load("GameOverScreen/background.jpg", Texture.class);
 
@@ -78,6 +103,11 @@ public class TanksGame extends Game {
         assetManager.load("towers/towerRed.png", Texture.class);
         assetManager.load("towers/towerSea.png", Texture.class);
 
+        assetManager.load("stoneTower/stoneTower.png", Texture.class);
+        assetManager.load("stoneTower/stoneTowerAfterOneHit.png", Texture.class);
+        assetManager.load("stoneTower/stoneTowerAfterSecondHit.png", Texture.class);
+        assetManager.load("stoneTower/stoneTowerAfterThirdHit.png", Texture.class);
+
         assetManager.load("stoneTower/stoneWinterTower.png", Texture.class);
         assetManager.load("stoneTower/stoneWinterTowerAfterOneHit.png", Texture.class);
         assetManager.load("stoneTower/stoneWinterTowerAfterSecondHit.png", Texture.class);
@@ -86,70 +116,6 @@ public class TanksGame extends Game {
         assetManager.load("bullet.png", Texture.class);
 
         assetManager.finishLoading();
-//        assets.assetManager.finishLoading();
-        screenManager = new ScreenManager(this);
-        screenManager.setOnMenuScreenFirst();
-    }
-
-    @Override
-    public void render() {
-        super.render();
-
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-    public void load() {
-        assetManager.load("creditsScreen/background.jpg", Texture.class);
-        assetManager.load("creditsScreen/return_button.jpg", Texture.class);
-
-        assetManager.load("exitWindow/background.png", Texture.class);
-        assetManager.load("exitWindow/no_button.png", Texture.class);
-        assetManager.load("exitWindow/yes_button.png", Texture.class);
-
-        assetManager.load("flame/flame.png", Texture.class);
-        assetManager.load("flame/Flame_A.png", Texture.class);
-        assetManager.load("flame/Flame_B.png", Texture.class);
-        assetManager.load("flame/Flame_C.png", Texture.class);
-        assetManager.load("flame/Flame_D.png", Texture.class);
-        assetManager.load("flame/Flame_E.png", Texture.class);
-        assetManager.load("flame/Flame_F.png", Texture.class);
-        assetManager.load("flame/Flame_G.png", Texture.class);
-        assetManager.load("flame/Flame_H.png", Texture.class);
-
-        assetManager.load("GameOverScreen/background.jpg", Texture.class);
-
-        assetManager.load("levelsScreen/background.jpg", Texture.class);
-        assetManager.load("levelsScreen/first_level_button.png", Texture.class);
-        assetManager.load("levelsScreen/second_level_button.png", Texture.class);
-        assetManager.load("levelsScreen/third_level_button.png", Texture.class);
-        assetManager.load("levelsScreen/fourth_level_button.png", Texture.class);
-        assetManager.load("levelsScreen/fifth_level_button.png", Texture.class);
-
-        assetManager.load("menuScreen/background.png", Texture.class);
-        assetManager.load("menuScreen/credit_button.png", Texture.class);
-        assetManager.load("menuScreen/exit_button.png", Texture.class);
-        assetManager.load("menuScreen/play_button.png", Texture.class);
-
-        assetManager.load("hulls/hullBlue.png", Texture.class);
-        assetManager.load("hulls/hullBrown.png", Texture.class);
-        assetManager.load("hulls/hullGreen.png", Texture.class);
-        assetManager.load("hulls/hullRed.png", Texture.class);
-        assetManager.load("hulls/hullSea.png", Texture.class);
-
-        assetManager.load("towers/towerBlue.png", Texture.class);
-        assetManager.load("towers/towerBrown.png", Texture.class);
-        assetManager.load("towers/towerGreen.png", Texture.class);
-        assetManager.load("towers/towerRed.png", Texture.class);
-        assetManager.load("towers/towerSea.png", Texture.class);
-
-        assetManager.load("stoneTower/stoneTower.png", Texture.class);
-        assetManager.load("stoneTower/stoneTowerAfterHit.png", Texture.class);
-        assetManager.load("stoneTower/stoneTowerAfterSecondHit.png", Texture.class);
-        assetManager.load("stoneTower/stoneTowerAfterThirdHit.png", Texture.class);
     }
 
 }

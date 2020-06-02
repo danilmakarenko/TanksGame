@@ -252,35 +252,10 @@ public class Tank extends Sprite {
         playScreen.getRenderer().addSprite(towerSprite);
 
 
-        //        System.out.println(Gdx.graphics.getWidth() / 2 + "; " + Gdx.graphics.getHeight() / 2);
-
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-////        if (isReloaded == false) {
-//        shapeRenderer.setColor(Color.WHITE);
-////        if ((int)(reloadProgress * 10) % 2 == 0)
-//
-//            shapeRenderer.arc(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2 + 2 * height, 10, 0, (float) reloadProgress * 360);
-//        System.out.println((reloadProgress * 10));
-//        shapeRenderer.end();
-//        }
-
-//        Pixmap pixmap = new Pixmap(40, 40, Pixmap.Format.RGBA8888);
-//        pixmap.setColor(Color.BLACK);
-//        pixmap.fillCircle(Gdx.graphics.getWidth() / 2, (int) (Gdx.graphics.getHeight() / 2 + 2 * height), 10);
-//        Texture texture = new Texture(pixmap);
-//
-//        batch.draw(texture,Gdx.graphics.getWidth() / 2, (int) (Gdx.graphics.getHeight() / 2 + 2 * height));
-
         if (bullets != null && bullets.size() > 0) {
             for (Bullet bulletTmp : bullets) {
-                if (!bulletTmp.isDestroyed()) {
-                    Sprite bulletSprite = new Sprite(new Texture("bullet.png"));
-                    bulletSprite.setRotation(bulletTmp.getAngleOfShoot() * 180 / (float) Math.PI);
-                    bulletSprite.setOrigin(width / 2, height / 2);
-                    bulletSprite.setPosition(bulletTmp.getPosition().x - width / 2, bulletTmp.getPosition().y - height / 2);
-                    bulletSprite.setSize(width, height);
-                    bulletSprite.draw(batch);
-                }
+                if (!bulletTmp.isDestroyed())
+                    bulletTmp.draw(batch, width, height);
             }
         }
 

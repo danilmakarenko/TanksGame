@@ -55,7 +55,7 @@ public class Info {
 
         stage = new Stage(viewport, batch);
 
-        Pixmap pixmap = new Pixmap(0, 20, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(0, 5, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.RED);
         pixmap.fill();
         TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
@@ -64,7 +64,7 @@ public class Info {
         ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
         progressBarStyle.knob = drawable;
 
-        Pixmap pixmap1 = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
+        Pixmap pixmap1 = new Pixmap(100, 5, Pixmap.Format.RGBA8888);
         pixmap1.setColor(Color.GREEN);
         pixmap1.fill();
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap1)));
@@ -74,7 +74,7 @@ public class Info {
 
         healthBar = new ProgressBar(0.0f, 100f, 1f, false, progressBarStyle);
         healthBar.setValue(health);
-        healthBar.setBounds(10, 10, 50, 20);
+        healthBar.setBounds(10, 10, 50, 5);
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
