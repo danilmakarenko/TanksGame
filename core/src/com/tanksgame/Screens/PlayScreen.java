@@ -171,7 +171,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
         //Load our map and setup our map renderer
         maploader = new TmxMapLoader();
-        map = maploader.load("level1.tmx");
+        map = maploader.load("level2.tmx");
         renderer = new OrthogonalTiledMapRendererWithSprites(map, 1 / TanksGame.PPM, player.tank);
         creator = new Box2DWorldCreator(this);
         world.setContactListener(new WorldContactListener(player, screenManager, this));
@@ -188,7 +188,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 4 / TanksGame.PPM && tower.isDestroyed == false) {
-                tower.b2body.setActive(false);
+                tower.b2body.setActive(true);
             } else {
                 tower.b2body.setActive(false);
             }
@@ -239,7 +239,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
                 batch.setProjectionMatrix(info.stage.getCamera().combined);
                 info.stage.draw();
 
-                b2dr.render(world, camera.combined);
+//                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {

@@ -40,7 +40,6 @@
  </layer>
  <objectgroup id="9" name="edges">
   <object id="87" x="0" y="-0.5" width="2" height="416"/>
-  <object id="88" x="56" y="-153"/>
   <object id="89" x="0.181818" y="-0.181818" width="5119.82" height="2.84848"/>
   <object id="92" x="5118" y="-0.666667" width="2" height="416.667"/>
   <object id="94" x="0" y="413.333" width="5120" height="2"/>
