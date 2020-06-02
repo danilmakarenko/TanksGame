@@ -73,7 +73,7 @@ public class GameOverScreen extends ScreenAdapter implements InputProcessor {
 
         batch.begin();
 
-        String s = "LOOOOOOHHH\n\npress on the screen to restart";
+        String s = "Try again!\n\npress on the screen to restart";
 
         glyphLayout.setText(font, s);
         font.draw(batch, s, Gdx.graphics.getWidth() / 2 - glyphLayout.width / 2, Gdx.graphics.getHeight() * 0.90f);

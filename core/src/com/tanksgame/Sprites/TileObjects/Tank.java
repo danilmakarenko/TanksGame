@@ -76,8 +76,6 @@ public class Tank extends Sprite {
     private Texture flameG;
     private Texture flameH;
 
-    private Texture hullTexture;
-    private Texture towerTexture;
 
     private Animation animation;
 
@@ -120,7 +118,8 @@ public class Tank extends Sprite {
                 TanksGame.LAKE_BIT |
                 TanksGame.EDGE_BIT |
                 TanksGame.BUILDING_BIT |
-                TanksGame.TOWER_BULLET_BIT;
+                TanksGame.TOWER_BULLET_BIT|
+                TanksGame.TOWER_GROUND_BIT;
         fixDefHull.shape = shapeTank;
         fixDefHull.density = (float) Math.pow(2, 15);
         fixDefHull.restitution = .1f;
@@ -234,7 +233,6 @@ public class Tank extends Sprite {
     Vector2 tmp2 = new Vector2();
 
     public void draw(Batch batch) {
-//        hullTexture = game.assetManager.get("hulls/hullSea.png");
         Sprite hullSprite = new Sprite(new Texture("hulls/hullSea.png"));
         hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
         hullSprite.setOrigin(width / 2, height / 2);
@@ -243,7 +241,7 @@ public class Tank extends Sprite {
 //        hullSprite.draw(batch);
         playScreen.getRenderer().addSprite(hullSprite);
 
-//        towerTexture = game.assetManager.get("towers/towerSea.png");
+
         Sprite towerSprite = new Sprite(new Texture("towers/towerSea.png"));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
         towerSprite.setOrigin(13 / 2f / TanksGame.PPM, 16 / TanksGame.PPM);
@@ -390,8 +388,6 @@ public class Tank extends Sprite {
     }
 
     public void dispose() {
-        hullTexture.dispose();
-        towerTexture.dispose();
         flameA.dispose();
         flameASprite.getTexture().dispose();
         flameB.dispose();

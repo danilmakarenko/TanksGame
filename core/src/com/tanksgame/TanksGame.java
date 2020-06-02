@@ -21,6 +21,7 @@ public class TanksGame extends Game {
     public static final short LAKE_BIT = 32;
     public static final short TOWER_BULLET_BIT = 64;
     public static final short TOWER_BIT = 128;
+    public static final short TOWER_GROUND_BIT = 256;
 
 
     private ScreenManager screenManager;

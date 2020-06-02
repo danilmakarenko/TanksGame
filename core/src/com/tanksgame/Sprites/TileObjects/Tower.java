@@ -165,7 +165,7 @@ public class Tower extends Sprite {
         bulletFixtureDef.filter.categoryBits = TanksGame.TOWER_BULLET_BIT;
         bulletFixtureDef.filter.maskBits = TanksGame.EDGE_BIT |
                 TanksGame.PLAYER_BIT |
-                TanksGame.TREE_BIT;
+                TanksGame.TREE_BIT|TanksGame.BUILDING_BIT;
 
         bulletBodyDef.position.set(b2body.getWorldPoint(tmp.set(0, getHeight())));
 

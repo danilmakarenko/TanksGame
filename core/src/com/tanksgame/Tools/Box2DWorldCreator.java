@@ -87,6 +87,24 @@ public class Box2DWorldCreator {
             body.setUserData(this);
         }
 
+        //create tower ground bodies/fixtures
+        for (MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX()/TanksGame.PPM + rect.getWidth()/TanksGame.PPM / 2), (rect.getY()/TanksGame.PPM + rect.getHeight()/TanksGame.PPM / 2));
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth()/TanksGame.PPM / 2, rect.getHeight()/TanksGame.PPM / 2);
+            fdef.filter.categoryBits = TanksGame.TOWER_GROUND_BIT;
+            fdef.shape = shape;
+            body.createFixture(fdef);
+
+            fdef.filter.categoryBits = TanksGame.TOWER_GROUND_BIT;
+            body.setUserData(this);
+        }
+
         //create all towers
         towers = new ArrayList<>();
         for (MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
