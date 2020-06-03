@@ -33,9 +33,12 @@ public class GameOverScreen extends ScreenAdapter implements InputProcessor {
 
     private GlyphLayout glyphLayout;
 
+    private int level;
 
-    public GameOverScreen(TanksGame game) {
+
+    public GameOverScreen(TanksGame game, int level) {
         this.game = game;
+        this.level = level;
         screenManager = new ScreenManager(game);
     }
 
@@ -117,7 +120,7 @@ public class GameOverScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        screenManager.setOnMenuScreen();
+        screenManager.setOnPlayScene(level);
         return false;
     }
 

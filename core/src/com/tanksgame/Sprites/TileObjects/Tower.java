@@ -252,6 +252,14 @@ public class Tower extends Sprite {
                 if (hits >= 3)
                     stoneTower = screen.getGame().assetManager.get("stoneTower/shipAfterThirdHit.png");
                 break;
+            case 5:
+                if (hits == 1)
+                    stoneTower = screen.getGame().assetManager.get("stoneTower/stoneCityTowerAfterOneHit.png");
+                if (hits == 2)
+                    stoneTower = screen.getGame().assetManager.get("stoneTower/stoneCityTowerAfterSecondHit.png");
+                if (hits >= 3)
+                    stoneTower = screen.getGame().assetManager.get("stoneTower/stoneCityTowerAfterThirdHit.png");
+                break;
         }
         BodyDef bdef = new BodyDef();
         bdef.position.set(towerX, towerY);
@@ -293,8 +301,11 @@ public class Tower extends Sprite {
             case 3:
                 stoneTower = screen.getGame().assetManager.get("stoneTower/stoneDesertTower.png");
                 break;
-                case 4:
+            case 4:
                 stoneTower = screen.getGame().assetManager.get("stoneTower/ship.png");
+                break;
+            case 5:
+                stoneTower = screen.getGame().assetManager.get("stoneTower/stoneCityTower.png");
                 break;
         }
         BodyDef bdef = new BodyDef();

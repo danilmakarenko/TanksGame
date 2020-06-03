@@ -52,8 +52,8 @@ public class ScreenManager {
         game.setScreen(new LevelsScreen(game));
     }
 
-    public void setOnGameOverScreen() {
-        game.setScreen(new GameOverScreen(game));
+    public void setOnGameOverScreen(int level) {
+        game.setScreen(new GameOverScreen(game, level));
     }
 
     public void dispose() {
