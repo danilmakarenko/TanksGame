@@ -34,7 +34,7 @@ import com.tanksgame.Tools.WorldContactListener;
 
 import java.util.Iterator;
 
-public class PlayScreen extends ScreenAdapter implements InputProcessor {
+public class PlayScreen extends ScreenAdapter {
 
     private TanksGame game;
 
@@ -53,16 +53,17 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     private Box2DWorldCreator creator;
 
     private Stage stage;
-    private Stage stageHealthBar;
 
     private SpriteBatch batch;
 
     private Player player;
 
-    private Window pauseWindow;
+    private PauseWindow pauseWindow;
+
 
     private Texture pauseBackgroundTexture;
     private Texture exitTexture;
+    private Texture resumeTexture;
 
     private Info info;
 
@@ -76,7 +77,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     }
 
     private State state;
-    private State stateNew;
+    public State stateNew;
     private State stateButton;
 
     private Skin skin;
@@ -101,8 +102,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
     public void show() {
 
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
-        stageHealthBar = new Stage(new FitViewport(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2));
-
         batch = new SpriteBatch();
 
         info = new Info(batch, this);
@@ -127,45 +126,55 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-        pauseWindow = new Window("Pause", skin);
+        pauseWindow = new PauseWindow("", skin, this, Gdx.graphics.getWidth() / 5, Gdx.graphics.getHeight() / 2.5f);
+        System.out.println("Size = " + pauseWindow.getWidth() + "; " + pauseWindow.getHeight());
         pauseWindow.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4, Align.center);
+        System.out.println("Position = " + pauseWindow.getX() + "; " + pauseWindow.getY());
 
-        pauseBackgroundTexture = new Texture(Gdx.files.internal("pause_frame_filled.png"));
-        Image pauseBackground = new Image(pauseBackgroundTexture);
-        pauseBackground.getColor().a = 0.05f;
-
-        Texture resumeTexture = new Texture(Gdx.files.internal("resume_button.png"));
-        resumeButton = new Image(resumeTexture);
-        resumeButton.setSize(pauseWindow.getWidth() / 2, pauseWindow.getHeight() / 4);
-        resumeButton.setPosition(pauseWindow.getX() + resumeButton.getWidth(), (float) (pauseWindow.getY() + 2 * pauseWindow.getHeight() / 3), Align.center);
-//        System.out.println(resumeButton.getX() + "; " + resumeButton.getY());
-//        System.out.println("Mouse: " + Gdx.input.getX() + "; " + Gdx.input.getY());
-        resumeButton.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                System.out.println("Resume");
-                stateNew = State.RUN;
-//                resumeIsPressed = true;
-            }
-        });
-
-
-        exitTexture = new Texture(Gdx.files.internal("exit_to_menu_button.png"));
-        exitButton = new Image(exitTexture);
-        exitButton.setSize(pauseWindow.getWidth() / 2, pauseWindow.getHeight() / 4);
-        exitButton.setPosition(pauseWindow.getX() + resumeButton.getWidth(), (float) (pauseWindow.getY() + 0.8 * pauseWindow.getHeight() / 3), Align.center);
-        exitButton.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                screenManager.setOnMenuScreenFirst();
-            }
-        });
 
         stage.addActor(pauseWindow);
-        stage.addActor(resumeButton);
-        stage.addActor(exitButton);
+
+//        pauseWindow = new Window("Pause", skin);
+//        pauseWindow.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4, Align.center);
+//
+//        pauseBackgroundTexture = getGame().assetManager.get("pauseWindow/background.jpg");
+//        Image pauseBackground = new Image(pauseBackgroundTexture);
+//        pauseBackground.getColor().a = 0.05f;
+//
+//        resumeTexture = getGame().assetManager.get("pauseWindow/resume_button.png");
+//        resumeButton = new Image(resumeTexture);
+//        resumeButton.setSize(pauseWindow.getWidth() / 2, pauseWindow.getHeight() / 4);
+//        resumeButton.setPosition(pauseWindow.getX() + resumeButton.getWidth(), (float) (pauseWindow.getY() + 2 * pauseWindow.getHeight() / 3), Align.center);
+////        System.out.println(resumeButton.getX() + "; " + resumeButton.getY());
+////        System.out.println("Mouse: " + Gdx.input.getX() + "; " + Gdx.input.getY());
+//        resumeButton.addListener(new ActorGestureListener() {
+//            @Override
+//            public void tap(InputEvent event, float x, float y, int count, int button) {
+//                super.tap(event, x, y, count, button);
+//                System.out.println("Resume");
+//                stateNew = State.RUN;
+////                resumeIsPressed = true;
+//            }
+//        });
+//
+//
+//        exitTexture = getGame().assetManager.get("pauseWindow/exit_to_menu_button.png");
+//        exitButton = new Image(exitTexture);
+//        exitButton.setSize(pauseWindow.getWidth() / 2, pauseWindow.getHeight() / 4);
+//        exitButton.setPosition(pauseWindow.getX() + resumeButton.getWidth(), (float) (pauseWindow.getY() + 0.8 * pauseWindow.getHeight() / 3), Align.center);
+//        exitButton.addListener(new ActorGestureListener() {
+//            @Override
+//            public void tap(InputEvent event, float x, float y, int count, int button) {
+//                super.tap(event, x, y, count, button);
+//                screenManager.setOnMenuScreenFirst();
+//            }
+//        });
+//
+//        pauseWindow.add(pauseBackground);
+//        pauseWindow.add(resumeButton);
+//        pauseWindow.add(exitButton);
+//
+//        stage.addActor(pauseWindow);
 
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(player); // Your screen
@@ -175,14 +184,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
         //Load our map and setup our map renderer
         maploader = new TmxMapLoader();
-        switch (level) {
-            case 1:
-                map = maploader.load("level4.tmx");
-                break;
-            case 2:
-                map = maploader.load("level2.tmx");
-                break;
-        }
+        map = maploader.load("level" + level + ".tmx");
         renderer = new OrthogonalTiledMapRendererWithSprites(map, 1 / TanksGame.PPM, player.tank);
         creator = new Box2DWorldCreator(this);
         world.setContactListener(new WorldContactListener(player, screenManager, this));
@@ -199,7 +201,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 4 / TanksGame.PPM && tower.isDestroyed == false) {
-                tower.b2body.setActive(false);
+                tower.b2body.setActive(true);
             } else {
                 tower.b2body.setActive(false);
             }
@@ -254,8 +256,13 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
             }
             break;
             case PAUSE: {
-                stage.act(delta);
+
                 stage.draw();
+
+//                stage.act(delta);
+//                stage.draw();
+//                pauseWindow.stage.draw();
+//                pauseWindow.draw(batch,);
 //                Gdx.input.setInputProcessor(this);
                 Gdx.input.setInputProcessor(multiplexer);
             }
@@ -301,7 +308,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         renderer.dispose();
         stage.dispose();
         skin.dispose();
-        stageHealthBar.dispose();
         screenManager.dispose();
         player.tank.dispose();
     }
@@ -312,56 +318,6 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
 
     public Player getPlayer() {
         return player;
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case Input.Keys.ESCAPE:
-                stateNew = State.RUN;
-                break;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (screenX >= pauseWindow.getX() + resumeButton.getWidth() && screenX <= resumeButton.getX() + resumeButton.getWidth() &&
-                screenY >= resumeButton.getY() && screenX <= resumeButton.getY() + resumeButton.getHeight()) {
-            System.out.println("Resume");
-            stateNew = State.RUN;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
     }
 
     public OrthogonalTiledMapRendererWithSprites getRenderer() {
