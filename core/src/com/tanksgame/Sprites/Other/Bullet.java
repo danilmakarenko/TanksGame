@@ -104,9 +104,8 @@ public class Bullet extends Sprite {
             Sprite ani = (Sprite) animation.getKeyFrame(animationTimer);
             ani.setOrigin(width / 2, height / 2);
             ani.setPosition(x, y);
-            ani.setSize(width, height);
+            ani.setSize(width * 2, height * 2);
             ani.draw(batch);
-            System.out.println("Here");
             explosion = false;
         }
     }

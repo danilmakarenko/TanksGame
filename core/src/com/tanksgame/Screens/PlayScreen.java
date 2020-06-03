@@ -177,7 +177,7 @@ public class PlayScreen extends ScreenAdapter implements InputProcessor {
         maploader = new TmxMapLoader();
         switch (level) {
             case 1:
-                map = maploader.load("level5.tmx");
+                map = maploader.load("level4.tmx");
                 break;
             case 2:
                 map = maploader.load("level2.tmx");

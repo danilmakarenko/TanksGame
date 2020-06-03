@@ -57,6 +57,11 @@ public class TanksGame extends Game {
         assetManager.load("exitWindow/no_button.png", Texture.class);
         assetManager.load("exitWindow/yes_button.png", Texture.class);
 
+        assetManager.load("pauseWindow/background.jpg", Texture.class);
+        assetManager.load("pauseWindow/exit_to_menu_button.png", Texture.class);
+        assetManager.load("pauseWindow/resume_button.png", Texture.class);
+        assetManager.load("pauseWindow/levels_button.png", Texture.class);
+
         assetManager.load("flame/flame.png", Texture.class);
         assetManager.load("flame/Flame_A.png", Texture.class);
         assetManager.load("flame/Flame_B.png", Texture.class);
@@ -75,7 +80,6 @@ public class TanksGame extends Game {
         assetManager.load("explosion/Explosion_F.png", Texture.class);
         assetManager.load("explosion/Explosion_G.png", Texture.class);
         assetManager.load("explosion/Explosion_H.png", Texture.class);
-
 
         assetManager.load("GameOverScreen/background.jpg", Texture.class);
 
@@ -112,6 +116,17 @@ public class TanksGame extends Game {
         assetManager.load("stoneTower/stoneWinterTowerAfterOneHit.png", Texture.class);
         assetManager.load("stoneTower/stoneWinterTowerAfterSecondHit.png", Texture.class);
         assetManager.load("stoneTower/stoneWinterTowerAfterThirdHit.png", Texture.class);
+
+        assetManager.load("stoneTower/stoneDesertTower.png", Texture.class);
+        assetManager.load("stoneTower/stoneDesertTowerAfterOneHit.png", Texture.class);
+        assetManager.load("stoneTower/stoneDesertTowerAfterSecondHit.png", Texture.class);
+        assetManager.load("stoneTower/stoneDesertTowerAfterThirdHit.png", Texture.class);
+
+        assetManager.load("stoneTower/ship.png", Texture.class);
+        assetManager.load("stoneTower/shipAfterOneHit.png", Texture.class);
+        assetManager.load("stoneTower/shipAfterSecondHit.png", Texture.class);
+        assetManager.load("stoneTower/shipAfterThirdHit.png", Texture.class);
+
 
         assetManager.load("bullet.png", Texture.class);
 
