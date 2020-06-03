@@ -60,11 +60,6 @@ public class PlayScreen extends ScreenAdapter {
 
     private PauseWindow pauseWindow;
 
-
-    private Texture pauseBackgroundTexture;
-    private Texture exitTexture;
-    private Texture resumeTexture;
-
     private Info info;
 
     public TiledMap getMap() {
@@ -81,9 +76,6 @@ public class PlayScreen extends ScreenAdapter {
     private State stateButton;
 
     private Skin skin;
-
-    private Image resumeButton;
-    private Image exitButton;
 
     //Tiled map variables
     private TmxMapLoader maploader;
@@ -127,6 +119,7 @@ public class PlayScreen extends ScreenAdapter {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         pauseWindow = new PauseWindow("", skin, this, Gdx.graphics.getWidth() / 5, Gdx.graphics.getHeight() / 2.5f);
+        pauseWindow.setMovable(false);
         System.out.println("Size = " + pauseWindow.getWidth() + "; " + pauseWindow.getHeight());
         pauseWindow.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4, Align.center);
         System.out.println("Position = " + pauseWindow.getX() + "; " + pauseWindow.getY());
@@ -256,14 +249,7 @@ public class PlayScreen extends ScreenAdapter {
             }
             break;
             case PAUSE: {
-
                 stage.draw();
-
-//                stage.act(delta);
-//                stage.draw();
-//                pauseWindow.stage.draw();
-//                pauseWindow.draw(batch,);
-//                Gdx.input.setInputProcessor(this);
                 Gdx.input.setInputProcessor(multiplexer);
             }
             break;

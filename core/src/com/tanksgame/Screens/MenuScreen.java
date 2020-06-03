@@ -32,13 +32,9 @@ public class MenuScreen extends ScreenAdapter {
     private Texture creditsButtonTexture;
     private Texture exitButtonTexture;
 
-    private Texture exitWindowBackgroundTexture;
-    private Texture yesButtonTexture;
-    private Texture noButtonTexture;
+    private ExitWindow exitWindow;
 
-    private Window exitWindow;
-
-    private boolean isExitWindow = false;
+    public boolean isExitWindow = false;
 
     public MenuScreen(TanksGame game) {
         this.game = game;
@@ -49,43 +45,12 @@ public class MenuScreen extends ScreenAdapter {
         stageExitWindow = new Stage(new FitViewport((Gdx.graphics.getWidth()), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
 
-        exitWindow = new Window("Are you sure", new Skin(Gdx.files.internal("uiskin.json")));
+        exitWindow = new ExitWindow("", new Skin(Gdx.files.internal("uiskin.json")), this, Gdx.graphics.getWidth() / 5, Gdx.graphics.getHeight() / 2.5f);
+        exitWindow.setMovable(false);
         exitWindow.setSize(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
         exitWindow.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
 
-
-        exitWindowBackgroundTexture = changeSizeOfTexture("exitWindow/background.png", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        Image exitWindowBackground = new Image(exitWindowBackgroundTexture);
-        exitWindowBackground.getColor().a = 0.4f;
-        exitWindowBackground.setSize(exitWindow.getWidth(), exitWindow.getHeight());
-        exitWindowBackground.setPosition(exitWindow.getX(), exitWindow.getY());
-
-
-        yesButtonTexture = changeSizeOfTexture("exitWindow/yes_button.png", 50, 50);
-        Image yesButton = new Image(yesButtonTexture);
-        yesButton.setPosition(exitWindow.getX() + exitWindow.getWidth() / 3 - yesButton.getWidth() / 2, exitWindow.getY() + exitWindow.getHeight() / 3);
-        yesButton.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                Gdx.app.exit();
-            }
-        });
-
-        noButtonTexture = changeSizeOfTexture("exitWindow/no_button.png", 50, 50);
-        Image noButton = new Image(noButtonTexture);
-        noButton.setPosition(exitWindow.getX() + 2 * exitWindow.getWidth() / 3 - noButton.getWidth() / 2, exitWindow.getY() + exitWindow.getHeight() / 3);
-        noButton.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                isExitWindow = false;
-            }
-        });
-
-        stageExitWindow.addActor(exitWindowBackground);
-        stageExitWindow.addActor(yesButton);
-        stageExitWindow.addActor(noButton);
+        stageExitWindow.addActor(exitWindow);
 
         screenManager = new ScreenManager(game);
 
@@ -144,7 +109,6 @@ public class MenuScreen extends ScreenAdapter {
 
     public void render(float delta) {
         if (isExitWindow) {
-            stageExitWindow.act(delta);
             stageExitWindow.draw();
             Gdx.input.setInputProcessor(stageExitWindow);
         } else {
@@ -161,23 +125,7 @@ public class MenuScreen extends ScreenAdapter {
         creditsButtonTexture.dispose();
         exitButtonTexture.dispose();
         stageExitWindow.dispose();
-        exitWindowBackgroundTexture.dispose();
-        yesButtonTexture.dispose();
-        noButtonTexture.dispose();
 //        game.dispose();
-    }
-
-    private Texture changeSizeOfTexture(String path, int prefferedWidth, int prefferedHeight) {
-        Pixmap originalPixmap = new Pixmap(Gdx.files.internal(path));
-        Pixmap formattedPixmap = new Pixmap(prefferedWidth, prefferedHeight, originalPixmap.getFormat());
-        formattedPixmap.drawPixmap(originalPixmap,
-                0, 0, originalPixmap.getWidth(), originalPixmap.getHeight(),
-                0, 0, formattedPixmap.getWidth(), formattedPixmap.getHeight()
-        );
-        Texture temp = new Texture(formattedPixmap);
-        originalPixmap.dispose();
-        formattedPixmap.dispose();
-        return temp;
     }
 
 }
