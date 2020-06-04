@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tanksgame.Sprites.Enemies.Enemy;
 import com.tanksgame.Sprites.Other.Bullet;
 import com.tanksgame.Sprites.Player;
+import com.tanksgame.Sprites.TileObjects.Bot;
 import com.tanksgame.Sprites.TileObjects.Tower;
 import com.tanksgame.TanksGame;
 import com.tanksgame.Tools.Box2DWorldCreator;
@@ -201,9 +202,21 @@ public class PlayScreen extends ScreenAdapter {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 4 / TanksGame.PPM && tower.isDestroyed == false) {
-                tower.b2body.setActive(true);
+                tower.b2body.setActive(false);
             } else {
                 tower.b2body.setActive(false);
+            }
+        }
+
+        for (Bot bot : creator.getBots()) {
+            bot.update(dt);
+            //чтобы не стреляла просто так, подобрать значения
+            if (bot.botHull.getPosition().x < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 4 / TanksGame.PPM && !bot.isDestroyed) {
+                bot.botHull.setActive(true);
+                bot.botTower.setActive(true);
+            } else {
+                bot.botHull.setActive(false);
+                bot.botTower.setActive(false);
             }
         }
 
@@ -247,12 +260,16 @@ public class PlayScreen extends ScreenAdapter {
                     tower.draw(batch);
                 }
 
+                for (Bot bot : creator.getBots()) {
+                    bot.draw(batch);
+                }
+
                 batch.end();
 
                 batch.setProjectionMatrix(info.stage.getCamera().combined);
                 info.stage.draw();
 
-//                b2dr.render(world, camera.combined);
+                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {

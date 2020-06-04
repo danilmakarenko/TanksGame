@@ -124,7 +124,9 @@ public class Tank extends Sprite {
                 TanksGame.TOWER_BULLET_BIT |
                 TanksGame.TOWER_GROUND_BIT |
                 TanksGame.BASE_BIT|
-                TanksGame.HEART_BIT;
+                TanksGame.HEART_BIT|
+                TanksGame.BOT_BULLET_BIT|
+                TanksGame.BOT_BIT;
         fixDefHull.shape = shapeTank;
         fixDefHull.density = (float) Math.pow(2, 15);
         fixDefHull.restitution = .1f;
@@ -183,7 +185,8 @@ public class Tank extends Sprite {
         fixDef.filter.maskBits = TanksGame.EDGE_BIT |
                 TanksGame.TREE_BIT |
                 TanksGame.BUILDING_BIT |
-                TanksGame.TOWER_BIT;
+                TanksGame.TOWER_BIT|
+                TanksGame.BOT_BIT;
 
         bulletFixtureDef = fixDef;
         bullets = new ArrayList<>();
@@ -269,19 +272,13 @@ public class Tank extends Sprite {
 
     public void draw(Batch batch) {
         Sprite hullSprite = new Sprite(new Texture(hullTexturePathToImg));
-        hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
-        hullSprite.setOrigin(width / 2, height / 2);
-        hullSprite.setPosition(hull.getPosition().x - width / 2, hull.getPosition().y - height / 2);
-        hullSprite.setSize(width, height);
+        Bot.hullSpriteSettings(hullSprite, hull, width, height);
 //        hullSprite.draw(batch);
         playScreen.getRenderer().addSprite(hullSprite);
 
 
         Sprite towerSprite = new Sprite(new Texture(towerTexturePathToImg));
-        towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
-        towerSprite.setOrigin(13 / 2f / TanksGame.PPM, 16 / TanksGame.PPM);
-        towerSprite.setPosition(tower.getPosition().x - 13 / 2f / TanksGame.PPM, tower.getPosition().y - 16 / TanksGame.PPM);
-        towerSprite.setSize(13 / TanksGame.PPM, 32 / TanksGame.PPM);
+        Bot.towerSpriteSettings(towerSprite, tower);
 //        towerSprite.draw(batch);
         playScreen.getRenderer().addSprite(towerSprite);
 

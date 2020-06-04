@@ -5,6 +5,7 @@ import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Screens.ScreenManager;
 import com.tanksgame.Sprites.Other.Bullet;
 import com.tanksgame.Sprites.Player;
+import com.tanksgame.Sprites.TileObjects.Bot;
 import com.tanksgame.Sprites.TileObjects.Tower;
 import com.tanksgame.TanksGame;
 
@@ -61,6 +62,11 @@ public class WorldContactListener implements ContactListener {
             case TanksGame.TOWER_BULLET_BIT | TanksGame.BUILDING_BIT:
             case TanksGame.TOWER_BULLET_BIT | TanksGame.EDGE_BIT:
             case TanksGame.TOWER_BULLET_BIT | TanksGame.LAKE_BIT:
+
+            case TanksGame.BOT_BULLET_BIT | TanksGame.TREE_BIT:
+            case TanksGame.BOT_BULLET_BIT | TanksGame.BUILDING_BIT:
+            case TanksGame.BOT_BULLET_BIT | TanksGame.EDGE_BIT:
+            case TanksGame.BOT_BULLET_BIT | TanksGame.LAKE_BIT:
                 if (fixA.getFilterData().categoryBits == TanksGame.TOWER_BULLET_BIT) {
                     ((Bullet) fixA.getUserData()).setToDestroyMethod();
                 } else {
@@ -68,6 +74,7 @@ public class WorldContactListener implements ContactListener {
                 }
                 break;
             case TanksGame.TOWER_BULLET_BIT | TanksGame.PLAYER_BIT:
+            case TanksGame.BOT_BULLET_BIT | TanksGame.PLAYER_BIT:
                 if (fixA.getFilterData().categoryBits == TanksGame.TOWER_BULLET_BIT) {
                     ((Bullet) fixA.getUserData()).setToDestroyMethod();
                 } else {
@@ -90,6 +97,20 @@ public class WorldContactListener implements ContactListener {
                 }
                 player.health += 10;
                 break;
+            case TanksGame.BOT_BIT | TanksGame.TREE_BIT:
+            case TanksGame.BOT_BIT | TanksGame.TOWER_BIT:
+            case TanksGame.BOT_BIT | TanksGame.EDGE_BIT:
+            case TanksGame.BOT_BIT | TanksGame.TOWER_GROUND_BIT:
+            case TanksGame.BOT_BIT | TanksGame.BUILDING_BIT:
+            case TanksGame.BOT_BIT | TanksGame.LAKE_BIT:
+                if (fixA.getFilterData().categoryBits == TanksGame.BOT_BIT) {
+                    ((Bot) fixA.getUserData()).reverseVelocity(true,false);
+                } else {
+                    ((Bot) fixB.getUserData()).reverseVelocity(true,false);
+                }
+                break;
+
+            //                System.out.println("Health = " + player.health);
         }
     }
 

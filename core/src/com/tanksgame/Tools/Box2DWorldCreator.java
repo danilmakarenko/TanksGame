@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.Enemies.Enemy;
+import com.tanksgame.Sprites.TileObjects.Bot;
 import com.tanksgame.Sprites.TileObjects.Tank;
 import com.tanksgame.Sprites.TileObjects.Tower;
 import com.tanksgame.TanksGame;
@@ -21,6 +22,7 @@ import java.util.List;
 
 public class Box2DWorldCreator {
     private List<Tower> towers;
+    private List<Bot> bots;
 
 
     public Box2DWorldCreator(PlayScreen screen) {
@@ -111,6 +113,13 @@ public class Box2DWorldCreator {
             towers.add(new Tower(screen, rect.getX() / TanksGame.PPM + rect.getWidth() / TanksGame.PPM / 2, rect.getY() / TanksGame.PPM + rect.getHeight() / TanksGame.PPM));
         }
 
+        //create bots towers
+        bots = new ArrayList<>();
+        for (MapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bots.add(new Bot(screen, rect.getX() / TanksGame.PPM + rect.getWidth() / TanksGame.PPM / 2, rect.getY() / TanksGame.PPM + rect.getHeight() / TanksGame.PPM));
+        }
+
 
         //create lakes bodies/fixtures
         for (MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
@@ -155,4 +164,7 @@ public class Box2DWorldCreator {
         return towers;
     }
 
+    public List<Bot> getBots() {
+        return bots;
+    }
 }
