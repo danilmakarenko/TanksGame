@@ -110,7 +110,15 @@ public class WorldContactListener implements ContactListener {
                 }
                 break;
 
-            //                System.out.println("Health = " + player.health);
+            case TanksGame.BULLET_BIT | TanksGame.BOT_BIT:
+                if (fixA.getFilterData().categoryBits == TanksGame.BOT_BIT) {
+                    ((Bot) fixA.getUserData()).hits++;
+                    ((Bullet) fixB.getUserData()).setToDestroyMethod();
+                } else {
+                    ((Bot) fixB.getUserData()).hits++;
+                    ((Bullet) fixA.getUserData()).setToDestroyMethod();
+                }
+                break;
         }
     }
 

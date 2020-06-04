@@ -23,7 +23,7 @@ public class Bot extends Sprite {
     public World world;
     public PlayScreen screen;
     float angle;
-    public Body botHull,botTower,botBullet;
+    public Body botHull, botTower, botBullet, deadHull;
 
     private float x;
     private float y;
@@ -44,8 +44,8 @@ public class Bot extends Sprite {
     private float width = getWidth();
     private float height = getHeight();
 
-    private float botWidth = 32/TanksGame.PPM;
-    private float botHeight = 32/TanksGame.PPM;
+    private float botWidth = 32 / TanksGame.PPM;
+    private float botHeight = 32 / TanksGame.PPM;
 
     private Texture bulletTexture;
 
@@ -114,16 +114,17 @@ public class Bot extends Sprite {
 
         newHits = hits;
 
+        if (!isDestroyed) {
+            float x = screen.getPlayer().tank.hull.getPosition().x;
+            float y = screen.getPlayer().tank.hull.getPosition().y;
+            Vector2 sp2 = new Vector2(x, y);
+            Vector2 sss = new Vector2(this.x, this.y);
+            Vector2 d = sp2.sub(sss);
+            botTower.setTransform(botTower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
+        }
 
-        float x = screen.getPlayer().tank.hull.getPosition().x;
-        float y = screen.getPlayer().tank.hull.getPosition().y;
-        Vector2 sp2 = new Vector2(x, y);
-        Vector2 sss = new Vector2(this.x, this.y);
-        Vector2 d = sp2.sub(sss);
-        botTower.setTransform(botTower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
-
-
-        botHull.setLinearVelocity(velocity);
+        if (!isDestroyed)
+            botHull.setLinearVelocity(velocity);
     }
 
     Vector2 tmp = new Vector2();
@@ -189,8 +190,22 @@ public class Bot extends Sprite {
         }
         if (hits >= 3) {
             isDestroyed = true;
+            velocity.x = 0;
             botHull.setActive(false);
             botTower.setActive(false);
+
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.position.set(botHull.getPosition().x, botHull.getPosition().y);
+            PolygonShape shapeTank = new PolygonShape();
+            shapeTank.setAsBox(botWidth / 3, botHeight / 3f);
+            FixtureDef fixDefHull = new FixtureDef();
+            fixDefHull.filter.categoryBits = TanksGame.BOT_BIT;
+            fixDefHull.filter.maskBits = TanksGame.PLAYER_BIT;
+            fixDefHull.shape = shapeTank;
+            deadHull = world.createBody(bodyDef);
+            deadHull.createFixture(fixDefHull).setUserData(this);
+
         }
     }
 
@@ -217,8 +232,8 @@ public class Bot extends Sprite {
                 TanksGame.TOWER_BULLET_BIT |
                 TanksGame.TOWER_GROUND_BIT |
                 TanksGame.BASE_BIT |
-                TanksGame.HEART_BIT|
-                TanksGame.PLAYER_BIT|
+                TanksGame.HEART_BIT |
+                TanksGame.PLAYER_BIT |
                 TanksGame.BULLET_BIT;
         fixDefHull.shape = shapeTank;
         fixDefHull.density = (float) Math.pow(5, 15);
@@ -228,7 +243,7 @@ public class Bot extends Sprite {
 
         botHull = world.createBody(bodyDef);
         botHull.createFixture(fixDefHull).setUserData(this);
-        botHull.setTransform(botHull.getPosition(), (float)Math.PI / 2);
+        botHull.setTransform(botHull.getPosition(), (float) Math.PI / 2);
 
 
         PolygonShape shape = new PolygonShape();
@@ -302,10 +317,10 @@ public class Bot extends Sprite {
     }
 
 
-    public void reverseVelocity(boolean x, boolean y){
-        if(x)
+    public void reverseVelocity(boolean x, boolean y) {
+        if (x)
             velocity.x = -velocity.x;
-        if(y)
+        if (y)
             velocity.y = -velocity.y;
     }
 }

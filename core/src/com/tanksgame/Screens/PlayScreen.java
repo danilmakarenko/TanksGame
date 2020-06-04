@@ -211,7 +211,7 @@ public class PlayScreen extends ScreenAdapter {
         for (Bot bot : creator.getBots()) {
             bot.update(dt);
             //чтобы не стреляла просто так, подобрать значения
-            if (bot.botHull.getPosition().x < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 4 / TanksGame.PPM && !bot.isDestroyed) {
+            if (bot.botHull.getPosition().x < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 2 / TanksGame.PPM&&!bot.isDestroyed) {
                 bot.botHull.setActive(true);
                 bot.botTower.setActive(true);
             } else {
