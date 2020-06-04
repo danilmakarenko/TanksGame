@@ -98,7 +98,6 @@ public class Bullet extends Sprite {
             bulletSprite.setPosition(getPosition().x - width / 2, getPosition().y - height / 2);
             bulletSprite.setSize(width, height);
             bulletSprite.draw(batch);
-            System.out.println("!!!!!");
         }
         if (explosion) {
             Sprite ani = (Sprite) animation.getKeyFrame(animationTimer);

@@ -77,10 +77,19 @@ public class WorldContactListener implements ContactListener {
                     player.health -= 10;
                 else
                     screenManager.setOnGameOverScreen(playScreen.level);
-                System.out.println("Health = " + player.health);
+//                System.out.println("Health = " + player.health);
                 break;
             case TanksGame.BASE_BIT | TanksGame.PLAYER_BIT:
                 player.isOnBase = true;
+                break;
+            case TanksGame.PLAYER_BIT | TanksGame.HEART_BIT:
+                if (fixA.getFilterData().categoryBits == TanksGame.HEART_BIT) {
+                    ((Tower) fixA.getUserData()).setToDestroyHeartBody();
+                } else {
+                    ((Tower) fixB.getUserData()).setToDestroyHeartBody();
+                }
+                System.out.println("Contact");
+                player.health += 10;
                 break;
         }
     }

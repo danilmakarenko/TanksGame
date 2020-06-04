@@ -127,9 +127,9 @@ public class PlayScreen extends ScreenAdapter {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         pauseWindow = new PauseWindow("", skin, this, Gdx.graphics.getWidth() / 5, Gdx.graphics.getHeight() / 2.5f);
-        System.out.println("Size = " + pauseWindow.getWidth() + "; " + pauseWindow.getHeight());
+//        System.out.println("Size = " + pauseWindow.getWidth() + "; " + pauseWindow.getHeight());
         pauseWindow.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4, Align.center);
-        System.out.println("Position = " + pauseWindow.getX() + "; " + pauseWindow.getY());
+//        System.out.println("Position = " + pauseWindow.getX() + "; " + pauseWindow.getY());
 
 
         stage.addActor(pauseWindow);

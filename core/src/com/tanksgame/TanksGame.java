@@ -23,6 +23,7 @@ public class TanksGame extends Game {
     public static final short TOWER_BIT = 128;
     public static final short TOWER_GROUND_BIT = 256;
     public static final short BASE_BIT = 512;
+    public static final short HEART_BIT = 1024;
 
 
     private ScreenManager screenManager;
@@ -133,6 +134,8 @@ public class TanksGame extends Game {
         assetManager.load("stoneTower/stoneCityTowerAfterThirdHit.png", Texture.class);
 
         assetManager.load("bullet.png", Texture.class);
+        assetManager.load("heart.png", Texture.class);
+
 
         assetManager.finishLoading();
     }

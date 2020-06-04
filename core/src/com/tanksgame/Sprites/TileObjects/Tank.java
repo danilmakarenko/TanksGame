@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tanksgame.Screens.PlayScreen;
 
 import com.tanksgame.Sprites.Other.Bullet;
@@ -90,6 +89,10 @@ public class Tank extends Sprite {
     private Sprite flameGSprite;
     private Sprite flameHSprite;
 
+
+    private String hullTexturePathToImg;
+    private String towerTexturePathToImg;
+
     private ShapeRenderer shapeRenderer;
 
     private double reloadProgress;
@@ -120,7 +123,8 @@ public class Tank extends Sprite {
                 TanksGame.BUILDING_BIT |
                 TanksGame.TOWER_BULLET_BIT |
                 TanksGame.TOWER_GROUND_BIT |
-                TanksGame.BASE_BIT;
+                TanksGame.BASE_BIT|
+                TanksGame.HEART_BIT;
         fixDefHull.shape = shapeTank;
         fixDefHull.density = (float) Math.pow(2, 15);
         fixDefHull.restitution = .1f;
@@ -209,6 +213,36 @@ public class Tank extends Sprite {
 
         shapeRenderer = new ShapeRenderer();
         shape.dispose();
+
+
+        switch (playScreen.level) {
+            case 1:
+                hullTexturePathToImg = "hulls/hullGreen.png";
+                towerTexturePathToImg = "towers/towerGreen.png";
+                System.out.println(playScreen.level);
+                break;
+            case 2:
+                hullTexturePathToImg ="hulls/hullBlue.png";
+                towerTexturePathToImg ="towers/towerBlue.png";
+
+                System.out.println(playScreen.level);
+                break;
+            case 3:
+                hullTexturePathToImg = "hulls/hullBrown.png";
+                towerTexturePathToImg = "towers/towerBrown.png";
+                System.out.println(playScreen.level);
+                break;
+            case 4:
+                hullTexturePathToImg = "hulls/hullSea.png";
+                towerTexturePathToImg = "towers/towerSea.png";
+                System.out.println(playScreen.level);
+                break;
+            case 5:
+                hullTexturePathToImg = "hulls/hullRed.png";
+                towerTexturePathToImg = "towers/towerRed.png";
+                System.out.println(playScreen.level);
+                break;
+        }
     }
 
     public void shoot() {
@@ -234,7 +268,7 @@ public class Tank extends Sprite {
     Vector2 tmp2 = new Vector2();
 
     public void draw(Batch batch) {
-        Sprite hullSprite = new Sprite(new Texture("hulls/hullSea.png"));
+        Sprite hullSprite = new Sprite(new Texture(hullTexturePathToImg));
         hullSprite.setRotation(hull.getAngle() * 180 / (float) Math.PI);
         hullSprite.setOrigin(width / 2, height / 2);
         hullSprite.setPosition(hull.getPosition().x - width / 2, hull.getPosition().y - height / 2);
@@ -243,7 +277,7 @@ public class Tank extends Sprite {
         playScreen.getRenderer().addSprite(hullSprite);
 
 
-        Sprite towerSprite = new Sprite(new Texture("towers/towerSea.png"));
+        Sprite towerSprite = new Sprite(new Texture(towerTexturePathToImg));
         towerSprite.setRotation(tower.getAngle() * 180 / (float) Math.PI);
         towerSprite.setOrigin(13 / 2f / TanksGame.PPM, 16 / TanksGame.PPM);
         towerSprite.setPosition(tower.getPosition().x - 13 / 2f / TanksGame.PPM, tower.getPosition().y - 16 / TanksGame.PPM);

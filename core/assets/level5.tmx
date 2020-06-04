@@ -144,29 +144,29 @@
   <object id="190" x="4702" y="33" width="354" height="318"/>
  </objectgroup>
  <objectgroup id="8" name="towers">
-  <object id="45" x="591" y="47"/>
-  <object id="46" x="894" y="47"/>
-  <object id="47" x="910" y="304"/>
-  <object id="48" x="1455" y="47"/>
-  <object id="49" x="1415" y="292"/>
-  <object id="50" x="1099" y="308"/>
-  <object id="51" x="1060" y="47"/>
-  <object id="52" x="1788" y="55"/>
-  <object id="53" x="1721" y="294"/>
-  <object id="55" x="2186" y="36"/>
-  <object id="56" x="2377" y="61"/>
-  <object id="57" x="2573" y="295"/>
-  <object id="59" x="3657" y="35"/>
-  <object id="60" x="3769" y="39"/>
-  <object id="61" x="3882" y="41"/>
-  <object id="63" x="4417" y="47"/>
+  <object id="45" x="593" y="27.25"/>
+  <object id="46" x="894" y="24"/>
+  <object id="47" x="905.667" y="280"/>
+  <object id="48" x="1459" y="23"/>
+  <object id="49" x="1418.33" y="270"/>
+  <object id="50" x="1097.67" y="280.667"/>
+  <object id="51" x="1061.67" y="26.3333"/>
+  <object id="52" x="1788" y="22.3333"/>
+  <object id="53" x="1719.67" y="272"/>
+  <object id="55" x="2187" y="12"/>
+  <object id="56" x="2379" y="40"/>
+  <object id="57" x="2571" y="266"/>
+  <object id="59" x="3658" y="14"/>
+  <object id="60" x="3769" y="20"/>
+  <object id="61" x="3883" y="18"/>
+  <object id="63" x="4415" y="22"/>
   <object id="64" x="5089" y="72"/>
   <object id="65" x="5088" y="169"/>
   <object id="66" x="5089" y="286"/>
-  <object id="86" x="2232" y="302"/>
-  <object id="89" x="3864" y="335"/>
-  <object id="95" x="4329" y="292"/>
-  <object id="103" x="2615" y="44"/>
+  <object id="86" x="2232" y="273"/>
+  <object id="89" x="3856" y="306"/>
+  <object id="95" x="4328" y="270"/>
+  <object id="103" x="2608" y="19"/>
   <object id="192" x="2827" y="258"/>
   <object id="194" x="2839" y="143"/>
   <object id="203" x="2936" y="197"/>

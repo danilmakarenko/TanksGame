@@ -50,10 +50,12 @@ public class Tower extends Sprite {
     public ArrayList<Explosion> explosions;
 
     private Texture stoneTower;
+    private Texture heartTexture;
 
     private float angleOfShoot;
 
     private Sprite tower;
+    private Sprite heartSprite;
 
     public int hits = 0;
 
@@ -85,6 +87,13 @@ public class Tower extends Sprite {
     private Sprite explosion_FSprite;
     private Sprite explosion_GSprite;
     private Sprite explosion_HSprite;
+
+    private Body heart;
+    private boolean drawHeart;
+    private boolean isSetToDestroyHeart;
+    private boolean heartIsDestroyed;
+
+
 
     public Tower(PlayScreen screen, float x, float y) {
         this.world = screen.getWorld();
@@ -122,7 +131,10 @@ public class Tower extends Sprite {
         animation = new Animation(1f, explosion_ASprite, explosion_BSprite, explosion_CSprite,
                 explosion_DSprite, explosion_ESprite, explosion_FSprite, explosion_GSprite, explosion_HSprite);
         animation.setPlayMode(Animation.PlayMode.LOOP);
-
+        heartTexture = screen.getGame().assetManager.get("heart.png");
+        drawHeart = false;
+        isSetToDestroyHeart = false;
+        heartIsDestroyed = false;
     }
 
     public void update(float dt) {
@@ -163,62 +175,77 @@ public class Tower extends Sprite {
             isReloaded = true;
 
         newHits = hits;
+
+        if (isSetToDestroyHeart&&!heartIsDestroyed) {
+            world.destroyBody(heart);
+//            heart.setActive(false);
+            heartIsDestroyed = true;
+        }
+
+            float x = screen.getPlayer().tank.hull.getPosition().x;
+            float y = screen.getPlayer().tank.hull.getPosition().y;
+            Vector2 sp2 = new Vector2(x, y);
+            Vector2 sss = new Vector2(this.x, this.y);
+            Vector2 d = sp2.sub(sss);
+            b2body.setTransform(b2body.getPosition(), (float) (d.angleRad() - Math.PI / 2));
+
     }
 
     Vector2 tmp = new Vector2();
     Vector2 tmp2 = new Vector2();
 
     public void shoot() {
+            float rotation = (float) ((float) b2body.getTransform().getRotation() + Math.PI / 2);
+            float xTower = MathUtils.cos(rotation);
+            float yTower = MathUtils.sin(rotation);
 
-        float rotation = (float) ((float) b2body.getTransform().getRotation() + Math.PI / 2);
-        float xTower = MathUtils.cos(rotation);
-        float yTower = MathUtils.sin(rotation);
+            angleOfShoot = b2body.getAngle();
 
-        angleOfShoot = b2body.getAngle();
+//            float x = screen.getPlayer().tank.hull.getPosition().x;
+//            float y = screen.getPlayer().tank.hull.getPosition().y;
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.position.set(this.x, this.y);
+            // making bullet body
+            bulletBodyDef = bodyDef;
 
-        float x = screen.getPlayer().tank.hull.getPosition().x;
-        float y = screen.getPlayer().tank.hull.getPosition().y;
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(this.x, this.y);
-        // making bullet body
-        bulletBodyDef = bodyDef;
-
-        Vector2 sp2 = new Vector2(x, y);
-        Vector2 sss = new Vector2(this.x, this.y);
-        Vector2 d = sp2.sub(sss);
-        b2body.setTransform(b2body.getPosition(), (float) (d.angleRad() - Math.PI / 2));
-
-        CircleShape bulletShape = new CircleShape();
-        bulletShape.setRadius(10 / TanksGame.PPM);
+//            Vector2 sp2 = new Vector2(x, y);
+//            Vector2 sss = new Vector2(this.x, this.y);
+//            Vector2 d = sp2.sub(sss);
+//            b2body.setTransform(b2body.getPosition(), (float) (d.angleRad() - Math.PI / 2));
 
 
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = bulletShape;
-        fixDef.density = (float) Math.pow(2, 15);
-        fixDef.restitution = .1f;
-        fixDef.friction = .5f;
+            CircleShape bulletShape = new CircleShape();
+            bulletShape.setRadius(10 / TanksGame.PPM);
 
-        bulletFixtureDef = fixDef;
 
-        bulletFixtureDef.filter.categoryBits = TanksGame.TOWER_BULLET_BIT;
-        bulletFixtureDef.filter.maskBits = TanksGame.EDGE_BIT |
-                TanksGame.PLAYER_BIT |
-                TanksGame.TREE_BIT |
-                TanksGame.BUILDING_BIT;
+            FixtureDef fixDef = new FixtureDef();
+            fixDef.shape = bulletShape;
+            fixDef.density = (float) Math.pow(2, 15);
+            fixDef.restitution = .1f;
+            fixDef.friction = .5f;
 
-        bulletBodyDef.position.set(b2body.getWorldPoint(tmp.set(0, getHeight())));
+            bulletFixtureDef = fixDef;
 
-        bullets.add(new Bullet(screen, angleOfShoot, b2body, bulletBodyDef, bulletFixtureDef, xTower, yTower, bulletSpeed));
-        isReloaded = true;
-        bullets.get(bullets.size() - 1).createBullet();
+            bulletFixtureDef.filter.categoryBits = TanksGame.TOWER_BULLET_BIT;
+            bulletFixtureDef.filter.maskBits = TanksGame.EDGE_BIT |
+                    TanksGame.PLAYER_BIT |
+                    TanksGame.TREE_BIT |
+                    TanksGame.BUILDING_BIT;
 
-        timeOfShooting = System.nanoTime();
+            bulletBodyDef.position.set(b2body.getWorldPoint(tmp.set(0, getHeight())));
+
+            bullets.add(new Bullet(screen, angleOfShoot, b2body, bulletBodyDef, bulletFixtureDef, xTower, yTower, bulletSpeed));
+            isReloaded = true;
+            bullets.get(bullets.size() - 1).createBullet();
+
+            timeOfShooting = System.nanoTime();
     }
 
     private void updateStoneTower() {
         System.out.println("Hits = " + hits);
         world.destroyBody(b2body);
+
         switch (screen.level) {
             case 1:
                 if (hits == 1)
@@ -274,7 +301,6 @@ public class Tower extends Sprite {
         fdef.filter.categoryBits = TanksGame.TOWER_BIT;
         fdef.filter.maskBits = TanksGame.BULLET_BIT;
 
-
         b2body.createFixture(fdef).setUserData(this);
         tower = new Sprite(stoneTower);
         tower.setPosition(b2body.getPosition().x, b2body.getPosition().y);
@@ -284,6 +310,7 @@ public class Tower extends Sprite {
         if (hits >= 3) {
             isDestroyed = true;
             b2body.setActive(false);
+            createHeart();
         }
         shape.dispose();
     }
@@ -339,11 +366,45 @@ public class Tower extends Sprite {
             for (Bullet bulletTmp : bullets)
                 bulletTmp.draw(batch, 100 / TanksGame.PPM, 100 / TanksGame.PPM);
         }
+        if (drawHeart&&!heartIsDestroyed) {
+            heartSprite.draw(batch);
+        }
 
     }
 
     public void dispose() {
         screen.dispose();
         world.dispose();
+        heartSprite.getTexture().dispose();
+        heartTexture.dispose();
+    }
+
+    private void createHeart() {
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(b2body.getPosition().x, b2body.getPosition().y+25/TanksGame.PPM);
+        bdef.type = BodyDef.BodyType.StaticBody;
+        heart = world.createBody(bdef);
+
+        FixtureDef fdef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(10 / TanksGame.PPM, 10 / TanksGame.PPM);
+        fdef.shape = shape;
+
+        fdef.filter.categoryBits = TanksGame.HEART_BIT;
+        fdef.filter.maskBits = TanksGame.PLAYER_BIT;
+
+        int heartScaleSize = 20;
+        heart.createFixture(fdef).setUserData(this);
+        heartSprite = new Sprite(heartTexture);
+        heartSprite.setOrigin(heartSprite.getWidth()/heartScaleSize/2/TanksGame.PPM,heartSprite.getHeight()/heartScaleSize/2/TanksGame.PPM);
+        heartSprite.setPosition(heart.getPosition().x - heartSprite.getWidth()/heartScaleSize / 2 / TanksGame.PPM, heart.getPosition().y - heartSprite.getHeight() /heartScaleSize / 2 / TanksGame.PPM);
+        heartSprite.setSize(heartSprite.getWidth()/heartScaleSize/TanksGame.PPM, heartSprite.getHeight()/heartScaleSize/TanksGame.PPM);
+        drawHeart = true;
+        shape.dispose();
+    }
+
+    public void setToDestroyHeartBody() {
+        isSetToDestroyHeart = true;
+        drawHeart = false;
     }
 }
