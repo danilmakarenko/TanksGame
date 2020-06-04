@@ -88,7 +88,6 @@ public class WorldContactListener implements ContactListener {
                 } else {
                     ((Tower) fixB.getUserData()).setToDestroyHeartBody();
                 }
-                System.out.println("Contact");
                 player.health += 10;
                 break;
         }

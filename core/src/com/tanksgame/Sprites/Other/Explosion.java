@@ -63,7 +63,7 @@ public class Explosion {
         explosionHSprite = new Sprite(explosionHTexture);
 
         if (animation == null)
-            animation = new Animation(1 / 16f, explosionASprite, explosionBSprite, explosionCSprite, explosionDSprite, explosionESprite,
+            animation = new Animation(1/16f, explosionASprite, explosionBSprite, explosionCSprite, explosionDSprite, explosionESprite,
                     explosionFSprite, explosionGSprite, explosionHSprite);
         animation.setPlayMode(Animation.PlayMode.NORMAL);
     }

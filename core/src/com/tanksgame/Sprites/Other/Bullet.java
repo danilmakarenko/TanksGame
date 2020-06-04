@@ -89,8 +89,8 @@ public class Bullet extends Sprite {
     }
 
     public void draw(Batch batch, float width, float height) {
-        float x = getPosition().x - width / 2;
-        float y = getPosition().y - height / 2;
+        float x = getPosition().x - width*2;
+        float y = getPosition().y - height*2;
         if (!destroyed) {
             Sprite bulletSprite = new Sprite(bulletTexture);
             bulletSprite.setRotation(getAngleOfShoot() * 180 / (float) Math.PI);
@@ -101,9 +101,9 @@ public class Bullet extends Sprite {
         }
         if (explosion) {
             Sprite ani = (Sprite) animation.getKeyFrame(animationTimer);
-            ani.setOrigin(width / 2, height / 2);
+            ani.setOrigin(width*2, height*2);
             ani.setPosition(x, y);
-            ani.setSize(width, height);
+            ani.setSize(width*4, height*4);
             ani.draw(batch);
             explosion = false;
         }
