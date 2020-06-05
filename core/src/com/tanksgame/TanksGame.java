@@ -26,7 +26,6 @@ public class TanksGame extends Game {
     public static final short HEART_BIT = 1024;
     public static final short BOT_BIT = 2048;
     public static final short BOT_BULLET_BIT = 4096;
-    public static final short DEAD_BOT_BIT = 8192;
 
 
     private ScreenManager screenManager;

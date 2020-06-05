@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="160" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="135">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="160" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="139">
  <tileset firstgid="1" source="desertTileset.tsx"/>
  <layer id="1" name="background" width="160" height="13">
   <data encoding="csv">
@@ -119,6 +119,8 @@
   <object id="96" x="1083" y="280" width="14" height="13"/>
   <object id="97" x="826" y="23" width="15" height="15"/>
   <object id="123" x="3993" y="377" width="20" height="13"/>
+  <object id="137" x="173" y="258" width="37" height="31"/>
+  <object id="138" x="553" y="194" width="34" height="28"/>
  </objectgroup>
  <objectgroup id="7" name="base">
   <object id="98" x="4703" y="64" width="321" height="289"/>
@@ -150,5 +152,8 @@
   <object id="121" x="4464" y="76" width="141" height="48"/>
   <object id="122" x="4466" y="333" width="143" height="48"/>
  </objectgroup>
- <objectgroup id="12" name="bots"/>
+ <objectgroup id="12" name="bots">
+  <object id="135" x="3960" y="119"/>
+  <object id="136" x="2136" y="110"/>
+ </objectgroup>
 </map>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="160" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="297">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="160" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="313">
  <editorsettings>
   <export target="TestLevel1.tmx" format="tmx"/>
  </editorsettings>
@@ -104,7 +104,7 @@
   <object id="282" x="4298" y="279.75" width="23" height="31"/>
   <object id="283" x="4323" y="287.75" width="10" height="30"/>
  </objectgroup>
- <objectgroup id="4" name="base" visible="0">
+ <objectgroup id="4" name="base">
   <object id="12" x="4640" y="62.6667" width="416" height="288.667"/>
  </objectgroup>
  <objectgroup id="8" name="towers">
@@ -156,6 +156,6 @@
  </objectgroup>
  <objectgroup id="18" name="bots">
   <object id="295" x="1093" y="133"/>
-  <object id="296" x="1387" y="143"/>
+  <object id="304" x="4245" y="345"/>
  </objectgroup>
 </map>

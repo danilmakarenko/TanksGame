@@ -82,49 +82,51 @@ public class Bot extends Sprite {
     }
 
     public void update(float dt) {
-        stateTime += dt;
-        for (Bullet bullet : bullets) {
-            bullet.update(dt);
-        }
+        if (botHull.isActive()) {
+            stateTime += dt;
+            for (Bullet bullet : bullets) {
+                bullet.update(dt);
+            }
 
 
-        if (hits != newHits && hits <= 3)
-            updateBot();
+            if (hits != newHits && hits <= 3)
+                updateBot();
 
-        setPosition(botHull.getPosition().x - getWidth() / 2, botHull.getPosition().y - getHeight() / 2 + getHeight() / 10);
+            setPosition(botHull.getPosition().x - getWidth() / 2, botHull.getPosition().y - getHeight() / 2 + getHeight() / 10);
 
 
-        if (!isReloaded) {
+            if (!isReloaded) {
+                double now = System.nanoTime();
+                reloadProgress = (now - timeOfShooting) / 1000000000 / screen.getPlayer().getReloadTime();
+            }
+            if (isReloaded && botHull.isActive()) {
+                shoot();
+                isReloaded = false;
+                shootingTime = System.nanoTime();
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                    }
+                }, 0.5f);
+            }
             double now = System.nanoTime();
-            reloadProgress = (now - timeOfShooting) / 1000000000 / screen.getPlayer().getReloadTime();
-        }
-        if (isReloaded && botHull.isActive()) {
-            shoot();
-            isReloaded = false;
-            shootingTime = System.nanoTime();
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                }
-            }, 0.5f);
-        }
-        double now = System.nanoTime();
-        if ((now - shootingTime) / 1000000000 >= reloadTime)
-            isReloaded = true;
+            if ((now - shootingTime) / 1000000000 >= reloadTime)
+                isReloaded = true;
 
-        newHits = hits;
+            newHits = hits;
 
-        if (!isDestroyed) {
-            float x = screen.getPlayer().tank.hull.getPosition().x;
-            float y = screen.getPlayer().tank.hull.getPosition().y;
-            Vector2 sp2 = new Vector2(x, y);
-            Vector2 sss = new Vector2(this.x, this.y);
-            Vector2 d = sp2.sub(sss);
-            botTower.setTransform(botTower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
+            if (!isDestroyed) {
+                float x = screen.getPlayer().tank.hull.getPosition().x;
+                float y = screen.getPlayer().tank.hull.getPosition().y;
+                Vector2 sp2 = new Vector2(x, y);
+                Vector2 sss = new Vector2(this.x, this.y);
+                Vector2 d = sp2.sub(sss);
+                botTower.setTransform(botTower.getPosition(), (float) (d.angleRad() - Math.PI / 2));
+            }
+
+            if (!isDestroyed&&screen.level!=4)
+                botHull.setLinearVelocity(velocity);
         }
-
-        if (!isDestroyed)
-            botHull.setLinearVelocity(velocity);
     }
 
     Vector2 tmp = new Vector2();
@@ -279,6 +281,8 @@ public class Bot extends Sprite {
 
         world.createJoint(jointDef);
         shape.dispose();
+        botHull.setActive(false);
+        botTower.setActive(false);
     }
 
 

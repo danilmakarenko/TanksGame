@@ -104,9 +104,9 @@ public class WorldContactListener implements ContactListener {
             case TanksGame.BOT_BIT | TanksGame.BUILDING_BIT:
             case TanksGame.BOT_BIT | TanksGame.LAKE_BIT:
                 if (fixA.getFilterData().categoryBits == TanksGame.BOT_BIT) {
-                    ((Bot) fixA.getUserData()).reverseVelocity(true,false);
+                    ((Bot) fixA.getUserData()).reverseVelocity(true, false);
                 } else {
-                    ((Bot) fixB.getUserData()).reverseVelocity(true,false);
+                    ((Bot) fixB.getUserData()).reverseVelocity(true, false);
                 }
                 break;
 

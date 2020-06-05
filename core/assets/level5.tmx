@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="160" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="208">
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="160" height="13" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="210">
  <tileset firstgid="1" source="cityTileset.tsx"/>
  <layer id="1" name="background" width="160" height="13">
   <data encoding="csv">
@@ -198,5 +198,8 @@
   <object id="117" x="547" y="63" width="95" height="42"/>
   <object id="118" x="585" y="106" width="54" height="23"/>
  </objectgroup>
- <objectgroup id="11" name="bots"/>
+ <objectgroup id="11" name="bots">
+  <object id="208" x="3711" y="211"/>
+  <object id="209" x="980" y="250"/>
+ </objectgroup>
 </map>

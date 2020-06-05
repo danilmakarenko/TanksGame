@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
-import com.tanksgame.Sprites.Enemies.Enemy;
 import com.tanksgame.Sprites.Other.Bullet;
 import com.tanksgame.Sprites.Other.Explosion;
 import com.tanksgame.TanksGame;
@@ -181,13 +180,15 @@ public class Tower extends Sprite {
 //            heart.setActive(false);
             heartIsDestroyed = true;
         }
-
+        if (b2body.isActive()) {
             float x = screen.getPlayer().tank.hull.getPosition().x;
             float y = screen.getPlayer().tank.hull.getPosition().y;
             Vector2 sp2 = new Vector2(x, y);
             Vector2 sss = new Vector2(this.x, this.y);
             Vector2 d = sp2.sub(sss);
             b2body.setTransform(b2body.getPosition(), (float) (d.angleRad() - Math.PI / 2));
+        }
+
 
     }
 
@@ -310,7 +311,10 @@ public class Tower extends Sprite {
         if (hits >= 3) {
             isDestroyed = true;
             b2body.setActive(false);
-            createHeart();
+            if (screen.level != 4) {
+                createHeart();
+            } else screen.player.health += 50;
+
         }
         shape.dispose();
     }

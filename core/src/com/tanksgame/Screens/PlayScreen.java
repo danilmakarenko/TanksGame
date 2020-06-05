@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.tanksgame.Sprites.Enemies.Enemy;
 import com.tanksgame.Sprites.Other.Bullet;
 import com.tanksgame.Sprites.Player;
 import com.tanksgame.Sprites.TileObjects.Bot;
@@ -57,7 +56,7 @@ public class PlayScreen extends ScreenAdapter {
 
     private SpriteBatch batch;
 
-    private Player player;
+    public Player player;
 
     private PauseWindow pauseWindow;
 
@@ -112,7 +111,7 @@ public class PlayScreen extends ScreenAdapter {
 //        camera = new OrthographicCamera(200, 200 * ((float) Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
         camera = new OrthographicCamera();
 //        camera.position.set(0, 0, 0);
-        viewport = new FitViewport(TanksGame.WIDTH / TanksGame.PPM * 1.7f, TanksGame.HEIGHT / TanksGame.PPM * 1.7f, camera);
+        viewport = new FitViewport(TanksGame.WIDTH / TanksGame.PPM * 2f, TanksGame.HEIGHT / TanksGame.PPM * 2, camera);
 
         b2dr = new Box2DDebugRenderer();
 
@@ -196,13 +195,13 @@ public class PlayScreen extends ScreenAdapter {
 
         player.update(dt);
         renderer.setView(camera);
-        world.step(1 / 60f, 6, 2);
+        world.step(1 / 60f, 8, 3);
 
         for (Tower tower : creator.getTowers()) {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
-            if (tower.getX() < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 4 / TanksGame.PPM && tower.isDestroyed == false) {
-                tower.b2body.setActive(false);
+            if (tower.getX() < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 3f / TanksGame.PPM && tower.isDestroyed == false) {
+                tower.b2body.setActive(true);
             } else {
                 tower.b2body.setActive(false);
             }
@@ -211,7 +210,7 @@ public class PlayScreen extends ScreenAdapter {
         for (Bot bot : creator.getBots()) {
             bot.update(dt);
             //чтобы не стреляла просто так, подобрать значения
-            if (bot.botHull.getPosition().x < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 2 / TanksGame.PPM&&!bot.isDestroyed) {
+            if (bot.botHull.getPosition().x < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 3 / TanksGame.PPM&&!bot.isDestroyed) {
                 bot.botHull.setActive(true);
                 bot.botTower.setActive(true);
             } else {
@@ -229,7 +228,7 @@ public class PlayScreen extends ScreenAdapter {
         info.update(dt);
 
         cameraToPlayer(camera, new Vector2(player.tank.hull.getPosition().x, player.tank.hull.getPosition().y));
-        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) - startX * 1.1f, map.getProperties().get("height", Integer.class) - startY * 1.85f);
+        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) - startX * 1.1f, map.getProperties().get("height", Integer.class) - startY * 1.9f);
 
         camera.update();
     }
