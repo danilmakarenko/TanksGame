@@ -103,7 +103,7 @@ public class CreditsScreen extends ScreenAdapter {
         backgroundTexture.dispose();
         stage.dispose();
         batch.dispose();
-        returnButtonTexture.dispose();
+//        returnButtonTexture.dispose();
     }
 
 }

@@ -44,7 +44,6 @@ public class LevelsScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
 
         backgroundTexture = game.assetManager.get("levelsScreen/background.jpg");
-//        backgroundTexture = new Texture(Gdx.files.internal("levelsScreen/background.jpg"));
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -133,18 +132,13 @@ public class LevelsScreen extends ScreenAdapter {
 
     public void dispose() {
         stage.dispose();
-        firstLevelTexture.dispose();
-        secondLevelTexture.dispose();
-        thirdLevelTexture.dispose();
-        fourthLevelTexture.dispose();
-        fifthLevelTexture.dispose();
         game.dispose();
-        backgroundTexture.dispose();
-        fifthLevelTexture.dispose();
-        firstLevelTexture.dispose();
-        secondLevelTexture.dispose();
-        thirdLevelTexture.dispose();
-        fourthLevelTexture.dispose();
+//        backgroundTexture.dispose();
+//        fifthLevelTexture.dispose();
+//        firstLevelTexture.dispose();
+//        secondLevelTexture.dispose();
+//        thirdLevelTexture.dispose();
+//        fourthLevelTexture.dispose();
     }
 
     private Texture changeSizeOfTexture(String path, int prefferedWidth, int prefferedHeight) {
