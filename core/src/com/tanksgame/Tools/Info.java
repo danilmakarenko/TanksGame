@@ -113,7 +113,7 @@ public class Info {
     }
 
     public void baseTimeCheck() {
-        if (playScreen.getPlayer().baseTime >= 1) {
+        if (playScreen.getPlayer().baseTime >= 5) {
             if (playScreen.level < 5) {
                 int newLevel = level + 1;
 //                level += 1;
@@ -122,7 +122,8 @@ public class Info {
 
 //                playScreen.dispose();
                 playScreen.screenManager.setOnPlayScene(newLevel);
-            }
+            } else
+                playScreen.screenManager.setOnWinScreen();
         }
         if (playScreen.getPlayer().isOnBase) {
             playScreen.getPlayer().baseTime += 1 / 60f;

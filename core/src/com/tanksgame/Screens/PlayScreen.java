@@ -58,11 +58,6 @@ public class PlayScreen extends ScreenAdapter {
 
     private PauseWindow pauseWindow;
 
-
-    private Texture pauseBackgroundTexture;
-    private Texture exitTexture;
-    private Texture resumeTexture;
-
     private Info info;
 
     public TiledMap getMap() {
@@ -155,7 +150,7 @@ public class PlayScreen extends ScreenAdapter {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 3f / TanksGame.PPM && tower.isDestroyed == false) {
-                tower.b2body.setActive(false);
+                tower.b2body.setActive(true);
             } else {
                 tower.b2body.setActive(false);
             }

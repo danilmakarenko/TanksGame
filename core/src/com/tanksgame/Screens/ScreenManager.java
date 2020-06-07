@@ -52,6 +52,10 @@ public class ScreenManager {
         game.setScreen(new LevelsScreen(game));
     }
 
+    public void setOnWinScreen(){
+        game.setScreen(new WinScreen(game));
+    }
+
     public void setOnGameOverScreen(int level) {
         game.setScreen(new GameOverScreen(game, level));
     }
