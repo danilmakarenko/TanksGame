@@ -90,19 +90,6 @@ public class GameOverScreen extends ScreenAdapter implements InputProcessor {
 
     }
 
-    private Texture changeSizeOfTexture(String path, int prefferedWidth, int prefferedHeight) {
-        Pixmap originalPixmap = new Pixmap(Gdx.files.internal(path));
-        Pixmap formattedPixmap = new Pixmap(prefferedWidth, prefferedHeight, originalPixmap.getFormat());
-        formattedPixmap.drawPixmap(originalPixmap,
-                0, 0, originalPixmap.getWidth(), originalPixmap.getHeight(),
-                0, 0, formattedPixmap.getWidth(), formattedPixmap.getHeight()
-        );
-        Texture temp = new Texture(formattedPixmap);
-        originalPixmap.dispose();
-        formattedPixmap.dispose();
-        return temp;
-    }
-
     @Override
     public boolean keyDown(int keycode) {
         return false;

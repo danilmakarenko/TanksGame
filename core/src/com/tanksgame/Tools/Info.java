@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -48,7 +47,7 @@ public class Info {
         this.playScreen = playScreen;
 
         health = 100;
-        level = 1;
+        level = playScreen.level;
         baseTime = 0;
 
         viewport = new FitViewport(TanksGame.WIDTH, TanksGame.HEIGHT, new OrthographicCamera());
@@ -114,9 +113,13 @@ public class Info {
     }
 
     public void baseTimeCheck() {
-        if (playScreen.getPlayer().baseTime >= 5) {
+        if (playScreen.getPlayer().baseTime >= 1) {
             if (playScreen.level < 5) {
-                int newLevel = level += 1;
+                int newLevel = level + 1;
+//                level += 1;
+                System.out.println("New level = " + newLevel);
+                System.out.println("Level = " + level);
+
 //                playScreen.dispose();
                 playScreen.screenManager.setOnPlayScene(newLevel);
             }

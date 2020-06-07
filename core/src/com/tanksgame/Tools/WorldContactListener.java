@@ -84,7 +84,6 @@ public class WorldContactListener implements ContactListener {
                     player.health -= 10;
                 else
                     screenManager.setOnGameOverScreen(playScreen.level);
-//                System.out.println("Health = " + player.health);
                 break;
             case TanksGame.BASE_BIT | TanksGame.PLAYER_BIT:
                 player.isOnBase = true;

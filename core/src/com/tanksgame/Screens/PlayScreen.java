@@ -32,8 +32,6 @@ import com.tanksgame.Tools.Info;
 import com.tanksgame.Tools.OrthogonalTiledMapRendererWithSprites;
 import com.tanksgame.Tools.WorldContactListener;
 
-import java.util.Iterator;
-
 public class PlayScreen extends ScreenAdapter {
 
     private TanksGame game;
@@ -82,9 +80,6 @@ public class PlayScreen extends ScreenAdapter {
 
     private Skin skin;
 
-    private Image resumeButton;
-    private Image exitButton;
-
     //Tiled map variables
     private TmxMapLoader maploader;
     private TiledMap map;
@@ -92,10 +87,11 @@ public class PlayScreen extends ScreenAdapter {
     private boolean towersDrawn = false;
 
 
-    public PlayScreen(TanksGame game, int level) {
+    public PlayScreen(TanksGame game, int l) {
         this.game = game;
         screenManager = new ScreenManager(game);
-        this.level = level;
+        this.level = l;
+        System.out.println("Level in class = " + level);
     }
 
     @Override
@@ -134,48 +130,6 @@ public class PlayScreen extends ScreenAdapter {
 
         stage.addActor(pauseWindow);
 
-//        pauseWindow = new Window("Pause", skin);
-//        pauseWindow.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4, Align.center);
-//
-//        pauseBackgroundTexture = getGame().assetManager.get("pauseWindow/background.jpg");
-//        Image pauseBackground = new Image(pauseBackgroundTexture);
-//        pauseBackground.getColor().a = 0.05f;
-//
-//        resumeTexture = getGame().assetManager.get("pauseWindow/resume_button.png");
-//        resumeButton = new Image(resumeTexture);
-//        resumeButton.setSize(pauseWindow.getWidth() / 2, pauseWindow.getHeight() / 4);
-//        resumeButton.setPosition(pauseWindow.getX() + resumeButton.getWidth(), (float) (pauseWindow.getY() + 2 * pauseWindow.getHeight() / 3), Align.center);
-////        System.out.println(resumeButton.getX() + "; " + resumeButton.getY());
-////        System.out.println("Mouse: " + Gdx.input.getX() + "; " + Gdx.input.getY());
-//        resumeButton.addListener(new ActorGestureListener() {
-//            @Override
-//            public void tap(InputEvent event, float x, float y, int count, int button) {
-//                super.tap(event, x, y, count, button);
-//                System.out.println("Resume");
-//                stateNew = State.RUN;
-////                resumeIsPressed = true;
-//            }
-//        });
-//
-//
-//        exitTexture = getGame().assetManager.get("pauseWindow/exit_to_menu_button.png");
-//        exitButton = new Image(exitTexture);
-//        exitButton.setSize(pauseWindow.getWidth() / 2, pauseWindow.getHeight() / 4);
-//        exitButton.setPosition(pauseWindow.getX() + resumeButton.getWidth(), (float) (pauseWindow.getY() + 0.8 * pauseWindow.getHeight() / 3), Align.center);
-//        exitButton.addListener(new ActorGestureListener() {
-//            @Override
-//            public void tap(InputEvent event, float x, float y, int count, int button) {
-//                super.tap(event, x, y, count, button);
-//                screenManager.setOnMenuScreenFirst();
-//            }
-//        });
-//
-//        pauseWindow.add(pauseBackground);
-//        pauseWindow.add(resumeButton);
-//        pauseWindow.add(exitButton);
-//
-//        stage.addActor(pauseWindow);
-
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(player); // Your screen
         Gdx.input.setInputProcessor(multiplexer);
@@ -201,7 +155,7 @@ public class PlayScreen extends ScreenAdapter {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 3f / TanksGame.PPM && tower.isDestroyed == false) {
-                tower.b2body.setActive(true);
+                tower.b2body.setActive(false);
             } else {
                 tower.b2body.setActive(false);
             }
@@ -210,7 +164,7 @@ public class PlayScreen extends ScreenAdapter {
         for (Bot bot : creator.getBots()) {
             bot.update(dt);
             //чтобы не стреляла просто так, подобрать значения
-            if (bot.botHull.getPosition().x < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 3 / TanksGame.PPM&&!bot.isDestroyed) {
+            if (bot.botHull.getPosition().x < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 3 / TanksGame.PPM && !bot.isDestroyed) {
                 bot.botHull.setActive(true);
                 bot.botTower.setActive(true);
             } else {
@@ -274,12 +228,6 @@ public class PlayScreen extends ScreenAdapter {
             case PAUSE: {
 
                 stage.draw();
-
-//                stage.act(delta);
-//                stage.draw();
-//                pauseWindow.stage.draw();
-//                pauseWindow.draw(batch,);
-//                Gdx.input.setInputProcessor(this);
                 Gdx.input.setInputProcessor(multiplexer);
             }
             break;
