@@ -150,7 +150,7 @@ public class PlayScreen extends ScreenAdapter {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 3f / TanksGame.PPM && tower.isDestroyed == false) {
-                tower.b2body.setActive(true);
+                tower.b2body.setActive(false);
             } else {
                 tower.b2body.setActive(false);
             }
@@ -177,7 +177,7 @@ public class PlayScreen extends ScreenAdapter {
         info.update(dt);
 
         cameraToPlayer(camera, new Vector2(player.tank.hull.getPosition().x, player.tank.hull.getPosition().y));
-        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) - startX * 1.1f, map.getProperties().get("height", Integer.class) - startY * 1.9f);
+        setBoundariesForCamera(camera, startX, startY, map.getProperties().get("width", Integer.class) - startX * 1.22f, map.getProperties().get("height", Integer.class) - startY * 1.9f);
 
         camera.update();
     }
@@ -217,7 +217,7 @@ public class PlayScreen extends ScreenAdapter {
                 batch.setProjectionMatrix(info.stage.getCamera().combined);
                 info.stage.draw();
 
-                b2dr.render(world, camera.combined);
+//                b2dr.render(world, camera.combined);
             }
             break;
             case PAUSE: {
