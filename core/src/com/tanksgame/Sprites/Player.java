@@ -49,13 +49,6 @@ public class Player extends Sprite implements InputProcessor {
 
     public void draw(Batch batch) {
         super.draw(batch);
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//        shapeRenderer.setColor(Color.WHITE);
-//        shapeRenderer.arc(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 10, 0, (float) 180);
-//        shapeRenderer.end();
-
-//        healthBar();
-//        healthBarDrawable.draw(batch, getX() + 100, getY() + 100, getWidth(), getHeight());
     }
 
     public void update(float dt) {

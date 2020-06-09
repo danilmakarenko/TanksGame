@@ -26,8 +26,10 @@ public class WinScreen extends ScreenAdapter implements InputProcessor {
 
     private Texture backgroundTexture;
 
+    private BitmapFont fontWon;
     private BitmapFont font;
 
+    private GlyphLayout glyphLayoutWon;
     private GlyphLayout glyphLayout;
 
     WinScreen(TanksGame game) {
@@ -42,16 +44,20 @@ public class WinScreen extends ScreenAdapter implements InputProcessor {
 
         batch = new SpriteBatch();
 
-        backgroundTexture = game.assetManager.get("GameOverScreen/background.jpg");
+        backgroundTexture = new Texture(Gdx.files.internal("background_win.jpg"));
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameterWon = new FreeTypeFontGenerator.FreeTypeFontParameter();
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 32;
+        parameterWon.size = 90;
+        fontWon = generator.generateFont(parameterWon);
+        parameter.size = 48;
         font = generator.generateFont(parameter);
         generator.dispose();
 
+        glyphLayoutWon = new GlyphLayout();
         glyphLayout = new GlyphLayout();
 
         stage.addActor(background);
@@ -69,10 +75,13 @@ public class WinScreen extends ScreenAdapter implements InputProcessor {
 
         batch.begin();
 
-        String s = "You won!\n\npress on the screen to get to the menu";
+        String s = "You won!\n\n";
+        String s1 = "Press on the screen to get to the menu";
 
-        glyphLayout.setText(font, s);
-        font.draw(batch, s, Gdx.graphics.getWidth() / 2 - glyphLayout.width / 2, Gdx.graphics.getHeight() * 0.90f);
+        glyphLayoutWon.setText(fontWon, s);
+        glyphLayout.setText(font, s1);
+        fontWon.draw(batch, s, Gdx.graphics.getWidth() / 2 - glyphLayoutWon.width / 2, Gdx.graphics.getHeight() * 0.5f + glyphLayoutWon.height / 2);
+        font.draw(batch, s1, Gdx.graphics.getWidth() / 2 - glyphLayout.width / 2, Gdx.graphics.getHeight() * 0.5f - glyphLayoutWon.height/2);
 
         batch.end();
 
@@ -80,7 +89,7 @@ public class WinScreen extends ScreenAdapter implements InputProcessor {
 
     public void dispose() {
         stage.dispose();
-
+        backgroundTexture.dispose();
     }
 
     @Override

@@ -31,7 +31,7 @@ public class Tank extends Sprite {
     public float leftAcc;
     public float rightAcc;
 
-    public float tankSpeed = 20;
+    public float tankSpeed = 15;
     public float bulletSpeed = 15;
 
     private float forwardX = 0;

@@ -1,22 +1,14 @@
 package com.tanksgame.Sprites.TileObjects;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.tanksgame.Screens.PlayScreen;
 import com.tanksgame.Sprites.Other.Bullet;
-import com.tanksgame.Sprites.Other.Explosion;
 import com.tanksgame.TanksGame;
-import org.w3c.dom.Text;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +37,6 @@ public class Tower extends Sprite {
     private float height = getHeight();
 
     private Texture bulletTexture;
-
-    public ArrayList<Explosion> explosions;
 
     private Texture stoneTower;
     private Texture heartTexture;
@@ -107,7 +97,6 @@ public class Tower extends Sprite {
         setToDestroy = false;
         destroyed = false;
         bullets = new ArrayList<>();
-        explosions = new ArrayList<Explosion>();
 
         explosion_ATexture = screen.getGame().assetManager.get("explosion/Explosion_A.png");
         explosion_BTexture = screen.getGame().assetManager.get("explosion/Explosion_B.png");
@@ -141,12 +130,6 @@ public class Tower extends Sprite {
         animationTimer += dt;
         for (Bullet bullet : bullets) {
             bullet.update(dt);
-        }
-        ArrayList<Explosion> explosionsToRemove = new ArrayList<>();
-        for (Explosion explosion : explosions) {
-            explosion.update(dt);
-            if (explosion.remove)
-                explosionsToRemove.add(explosion);
         }
 
         if (hits != newHits && hits <= 3)

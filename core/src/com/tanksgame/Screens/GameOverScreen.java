@@ -30,8 +30,10 @@ public class GameOverScreen extends ScreenAdapter implements InputProcessor {
     private Texture backgroundTexture;
 
     private BitmapFont font;
+    private BitmapFont font1;
 
     private GlyphLayout glyphLayout;
+    private GlyphLayout glyphLayout1;
 
     private int level;
 
@@ -49,17 +51,20 @@ public class GameOverScreen extends ScreenAdapter implements InputProcessor {
 
         batch = new SpriteBatch();
 
-        backgroundTexture = game.assetManager.get("GameOverScreen/background.jpg");
+        backgroundTexture = new Texture(Gdx.files.internal("GameOverScreen/background.jpeg"));
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 32;
+        parameter.size = 75;
         font = generator.generateFont(parameter);
+        parameter.size = 50;
+        font1 = generator.generateFont(parameter);
         generator.dispose();
 
         glyphLayout = new GlyphLayout();
+        glyphLayout1 = new GlyphLayout();
 
         stage.addActor(background);
 
@@ -76,10 +81,13 @@ public class GameOverScreen extends ScreenAdapter implements InputProcessor {
 
         batch.begin();
 
-        String s = "Try again!\n\npress on the screen to restart";
+        String s = "Try again!\n\n";
+        String s1 = "Press on the screen to restart";
 
         glyphLayout.setText(font, s);
-        font.draw(batch, s, Gdx.graphics.getWidth() / 2 - glyphLayout.width / 2, Gdx.graphics.getHeight() * 0.90f);
+        glyphLayout1.setText(font, s1);
+//        font.draw(batch, s, Gdx.graphics.getWidth() / 2 - glyphLayout.width / 2, Gdx.graphics.getHeight() / 2 + glyphLayout.height / 2);
+        font1.draw(batch, s1, Gdx.graphics.getWidth() / 1.5f - glyphLayout1.width / 2, Gdx.graphics.getHeight() / 2 - glyphLayout.height);
 
         batch.end();
 
@@ -87,7 +95,7 @@ public class GameOverScreen extends ScreenAdapter implements InputProcessor {
 
     public void dispose() {
         stage.dispose();
-
+        backgroundTexture.dispose();
     }
 
     @Override

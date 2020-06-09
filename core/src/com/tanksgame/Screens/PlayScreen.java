@@ -150,7 +150,7 @@ public class PlayScreen extends ScreenAdapter {
             tower.update(dt);
             //чтобы не стреляла просто так, подобрать значения
             if (tower.getX() < player.tank.hull.getPosition().x + Gdx.graphics.getWidth() / 3f / TanksGame.PPM && tower.isDestroyed == false) {
-                tower.b2body.setActive(false);
+                tower.b2body.setActive(true);
             } else {
                 tower.b2body.setActive(false);
             }
@@ -240,21 +240,6 @@ public class PlayScreen extends ScreenAdapter {
     public void resize(int width, int height) {
 
         viewport.update(width, height);
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
 
     }
 
